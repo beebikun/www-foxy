@@ -1,0 +1,83 @@
+{% extends "client/base.html" %}
+{% block style-block %}
+<style type="text/css">
+    .phones-block, #mainMenu{position: static;}
+    .items-area img{display: none}
+</style>
+{% endblock %}
+{% block main-top-left %}
+    <div id="carussel">        
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="10000">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
+          </ol>
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner">
+            <div class="item active">
+                <a href="{% url 'client-rates' %}">
+        		    <object type="application/x-shockwave-flash" data="{{ STATIC_URL }}img/banner/1.swf" width="712" height="410">
+                        <param name="quality" value="high">
+                        <param name="wmode" value="opaque">
+                    </object>
+                </a>
+            </div>    
+          </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block connectBut %}  
+{% endblock %}
+{% block main-bottom-left %}
+    <div id="simmularItems" class="items-area no-margin-top">
+        {% for note in data.result|slice:':3' %}
+            <div class="some-item">
+                <div class="some-item-date"> 
+                    {{ note.date|date:"d E Y" }}
+                </div>
+                <div class="some-item-body">
+                    <a class="some-item-body-title" href="{% url 'client-newsdetail' note.id %}">
+                        {{ note.header }}
+                    </a>
+                    <div class="some-item-body-text">
+                        {{ note.text|safe }}
+                    </div>
+		    <a class="some-item-body-detail" href="{% url 'client-newsdetail' note.id %}" >Читать далее...</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="more-items-btn">
+        <a href="{% url 'client-news' %}">Все новости</a>
+    </div>
+{% endblock %}      
+{% block menuBottom %}
+    <div id="menuBottom">
+        {% block 2gisban %}
+            <a class="btn btn-default mybtn mybtn-block" id="gisBan" href="http://2gis.ru/#!/blagoveshensk/center/127.538718%2C50.279035/zoom/13/state/firms/what/%D0%A2%D0%B5%D0%BB%D0%B5%D0%B2%D0%BE%D0%BA%D1%81%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82-%D0%BF%D1%80%D0%BE%D0%B2%D0%B0%D0%B9%D0%B4%D0%B5%D1%80/action/search/page/1/sort/relevance/rpage/1/ppage/1">
+                <div>МЫ НА КАРТЕ</div>
+                <img src="static/img/2gis.png" alt='2gis'>
+            </a> 
+        {% endblock %}  
+        {% block social %}
+            <div id="social" class="margin-top">
+                <a href="http://www.odnoklassniki.ru/profile/523609457931">
+                    <img src="static/img/soc-ok.png" alt='ok-ico'>
+                </a>
+                <a href="http://vkontakte.ru/id141384059">
+                    <img src="static/img/soc-vk.png" alt='vk-ico'>
+                </a>
+                <a href="http://my.mail.ru/list/televox/">
+                    <img src="static/img/soc-mail.png" alt='mail-ico'>
+                </a>
+                <a href="https://www.facebook.com/fox.televox">
+                    <img src="static/img/soc-f.png" alt='fb-ico'>
+                </a>
+                <a href="https://twitter.com/Televox_company">
+                    <img src="static/img/soc-tw.png" alt='tw-ico'>
+                </a>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

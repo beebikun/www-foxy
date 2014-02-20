@@ -1,0 +1,36 @@
+{% extends "client/payment-way.html" %}
+{% block payment-title %}
+	Электронные деньги, 0%	
+{% endblock %}
+{% block payment %}
+<div>
+	{% for payment in data %}
+		<div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+				<div class="modal-content">
+					<form role="form "> 
+				        <div class="modal-header">
+				        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        	<h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
+				        </div>
+				        <div class="modal-body">
+				        	{{ payment.description|safe }}
+				        </div>
+				        <div class="modal-footer">
+				        	<button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
+				        </div>
+			        </form>
+		      	</div>
+			</div>
+		</div>				
+		<div class="some-item">
+                <div class="some-item-body">
+                    <div class="some-item-body-text"> 
+                    	<strong>{{ payment.name|safe }}</strong>
+                    	<div><a data-toggle="modal" class="how-play-btn" href="#modal{{ payment.id }} ">Как оплатить</a></div>
+                	</div>
+                </div>
+            </div>
+	{% endfor %}
+</div>		
+{% endblock %}

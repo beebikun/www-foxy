@@ -1,0 +1,38 @@
+{% extends "client/about.html" %}
+{% block content %}Телевокс - Вакансии{% endblock %}
+{% block title %}Televox -  Вакансии{% endblock %}
+{% block jsscript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           /*var domH = $().domHelper();
+            domH.$linkParent = $(".link-list")
+            domH.$descrParent = $(".link-descr-list")
+            domH.createStaticPage(true)*/
+        })
+    </script>
+{% endblock %}    
+{% block about %}
+<div  class="link-list">
+	{% if data %}
+		<ul>
+			<div> {{ data.content|safe }} </div>
+			{% for vacancy in data.childs %}
+			<li>
+				<a href="#{{vacancy.name}}"> {{ vacancy.display_name }} </a>
+			</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
+{% endblock %}    
+{% block main-bottom-left %}
+<div id="fqaAnsw" class="link-list">
+	{% if data %}
+		{% for vacancy in data.childs %}
+			<a href="#{{vacancy.name}}" id="{{vacancy.name}}"> <strong>{{ vacancy.display_name }}</strong> </a>
+			<a href="" class="pull-right"><i class="fa fa-arrow-up"></i></a>
+			<div> {{ vacancy.content|safe }} </div>
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock %} 

@@ -1,0 +1,33 @@
+{% extends "client/base.html" %}
+{% block payment-btn-active %}active{% endblock %}
+
+{% block main-top-left %}
+	<div class="some-item">
+		<div class=""> 
+			<ul class="pager some-item-date" style="margin-top:0px;">
+			    <li class="previous">
+				    <a href="{% url 'client-payment' %}">&larr; Назад</a>
+			    </li>		    
+				<li class="pull-right">
+					<a class="title">
+					{% block payment-title %}
+						{{data.display_name}}					
+					{% endblock %} </a>
+				</li>
+			</ul>
+		</div>
+		<div class="some-item-body">
+			{% block payment %}
+				{{data.content|safe}}		
+			{% endblock %}   
+		</div>
+	</div>
+	
+	
+{% endblock %}   
+{% block connectBut %}  
+{% endblock %}
+{% block main-bottom-left %}
+	{% block simitems %}
+	{% endblock %} 
+{% endblock %}

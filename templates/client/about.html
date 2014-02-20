@@ -1,0 +1,34 @@
+{% extends "client/base.html" %}
+{% block content %}Телевокс - Контакты{% endblock %}
+{% block title %}Televox -  Контакты{% endblock %}
+{% block jsscript %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
+{% endblock %}
+{% block about-btn-active %}active{% endblock %}
+{% block main-top-left %}
+<div id="aboutCont" class="content">
+ 	<div class="content-menu">
+		<a href="{% url 'client-about' %}">Контакты</a>
+		<a href="{% url 'client-documents' %}">Документы</a>
+		<a href="{% url 'client-vacancy' %}">Вакансии</a>
+	</div>
+	{% block about %}	
+	<div id="myMapId" class="map map-on-page-with-tp"></div>
+	{% endblock %}    	
+</div>
+{% endblock %}  
+{% block connectBut %}  
+{% endblock %}    
+{% block main-bottom-left %}
+<div id="simmularItems" class="items-area">
+        {% for point in data.result %}
+            <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{point.ico}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
+                <div class="some-item-date">{{ point.address }}</div>
+                <div class="some-item-body">
+                    <span class="some-item-body-title">{{ point.contacts }}</span>
+                    <div class="some-item-body-text"> {{ point.schedule }} </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %} 

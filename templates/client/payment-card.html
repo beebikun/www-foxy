@@ -1,0 +1,55 @@
+{% extends "client/payment-way.html" %}
+{% block content %}Телевокс - Оплата пластиковыми картами{% endblock %}
+{% block title %}Televox -  Оплата пластиковыми картами{% endblock %}
+{% block payment-title %}
+	Пластиковые карты, 0%
+{% endblock %}
+{% block payment %} 
+<div id="payment-card">
+	{% for payment in data %}
+		{% ifnotequal payment.name "ДВ-пэй" %}
+        <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ payment.description|safe }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>      
+        {% endifnotequal %}     
+        <div class="some-item">
+            <a class="some-item-body"  {% ifnotequal payment.name "ДВ-пэй" %}data-toggle="modal" href="#modal{{ payment.id }}"{% else %}href="http://tlvxplat.ru/index.html"{% endifnotequal %}   >
+                <span class="some-item-body-title">{{ payment.name|safe }}</span>        
+                <div class="some-item-body-text"> 
+                    {{ payment.hint_line|safe }}                        
+                    <div class="how-play-btn">
+                        {% ifnotequal payment.name "ДВ-пэй" %}Как оплатить{% else %}Оплатить{% endifnotequal %}
+                    </div>
+                </div>
+            </a>
+        </div>
+	{% endfor %}
+	{% comment %}
+	<div class="some-item">
+		<div class="some-item-body">
+			<div class="some-item-body-text"> 
+				<strong>On-line платеж</strong>
+				<div>
+					{{data.main.content|safe}}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endcomment %}
+</div>	
+{% endblock %}  

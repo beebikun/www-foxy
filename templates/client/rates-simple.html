@@ -1,0 +1,67 @@
+{% extends "client/base.html" %}
+{% block content %}Телевокс - Тарифы{% endblock %}
+{% block title %}Televox -  Тарифы{% endblock %}
+{% block jsscript %}
+<script type="text/javascript">
+	function showArchive(){
+		var btnText1 = "Архив тарифов";
+		var btnText2 = "Скрыть";
+		$(".rates-archive").toggle();	
+		$(".more-items-btn>span").text( ($(".more-items-btn>span").text()==btnText1) ? btnText2 : btnText1 )
+	}
+  	$(document).ready(function(){
+  		if($(".rates-archive").children().length>0)$(".more-items-btn").show()
+  });
+</script>
+{% endblock %}
+{% block rates-btn-active %}active{% endblock %}
+{% block main-top-left %}
+<div id="ratesCont" class="content">
+	<div class="content-menu">
+		<a href="{% url 'client-rates' %}">Физ лица</a>
+		<a href="{% url 'client-ratessimple' name='jp' %}">Юр лица</a>
+		<a href="{% url 'client-ratessimple' name='other' %}">Доп услуги</a>
+	</div>
+	{% block rates %}
+	<div> 
+		{% for rates in data %}
+			{% if rates.active%}			
+			<div class="table-box some-item">
+				<div class="some-item-body">
+					<div class="some-item-body-title">
+						Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
+					</div>
+					<div class="some-item-body-text margin-top">
+						{{ rates.tables|safe }}
+					</div>
+				</div>
+			</div>
+		 	{% endif %}
+		 {% endfor %}
+		</div>
+	{% endblock %}      
+</div>
+{% endblock %}      
+{% block main-bottom-left %}
+	{% block helptext %}
+	{% endblock %}
+	{% block archive %}
+	<div id="simmularItems"> 
+		<div class="rates-archive">
+		{% for rates in data %}{% if not rates.active %}
+			<div class="table-box some-item">
+				<div class="some-item-body">
+					<div class="some-item-body-title">
+						Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
+					</div>
+					<div class="some-item-body-text margin-top">
+						{{ rates.tables|safe }}
+					</div>
+				</div>
+			</div>
+		{% endif %}{% endfor %}		
+		</div>
+		<div class="more-items-btn" style="display:none"><span onclick="showArchive()">Архив тарифов</span></div>
+	</div>
+	{% endblock %}
+{% endblock %}

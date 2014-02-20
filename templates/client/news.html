@@ -1,0 +1,56 @@
+{% extends "client/base.html" %}
+{% block content %}Телевокс - Новости{% endblock %}
+{% block title %}Televox -  Новости{% endblock %}
+{% block jsscript %}
+{% endblock %}
+{% block new-btn-active %}active{% endblock %}
+{% block main-top-left %}
+<div id="bigParent">
+    <div id="newsCont"> 
+        {% for note in data.result %}
+            <div class="some-item">
+                <div class="some-item-date"> 
+                    {{ note.date|date:"d E Y" }}
+                </div>
+                <div class="some-item-body">
+                    <a class="some-item-body-title" href="{% url 'client-newsdetail' note.id %}">
+                        {{ note.header }}
+                    </a>
+                    <div class="some-item-body-text">
+                        {{ note.text|safe }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if data.display_page %}
+        <div class="text-center">
+            <ul class="pagination">
+                <li id="less" class="moreless">
+                    <a href="?page={{ data.prev_page }}">&laquo;</a>
+                </li>
+                {% for i in data.display_page %}
+                    <li class="
+                        {% if i == data.page %} {{ 'active' }}  
+                        {% else %} {% if i == '...' %} {{ 'disabled'}}
+                        {% else %} {{''}}
+                        {% endif %}{% endif %}
+                        ">
+                        <a href="?page={{ i }}">
+                            <span>
+                                <span>{{ i }}</span>
+                            </span>
+                        </a>
+                    </li>
+                {% endfor %}
+                <li id="more" class="moreless">
+                    <a href="?page={{ data.next_page }}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}      
+{% block connectBut %}  
+{% endblock %}

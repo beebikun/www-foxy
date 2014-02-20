@@ -1,0 +1,35 @@
+{% extends "client/payment-way.html" %}
+{% block content %}Телевокс - Обещанный платеж{% endblock %}
+{% block title %}Televox -  Обещанный платеж{% endblock %}
+{% block payment %}
+{{data.content|safe}}
+<div class="form-inline form-group" role="form" id="limit_form">
+	{% csrf_token %}
+  	<div class="form-group">
+    	<input type="text" class="form-control" placeholder="Номер договора" name="user"> 
+  	</div>
+  	<div class="form-group">    	
+    	<input type="password" class="form-control" placeholder="Пароль" name="pswd" >
+  	</div>
+  	<button id="limit_ok" class="btn btn-default" >Подключить</button>
+</div>
+<p id="message"></p>
+{% endblock %}
+
+{% block jsscript %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		var api = $().apiHelper();
+		$("#limit_ok").click(function(){
+			data = {}
+			$.each($("#limit_form input"), function(i, el){
+				if(el.getAttribute('name')) data[el.getAttribute('name')] = $(el).val()
+			});
+			$.post(api.bg.limit, data, function(data){
+				var data = data.data
+				$("#message").html(data.message)
+			});
+		})
+	})
+</script>
+{% endblock %}

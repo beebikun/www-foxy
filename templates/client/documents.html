@@ -1,0 +1,29 @@
+{% extends "client/about.html" %}
+{% block content %}Телевокс - Документы{% endblock %}
+{% block title %}Televox -  Документы{% endblock %}
+{% block jsscript %}
+    <script type="text/javascript"> </script>
+{% endblock %}    
+{% block about %}
+<div  class="link-list">
+	{% if data %}
+		<ul>
+			<div> {{ data.content|safe }} </div>
+			{% for doc in data.childs %}
+			<li>
+				<strong>{{ doc.display_name }}</strong>
+				<ul>
+					{% for d in doc.childs %}	
+					<li>
+						<a href=" {% url 'client-index'%}{{d.attach}} "> {{ d.display_name }} </a>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
+{% endblock %}    
+{% block main-bottom-left %}
+{% endblock %}    

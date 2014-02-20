@@ -1,0 +1,81 @@
+{% extends "client/base.html" %}
+{% block content %}Телевокс - Оплата{% endblock %}
+{% block title %}Televox -  Оплата{% endblock %}
+{% block style-block %}
+ <style>
+   
+   
+  </style>
+{% endblock %}
+{% block payment-btn-active %}active{% endblock %}
+{% block main-top-left %}
+<div id="paymentWays" >	
+	<a class="text-left payment-items" href="{% url 'client-paymentterminal' %}">
+		<div class="icon-box">
+			<i style="" class="fa fa-3x fa-money" ></i>			
+		</div>
+		<div class="payment-items-right">
+			<div class="payment-items-name"> Наличные, 0% </div>
+			<span class="payment-items-description">
+				Оплата услуг наличными в кассах, терминалах</span>
+		</div>
+	</a> 
+
+	<a class="text-left payment-items" href="{% url 'client-paymentcard' %}">
+		<div class="icon-box" >
+			<i style="" class="fa fa-3x fa-credit-card" ></i>			
+		</div>
+		<div class="payment-items-right">
+			<div class="payment-items-name">
+				Пластиковые карты, 0%
+			</div>
+			<span class="payment-items-description">
+				Оплата услуг с помощью пластиковых карт Visa или Mastercard.</span>
+		</div>
+	</a> 
+{% comment %}
+	<a class="text-left payment-items" href="{% url 'client-payment' name="electron" %}">
+		<div class="icon-box">
+			<i style="" class="fa fa-3x fa-btc" ></i>
+		</div>
+		<div class="payment-items-right">
+			<div class="payment-items-name">
+				Электронные деньги, 0%
+			</div>
+			<span class="payment-items-description">
+				Оплата услуг с помощью электронных платежных систем (Яндекс-деньги, Веб-мани и т.д.).</span>
+		</div>
+	</a>
+{% endcomment %}
+
+	<a class="text-left payment-items" href="{% url 'client-payment' name='mobile' %}">
+		<div class="icon-box">
+			<i style="" class="fa fa-3x fa-mobile " ></i>
+		</div>
+		<div class="payment-items-right">
+			<div class="payment-items-name">
+				Мобильные платежи
+			</div>
+			<span class="payment-items-description">
+				Оплата услуг со счета вашего мобильного телефона.</span>
+		</div>
+	</a> 
+
+	<a class="text-left payment-items" href="{% url 'client-payment' name='limit' %}">
+		<div class="icon-box">
+			<i style="" class="fa fa-3x fa-smile-o" ></i>			
+		</div>
+		<div class="payment-items-right">
+			<div class="payment-items-name">
+				Обещанный платеж, 0%
+			</div>
+			<span class="payment-items-description">
+				Кредит, который вы можете взять для пополнения своего счета</span>
+		</div>
+	</a>
+</div>
+{% endblock %}
+{% block main-bottom-left %}
+{% endblock %}
+{% block connectBut %}  
+{% endblock %}

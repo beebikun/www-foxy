@@ -1,0 +1,295 @@
+/*=========================================================*/
+/*===================Footer*/
+/*=========================================================*/
+footer>.content-inner{
+    padding: 0;
+}
+#bottomnav{
+    display: none;
+}
+#bottomnav li{
+    display: block;
+    width: auto;
+    margin-bottom: 10px;
+}
+/*=========================================================*/
+/*===================General*/
+/*=========================================================*/
+body{padding: 0 0;}
+
+/*--------Настраиваем сетку--------*/
+
+.content-inner{
+    display: inline-block;
+    width: 712px;
+}   
+.content-inner-left{
+    display: inline-block;
+    width: 100%;
+}
+
+.content-inner-right{
+    width:auto;
+    float:none;
+    text-align: center;
+}
+
+.content-inner-right section{
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+#main{
+    margin: 0;
+    margin-top: 0;
+}
+
+#mainTop{
+    margin-top: 0;
+}
+
+#mainTop .content-inner-left{
+    margin-top: 15px; 
+}
+
+#mainTop .content-inner-right{
+    margin-left: 0;
+    margin-right: 0
+}
+
+/*=========================================================*/
+/*===================Header*/
+/*=========================================================*/
+
+header{
+    height: auto;   
+    position: static;
+    margin-top: 0;
+    border-bottom: none;
+    padding-right: 0;
+    padding-left: 0; 
+    box-shadow: none;   
+}
+
+header section{
+    height: auto;
+}
+
+header .content-inner{
+    margin-right: 0;
+}
+
+header .content-inner-right{
+    display: block;
+    margin-top:0;
+    margin-bottom: 0;
+}
+
+header .content-inner-right section{
+    width: auto;
+}
+
+header .content-inner-right section:first-child .phones-block .phone-num{
+    text-align: center;
+}
+
+header .content-inner-right section:last-child .phones-block .phone-num{
+    text-align: center;
+}
+
+/*--------Header-top (Ресурсы + logo)--------*/
+
+#collapseMenuBtn{
+    display: none;
+    margin-top: 0;
+    float: none;
+}
+
+#topnav{
+    margin-top: 0;
+    padding-right: 0;
+}
+
+#topnav>#logo{
+    height: 55px;
+}
+
+#topnav>ul{ 
+    float: right;
+    text-align: right;
+    margin: 0;
+    display:block;
+}
+
+#topnav>ul>li{  
+    margin-top:24px;
+}
+
+/*--------Header-bottom (Заявка)--------*/
+
+#makeConReq{
+    display: block;
+    margin-bottom: 15px;
+}
+
+.makeConReqBut{
+    display: block;
+    float:right;
+}
+
+/*--------Header-right (Phones)--------*/
+
+.phones-block{
+    display: inline-block;
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-right:50%;
+}
+
+.phone-descr{
+    display: inline-block;
+}
+
+.phone-num{    
+    display: inline-block;
+}
+
+/*=========================================================*/
+/*===================Menu*/
+/*=========================================================*/
+/*--------Main menu--------*/
+
+#mainMenu{
+    width: 100%;    
+    height: auto;
+    position: static;
+    border-top: none;
+    border-bottom: none;
+    display: block;
+    top:0;
+    box-shadow: none;
+}
+
+#mainMenu .mybtn{
+    border:1px solid #9c9c9c;
+    border-radius: 0;    
+    display: inline-block;
+    margin-bottom: 15px;
+    margin-left: -5px;
+    padding: 12px;
+    width: auto;
+}
+
+#mainMenu .btn-orange{
+    border-color: #ff6600;
+}
+
+#mainMenu .mybtn:first-child{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+#mainMenu .mybtn:last-child{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    margin-top:-15px;
+}
+
+/*--------Menu bottom (2gis)--------*/
+
+#gisBan{
+    display: inline-block;
+}
+
+#social{
+    text-align: center;
+}
+
+/*=========================================================*/
+/*===================Content (Middle)*/
+/*=========================================================*/
+/*--------Items--------*/
+
+/*--------Map--------*/
+
+.map{
+    height:200px;
+}
+
+.map-full-size{
+    height:200px;
+}
+
+.map-on-page-with-tp{
+    height:200px;
+}
+
+
+/*=========================================================*/
+/*===================Pages*/
+/*=========================================================*/
+/*--------Letsfox--------*/
+
+#LetsfoxMakeReq{
+    display: none;
+    float:none;
+    width: 100%;
+}
+
+#doit .form-group .col-lg-6{
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: -20px;
+}
+
+#doit .form-group .col-lg-6:first-child{
+    margin-bottom: 10px;
+}
+
+/*--------Index--------*/
+/*--------News--------*/
+/*--------Internet (simple-pages)--------*/
+/*--------Rates--------*/
+
+.ratesGraph > ul > li > div > span{
+    top:0;
+}
+#ratesHit > ul > li:first-child .speed {
+    top:0;
+}
+#ratesHit > ul > li:first-child .traffic span{
+    top:0;
+}
+.ratesGraph > ul > li:first-child > .speed{
+    top:0;
+}
+.ratesGraph>ul>li>.pay{
+    bottom:-2em;
+}
+
+.ratesGraph i{
+    font-size: 0.5em;
+    display: block;
+}
+.ratesGraph>ul>li>.speed, #ratesHit>ul>li>.traffic>span{font-size: 2.1em; }
+.ratesGraph>ul>li:first-child>.speed, #ratesHit>ul>li:first-child>.traffic>span,
+.ratesGraph>ul>li>div>span{font-size: 2.3em;}
+.ratesGraph>ul>li:last-child>.speed, #ratesHit>ul>li:last-child>.traffic>span{font-size: 3.2em; }
+.ratesGraph>ul>li>.pay{font-size: 1.6em; }
+
+/*--------About--------*/
+/*--------How (tree pages)--------*/
+
+/*=========================================================*/
+/*===================Paginator*/
+/*=========================================================*/
+
+/*=========================================================*/
+/*===================Carousel*/
+/*=========================================================*/
+
+#carussel{
+    height: 424px;
+    display: block;
+}

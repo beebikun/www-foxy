@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Интернет провайдер Телевокс - Интернет в каждый дом!" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="icon" type="image/png" href="/static/img/favicon.png" />
+    <link rel="stylesheet" href="/static/css/bootstrap-3.0.0/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/tlvx.css" />    
+    <link rel="stylesheet" href="/static/css/fonts.css" />    
+    <title>Televox</title>
+</head>
+<body>
+    <div id="wrap" >
+        <header>
+            <div class="content-inner" style="text-align:center">
+                <h1>Ой, таки, вэй!</h1>
+                <p>Запрашиваемой страницы нет в базе данных, вместо этого вот картинка</p>
+                <p><a href="/">На главную</a></p>
+            </div>
+        </header>
+        <section id="main" class="clearfix">
+            <div class="content-inner" style="text-align:center">
+                <a href="/" style="display:inline-block">
+                    <img src="/media/404/1.jpg" alt='404' id="myimg" class="img-responsive" >
+                </a>
+            </div>
+        </section>        
+    </div>
+    <footer>
+        <div class="content-inner">
+            <div class="content-inner-left">
+                &copy; ООО "Телевокс", 2008-2013<br>
+                Свидетельство о регистрации СМИ  Эл № ФС77-46508 от 09.09.2011 г. выданное Федеральной службой по надзору в сфере связи, информационных технологий и массовых коммуникаций (Роскомнадзор)
+            </div>
+        </div>      
+    </footer>
+    <script type="text/javascript">
+        var img = document.getElementById('myimg'), max = 8;
+        img.setAttribute('src','/media/404/' + Math.floor(1 + Math.random()*max) + '.jpg' )
+    </script>
+</body>

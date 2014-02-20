@@ -1,0 +1,50 @@
+@font-face{
+	font-family: newSans; /* Гарнитура шрифта */
+    /*src: url(../fonts/NeoSansCyr-Regular.ttf);*/
+    src: url(../fonts/neosanscyr-regular.woff); 
+}
+.mybtn{
+	font: normal normal 400 1.15em/20px newSans;
+}
+
+body{
+	font-family: Arial;font-size: 1.4em;
+}
+
+.phone-num{
+	font-size: 1.8em;
+}
+
+#makeConReqBut> .btn{
+	font-size: 1em;
+}
+
+#makeConReq, .phone-descr, #gisBan,
+.some-item-date, .some-item-body-text, .more-items-btn, .help-block, 
+	.markerHeader, .markerCont, .markerFooter{
+		font-size: 0.9em; 
+}
+
+#license-info{
+	font-size: 0.7em;
+}
+
+
+.ratesGraph>ul>li>div>span{font-size: 2em;}
+.ratesGraph>ul>li>.pay{font-size: 1.6em; }
+
+
+body{
+	line-height:normal;
+}
+
+.some-item-body-text, .markerFooter{
+	line-height: 1.45; 
+}
+
+
+@media (min-width: 990px) {
+	.mybtn{font-size: 1.5em;}
+	
+}
+
