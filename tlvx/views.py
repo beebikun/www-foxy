@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import math
 import re
-import uuid
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, get_object_or_404
-from django.template import RequestContext, loader
-from django.http import Http404
-from django.core.urlresolvers import reverse
 from django.db.models import Max
-from tlvx.core import models
-from tlvx.api import serializers
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.template import RequestContext, loader
 from tlvx import settings
+from tlvx.api import serializers
+from tlvx.core import models
 from tlvx.helpers import change_keyboard
 
 
@@ -19,11 +16,11 @@ def is_gray_ip(ip):
     if not ip:
         return
     A, B, C, D = [int(i) for i in ip.group().split('.')]
-    if A==10:
+    if A == 10:
         return True
-    if A==172 and 16<=B<=31:
+    if A == 172 and 16 <= B <= 31:
         return True
-    if A==192 and B==168:
+    if A == 192 and B == 168:
         return True
     return False
 

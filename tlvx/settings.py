@@ -101,47 +101,36 @@ LOGGING = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-       'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
     )
 }
 
 
-
-GIS_CONFIG = {
-    'url': 'http://catalog.api.2gis.ru/',
-    'search':'geo/search',
-    'get':'geo/get',
-    'search_point':'search',
-    'profile':'profile',
-    'key':'ruqcrc5381',
-    'version':'1.3',
-}
-
 BUILD_TYPES = (
-    (u"house",u"Жилое"),
-    (u"office",u"Офисное")
+    (u"house", u"Жилое"),
+    (u"office", u"Офисное")
 )
 NOTE_TYPES = (
-    ('news',u'Новости'),
-    ('crash',u'Авария')
+    ('news', u'Новости'),
+    ('crash', u'Авария')
 )
 RATES_TYPES = (
-    ('jp',u'Юр лица'),
-    ('p',u'Физ лица'),
-    ('other',u'Прочее'),
+    ('jp', u'Юр лица'),
+    ('p', u'Физ лица'),
+    ('other', u'Прочее'),
 )
 ICONS = (
-    ('tlvx','tlvx-logo'),
-    ('red','red'),
-    ('orange','orange'),
-    ('yellow','yellow'),
-    ('green','green'),
-    ('blue','blue'),
-    ('purple','purple'),
-    ('gray','gray'),
-    ('active','дом подключен'),
-    ('plan','сбор заявок'),
-    ('not_in_list','дом не подключен'),
+    ('tlvx', 'tlvx-logo'),
+    ('red', 'red'),
+    ('orange', 'orange'),
+    ('yellow', 'yellow'),
+    ('green', 'green'),
+    ('blue', 'blue'),
+    ('purple', 'purple'),
+    ('gray', 'gray'),
+    ('active', 'дом подключен'),
+    ('plan', 'сбор заявок'),
+    ('not_in_list', 'дом не подключен'),
 )
 NOTE_COUNT = 10
 PAGINATOR_PAGE = 9
