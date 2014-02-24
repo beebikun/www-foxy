@@ -21,8 +21,7 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 
 
-def formatted_date(date):
-    return dateformat.format(date, DATE_FORMAT)
+formatted_date = lambda date: dateformat.format(date, DATE_FORMAT)
 
 
 def get_gis_url(suf=''):
@@ -91,8 +90,7 @@ def get_gis_answer(url, city, street, num, street_alt, num_alt):
 class City(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
-    def get_builds_sum(self):
-        return len(self.buildings.all())
+    get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
         return self.name
@@ -101,8 +99,7 @@ class City(models.Model):
 class Street(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
-    def get_builds_sum(self):
-        return len(self.buildings.all())
+    get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
         return self.name
@@ -123,17 +120,13 @@ class CentralOffice(models.Model):
         verbose_name=u"Иконка маркера на карте",
         related_name="offices")
 
-    def lat(self):
-        return self.address.lat
+    lat = lambda self: self.address.lat
 
-    def lng(self):
-        return self.address.lng
+    lng = lambda self: self.address.lng
 
-    def get_address(self):
-        return self.address.get_address()
+    get_address = lambda self: self.address.get_address()
 
-    def get_builds_sum(self):
-        return len(self.buildings.all())
+    get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
         return str(self.pk)
@@ -145,8 +138,7 @@ class BuildType(models.Model):
     """
     name = models.CharField(max_length=256, choices=BUILD_TYPES, unique=True)
 
-    def get_builds_sum(self):
-        return len(self.buildings.all())
+    get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
         return self.name
@@ -158,8 +150,7 @@ class Square(models.Model):
     """
     num = models.IntegerField(unique=True)
 
-    def get_builds_sum(self):
-        return len(self.buildings.all())
+    get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
         return str(self.num)
@@ -171,8 +162,7 @@ class NoteType(models.Model):
     """
     name = models.CharField(max_length=256, choices=NOTE_TYPES, unique=True)
 
-    def get_notes_sum(self):
-        return len(self.notes.all())
+    get_notes_sum = lambda self: len(self.notes.all())
 
     def __unicode__(self):
         return self.name
@@ -212,11 +202,9 @@ class Building(models.Model):
         verbose_name="longitude of position for place")
     name = models.CharField(max_length=256, blank=True, null=True, )
 
-    def get_pp(self):
-        return len(self.points.all())
+    get_pp = lambda self: len(self.points.all())
 
-    def get_position(self):
-        return [self.lat, self.lng]
+    get_position = lambda self: [self.lat, self.lng]
 
     def search_by_address(self, street='', num=''):
         if street.lower() in self.street.name.lower() and \
@@ -307,20 +295,17 @@ class Building(models.Model):
     def get_address(self):
         if self.street and self.num:
             return self.street.name + ', ' + self.num
-        else:
-            return ''
+        return ''
 
     def get_address_alt(self):
         if self.street_alt and self.num_alt:
             return self.street_alt.name + ', ' + self.num_alt
-        else:
-            return ''
+        return ''
 
-    def get_params_for_gis(self, url):
-        return dict(
-            url=url, city=self.city.name, street=self.street.name,
-            num=self.num, street_alt=self.street_alt and self.street_alt.name,
-            num_alt=self.num_alt)
+    get_params_for_gis = lambda self, url: dict(
+        url=url, city=self.city.name, street=self.street.name, num=self.num,
+        street_alt=self.street_alt and self.street_alt.name,
+        num_alt=self.num_alt)
 
     def get_info_from_gis(self):
         #вытягиваем название места
@@ -389,11 +374,9 @@ class Note(models.Model):
     attach = models.FileField(upload_to="notes",  null=True, blank=True)
     num = models.IntegerField(null=True, blank=True)
 
-    def attach_path(self):
-        return ''
+    attach_path = lambda self: ''
 
-    def normal_date(self):
-        return formatted_date(self.date)
+    normal_date = lambda self: formatted_date(self.date)
 
     def __unicode__(self):
         return "%s: %s" % (self.id, self.header)
@@ -448,8 +431,7 @@ class Rates(models.Model):
         # verbose_name=u"для физических или для юридических лиц"
     )
 
-    def normal_date_in(self):
-        return formatted_date(self.date_in)
+    normal_date = lambda self: formatted_date(self.date_in)
 
     def save(self, *args, **kwargs):
         if kwargs:
@@ -481,14 +463,11 @@ class PaymentPoint(models.Model):
     gis_hash = models.CharField(max_length=256, blank=True, default=u'')
     contacts = models.CharField(max_length=2048, blank=True, default=u'')
 
-    def lat(self):
-        return self.address.lat
+    lat = lambda self: self.address.lat
 
-    def lng(self):
-        return self.address.lng
+    lng = lambda self: self.address.lng
 
-    def get_address(self):
-        return self.address.get_address()
+    get_address = lambda self: self.address.get_address()
 
     def save(self, *args, **kwargs):
         if kwargs:
@@ -592,11 +571,9 @@ class Payment(models.Model):
     hint_line = models.CharField(max_length=512, blank=True)
     num = models.IntegerField(null=True, blank=True)
 
-    def get_values(self):
-        return len(self.points.all())
+    get_values = lambda self: len(self.points.all())
 
-    def get_points(self):
-        return self.points.all()
+    get_points = lambda self: self.points.all()
 
     def __unicode__(self):
         return self.name
@@ -605,29 +582,18 @@ class Payment(models.Model):
 class MarkerIcon(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
-    def get_photo_path(self, filename):
-        return os.path.join('icons', filename)
+    get_photo_path = lambda self, filename: os.path.join('icons', filename)
 
-    def get_absolute_url(self, host_url=""):
-        if self.ico:
-            return host_url + self.ico.url
-        else:
-            return None
+    get_absolute_url = lambda self, host_url='': '%s%s' % (
+        host_url, self.ico.url) if self.ico else None
     ico = imagekit_models.ProcessedImageField(
         upload_to=get_photo_path,
-        verbose_name=u"иконка", null=True, blank=True,
-        processors=[processors.ResizeToFit(100, 100), ], options={'quality': 85}
+        verbose_name=u"иконка", null=True, blank=True, options={'quality': 85},
+        processors=[processors.ResizeToFit(100, 100), ]
     )
 
-    def width(self):
-        if self.ico:
-            return self.ico.width
-        return 0
-
-    def height(self):
-        if self.ico:
-            return self.ico.height
-        return 0
+    width = lambda self: self.ico.width if self.ico else 0
+    height = lambda self: self.ico.height if self.ico else 0
 
     def __unicode__(self):
         return self.name
@@ -642,21 +608,18 @@ class StaticPageBase(models.Model):
 
     display_name = models.CharField(max_length=256, null=True, blank=True)
 
-    def get_child(self):
-        return None
+    get_child = lambda self: None
 
-    def get_attach_path(self, filename):
-        return 'pages/%s/%s.%s' % (self.__class__.__name__.lower(), self.name,
-                                   filename.split('.')[-1])
+    get_attach_path = lambda self, filename: 'pages/%s/%s.%s' % (
+        self.__class__.__name__.lower(), self.name, filename.split('.')[-1])
 
-    def get_url_attach(self, host_url=""):
-        return host_url + self.attach.url if self.attach else None
+    get_url_attach = lambda self, host_url='': '%s%s' % (
+        host_url, self.attach.url) if self.attach else None
 
     attach = models.FileField(
         upload_to=get_attach_path,  null=True, blank=True)
 
-    def have_content(self):
-        return True if self.content else False
+    have_content = lambda self: True if self.content else False
 
     def __unicode__(self):
         return self.name
@@ -664,18 +627,16 @@ class StaticPageBase(models.Model):
 
 class StaticPage(StaticPageBase):
     content = models.TextField(null=True, blank=True)
-    pass
 
 
 class TreePage(StaticPageBase):
     class Meta:
         abstract = True
 
-    def have_childs(self):
-        return len(self.get_child()) and True
+    have_childs = lambda self: True if len(self.get_child()) else False
 
     def get_child(self):
-        childs = getattr(self, '%s_childs'%self.__class__.__name__.lower())
+        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.all())
 
 
@@ -693,7 +654,7 @@ class HelpPage(TreePage):
         'HelpPage', null=True, blank=True, related_name="%(class)s_childs")
 
     def get_child(self):
-        childs = getattr(self, '%s_childs'%self.__class__.__name__.lower())
+        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.all().order_by('num', 'display_name'))
 
 
@@ -742,8 +703,7 @@ class Captcha(models.Model):
     key = models.CharField(max_length=256, blank=True)
     date = models.DateTimeField(default=timezone.now(), blank=True)
 
-    def get_absolute_url(self, host_url=""):
-        return host_url + self.img.url
+    get_absolute_url = lambda self, host_url="": host_url + self.img.url
 
     right = models.BooleanField(default=False)
 
@@ -769,9 +729,6 @@ class CaptchaImageClone(Captcha):
         upload_to=get_photo_path, options={'quality': 85},
         processors=[processors.ResizeToFit(100, 100), ]
     )
-
-    def save(self, *args, **kwargs):
-        super(CaptchaImageClone, self).save(*args, **kwargs)
 
 
 class ConnRequest(models.Model):
