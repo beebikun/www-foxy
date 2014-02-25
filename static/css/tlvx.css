@@ -873,7 +873,7 @@ header section:last-child{
 .big-ul>li{
 	margin-top: 10px;
 }
-.static-header{
+.static-header, .#mainMenu.static-header{
 	position: absolute;
 }
 .no-margin-top{

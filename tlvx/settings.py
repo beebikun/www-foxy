@@ -8,7 +8,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-     ('Televox', 'info@tlvx.ru'),
+    ('Televox', 'info@tlvx.ru'),
 )
 
 MANAGERS = ADMINS
@@ -22,15 +22,15 @@ DATE_FORMAT = 'd E Y'
 
 SITE_ID = 1
 
-USE_I18N = True    
+USE_I18N = True
 
-USE_L10N = True    
+USE_L10N = True
 
-USE_TZ = True    
+USE_TZ = True
 MEDIA_ROOT = os.path.join(TLVX_ROOT, 'media')
 MEDIA_URL = 'media/'
 STATIC_ROOT = os.path.join(TLVX_ROOT, 'static')
-STATIC_URL ='/static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 )
 STATICFILES_FINDERS = (
@@ -94,7 +94,7 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'propagate': True    ,
+            'propagate': True,
         },
     }
 }

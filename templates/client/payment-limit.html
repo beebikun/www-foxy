@@ -11,25 +11,13 @@
   	<div class="form-group">    	
     	<input type="password" class="form-control" placeholder="Пароль" name="pswd" >
   	</div>
-  	<button id="limit_ok" class="btn btn-default" >Подключить</button>
+  	<button id="limit_ok" class="btn btn-default disable">Подключить</button>
 </div>
 <p id="message"></p>
 {% endblock %}
 
 {% block jsscript %}
 <script type="text/javascript">
-	$(document).ready(function(){
-		var api = $().apiHelper();
-		$("#limit_ok").click(function(){
-			data = {}
-			$.each($("#limit_form input"), function(i, el){
-				if(el.getAttribute('name')) data[el.getAttribute('name')] = $(el).val()
-			});
-			$.post(api.bg.limit, data, function(data){
-				var data = data.data
-				$("#message").html(data.message)
-			});
-		})
-	})
+	document.getElementById("limit_ok").onclick = enlargeLimit;
 </script>
 {% endblock %}

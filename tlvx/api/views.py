@@ -63,7 +63,6 @@ class StreetRoot(ApiRoot):
     def get(self, request, format=None,):
         params = self.validate_and_get_params(
             forms.StreetRequestForm, request.QUERY_PARAMS)
-        #print change_keyboard(params['name'])
         objects = set(self.get_object(params['name']) +
                       self.get_object(change_keyboard(params['name'])))
         data = [self.get_data(obj) for obj in objects]
@@ -133,14 +132,15 @@ class DoitRoot(ApiRoot):
         s = serializers.DoitSerializer(data=request.POST)
         if s.is_valid():
             return project_api_response.Response({'doit': True})
-        else:
-            return project_api_response.Response(s.errors)
+        return project_api_response.Response(s.errors)
 
 
 class BGLimitRoot(ApiRoot):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
+        #By some reasons, needed params in params, but forms say other :/
+        #So i set requres False for params in form
         params = self.validate_and_get_params(
             forms.BGLimitForm, request.POST)
         message = bg.take_limit(**params)

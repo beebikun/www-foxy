@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework.response import Response as RestFrameworkResponse
-from rest_framework.reverse import reverse
 
-# from sz.core import models
-
-# from sz.core import gis as gis_core
 
 class Response(RestFrameworkResponse):
     """
@@ -20,5 +16,6 @@ class Response(RestFrameworkResponse):
         Setting 'renderer' and 'media_type' will typically be defered,
         For example being set automatically by the `APIView`.
         """
-        super(Response, self).__init__(None, status=status, template_name=template_name, headers=headers)
+        super(Response, self).__init__(
+            None, status=status, template_name=template_name, headers=headers)
         self.data = {'data': data, 'meta': {'code': status, 'info': info}}

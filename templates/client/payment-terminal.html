@@ -4,104 +4,103 @@
 {% block title %}Televox -  Оплата наличными{% endblock %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){				
-		$("#searchInPoints").keydown(function(e){
-			if(window.mapH===undefined) return
-			var code = e.keyCode || e.which;
-			if(code==27){/*esc*/$(this).blur();return}
-			var key = $(this).val(); var markersList = mapH.map.markers.getAll();
-			function showHideMarker(m, show){
-				var $elem = $("#" + m.val.id)
-				if(show){m.show();$elem.show();}
-				else{m.hide(); $elem.hide();}
-			}
-			for(var i in markersList){
-				var m = markersList[i]
-				if(key.length>2){
-					var key = key.toLowerCase(); var query = m.val.query.toLowerCase();
-					if(!(query.indexOf(key)+1)) showHideMarker(m)
-					else showHideMarker(m, true)
-				}
-				else{showHideMarker(m, true)}
-			}				
-		});
-		function showHideGroup(group, show){
-			group.getAll().map(function(m){return m.val}).map(function(val){
-				var $elem = $("#" + val.id)
-				if(show) $elem.show()
-				else $elem.hide()
-			})
-			if(show) group.show();
-			else group.hide();
-		}
-		$("#paymentSelect").change(function(){
-			if(window.mapH===undefined) return
-			var payment = this.options[this.selectedIndex].value;
-			if(payment){
-				for (var name in mapH.markerGroups){
-					if(name!=payment) showHideGroup(mapH.markerGroups[name]);
-					else showHideGroup(mapH.markerGroups[name], true);
-				}
-			}
-			else{for (var name in mapH.markerGroups) showHideGroup(mapH.markerGroups[name], true);}
-		});
-	});
+	document.getElementById('searchInPoints').onkeydown = function(e){
+        if(window.mapH===undefined) return
+        var code = e.keyCode || e.which;
+        if(code==27){/*esc*/this.blur();return}
+        var key = this.value, markersList = mapH.map.markers.getAll();
+        function showHideMarker(m, show){
+            showhideEl(m.val.id, show)
+            if(show) m.show();
+            else m.hide();
+        }
+        for (var i = markersList.length - 1; i >= 0; i--) {
+            var m = markersList[i]
+            if(key.length>2){
+                var key = key.toLowerCase(); var query = m.val.query.toLowerCase();
+                if(!(query.indexOf(key)+1)) showHideMarker(m)
+                else showHideMarker(m, true)
+            }
+            else{showHideMarker(m, true)}
+        };
+    }
+
+    document.getElementById.onchange = function(){
+    	function showHideGroup(group, show){
+	    	for (var i = group.getAll.length - 1; i >= 0; i--) {
+	    		var val = group.getAll[i].val;
+	    		showhideEl(val.id, show)
+	    	};
+	        if(show) group.show();
+	        else group.hide();
+	    }
+        if(window.mapH===undefined) return
+        var payment = this.options[this.selectedIndex].value;
+        if(payment){
+        	for (var i = mapH.markerGroups.length - 1; i >= 0; i--) {
+        		var name = mapH.markerGroups[i]
+        		if(name!=payment) showHideGroup(mapH.markerGroups[name]);
+                else showHideGroup(mapH.markerGroups[name], true);
+        	};
+        }
+        else{for (var name in mapH.markerGroups) showHideGroup(mapH.markerGroups[name], true);}
+    };
 </script>
 {% endblock %}
 {% block payment-title %}
-	Наличные, 0% 	
+    Наличные, 0%     
 {% endblock %}
 {% block payment %}
-	<div id="myMapId" class="map margin-bottom"></div>
-	<noscript>Для просмотра карты и поиска нужного терминала необходим javascript. Пожалуйста, включите его в настройках вашего браузера.</noscript>
-	<span class="help-block">На карте в виде маркеров обозначены места, в которых вы можете заплатить за услуги "Телевокс"</span>	
-	<div class="margin-bottom margin-top">	
-       	<select class="form-control input-sm" id="paymentSelect">
-            	<option value="" selected="selected">Все</option>
-       		{% for payment in data %}
-       			<option id="{{payment.id}}">{{ payment.name|safe }}</option>
-        	{% endfor %}
-		</select>
-		<span class="help-block">Вы можете выбрать конкретного оператора из списка</span>	
-	</div>
-	<div >
-		<input type="text" class="form-control input-sm" placeholder="Название или адрес" id="searchInPoints">
-		<span class="help-block">Введите название местоположения или адрес терминала, чтобы найти его. Например, &laquo;Зейская&raquo; или &laquo;От и До&raquo;. При этом маркеры и список внизу отфильтруются согласно вашему запросу.</span>	
-	</div>
+    <div id="myMapId" class="map margin-bottom"></div>
+    <noscript>Для просмотра карты и поиска нужного терминала необходим javascript. Пожалуйста, включите его в настройках вашего браузера.</noscript>
+    <span class="help-block">На карте в виде маркеров обозначены места, в которых вы можете заплатить за услуги "Телевокс"</span>    
+    <div class="margin-bottom margin-top">    
+           <select class="form-control input-sm" id="paymentSelect">
+                <option value="" selected="selected">Все</option>
+               {% for payment in data %}
+                   <option id="{{payment.id}}">{{ payment.name|safe }}</option>
+            {% endfor %}
+        </select>
+        <span class="help-block">Вы можете выбрать конкретного оператора из списка</span>    
+    </div>
+    <div >
+        <input type="text" class="form-control input-sm" placeholder="Название или адрес" id="searchInPoints">
+        <span class="help-block">Введите название местоположения или адрес терминала, чтобы найти его. Например, &laquo;Зейская&raquo; или &laquo;От и До&raquo;. При этом маркеры и список внизу отфильтруются согласно вашему запросу.</span>    
+    </div>
 {% endblock %}   
 {% block simitems %}
 <div id="simmularItems" class="items-area">
-	{% for payment in data %}
-		<div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-hidden="true">
-		    <div class="modal-dialog">
-				<div class="modal-content">
-					<form role="form"> 
-				        <div class="modal-header">
-				        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				        	<h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
-				        </div>
-				        <div class="modal-body">
-				        	{{ payment.description|safe }}
-				        </div>
-				        <div class="modal-footer">
-				        	<button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
-				        </div>
-			        </form>
-		      	</div>
-			</div>
-		</div>	
-		{% for point in payment.points.result %}
-			<div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.marker}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
+    {% for payment in data %}
+        <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form"> 
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ payment.description|safe }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
+                        </div>
+                    </form>
+                  </div>
+            </div>
+        </div>    
+        {% for point in payment.points.result %}
+            <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.marker}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
                 <p class="some-item-date">{{ payment.name }} </p>
                 <div class="some-item-body">
                     <span class="some-item-body-title">{{ point.address }}</span>
                     <div class="some-item-body-text"> 
-                    	{{ point.name|safe }}
-                    	<div><a data-toggle="modal" class="how-play-btn bold-a" href="#modal{{ payment.id }} ">Как оплатить</a></div>
-                	</div>
+                        {{ point.name|safe }}
+                        <div><a data-toggle="modal" class="how-play-btn bold-a" href="#modal{{ payment.id }} ">Как оплатить</a></div>
+                    </div>
                 </div>
             </div>
-		{% endfor %}
-	{% endfor %}
+        {% endfor %}
+    {% endfor %}
 </div>
 {% endblock %}        

@@ -204,7 +204,18 @@
 	var streetInputID = "[name=street]:visible";
 	var numInputID = "[name=num]:visible";
 	var streetTipsID = "#streetTips";
-        var paymentMobileOnSite = "#payment-mobile-onsite";
+    var paymentMobileOnSite = "#payment-mobile-onsite";
+    var url = window.location.host + '/';
+    var api = new Object;
+    api.api = 'http://' + url + "api/"
+    api.street = api.api + 'street';
+    api.markers = api.api + 'markers-icons';
+    api.doit = api.api + 'doit';
+    api.captcha = api.api + 'captcha';
+    api.buildingSearch = api.api + 'buildings/search';
+    api.bg = {};
+    api.bg.root = api.api + 'bg/';
+    api.bglimit = api.bg.root + 'limit';
 </script>
 <script src="{{ STATIC_URL }}css/bootstrap-3.0.0/bootstrap/js/bootstrap.min.js"></script>        
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/tinyscrollbar/js/jquery.tinyscrollbar.min.js"></script>
