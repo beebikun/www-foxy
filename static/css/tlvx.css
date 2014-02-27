@@ -366,7 +366,12 @@ header section:last-child{
 	margin-bottom: 0;
 }
 
-@media(min-height: 700px) and (min-width:990px)  {#mainMenu{position: fixed;} } /*Ограничение по высоте для плавующего блока*/
+@media(min-height: 700px) and (min-width:990px)  {
+	#mainMenu{
+		position: fixed;
+		z-index: 1;
+	}
+} /*Ограничение по высоте для плавующего блока*/
 
 /*--------Menu bottom (2gis)--------*/
 
@@ -879,3 +884,5 @@ header section:last-child{
 .no-margin-top{
 	margin-top: -40px;
 }
+.no-margin{margin: 0 }
+.no-padding{padding: 0}

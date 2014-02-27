@@ -61,6 +61,7 @@ class StreetRoot(ApiRoot):
         return serializers.StreetSerializer(instance=obj).data
 
     def get(self, request, format=None,):
+        print request.QUERY_PARAMS
         params = self.validate_and_get_params(
             forms.StreetRequestForm, request.QUERY_PARAMS)
         objects = set(self.get_object(params['name']) +
