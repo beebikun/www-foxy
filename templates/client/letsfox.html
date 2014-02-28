@@ -4,7 +4,7 @@
 {% block jsscript %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	function open_doit_modal(point){
+	var preModalFn = function(point){
 		var contacts = document.getElementById('doit_contacts');
 		var params = {
 			address:point.getAttribute('address'),
@@ -19,86 +19,11 @@
 			var el = document.querySelectorAll("[name=" + p + "]");
 			if(el.length) el[0].value = params[p]
 		}
-
-		var modal = document.getElementById(point.getAttribute('href').slice(1));
-		showHideModal(modal, true)
 	}
+	
+	createCaptcha('captcha');	
 
-	node2array(document.querySelectorAll('[data-dismiss=modal]')).forEach(function(btn){
-		btn.onclick = function(e){
-			var modal = findParent('.modal', this);
-			if(modal) showHideModal(modal);
-		}
-	});
-
-
-	$(document).ready(function(){		
-		/*node2array(document.getElementsByClassName('open-doit')).forEach(function(el){
-			el.onclick = function(e){
-				open_doit_modal(el)
-			}
-		})*/;
-		function createCaptcha(){
-			var captcha = document.getElementById('captcha');
-			captcha.innerHTML = '';
-			request({
-				path: 'captcha',
-				success: function(data){
-					if(!data || data.length == 0) return;
-					document.querySelectorAll('[name=captcha_key]').value = data.key;
-					for (var i = 0; i < data.images.length; i++) {
-						var val = data.images[i]
-		        		captcha.innerHTML = [captcha.innerHTML, '<label class="btn btn-default mybtn">',
-		        		                     '<input type="radio" name="captcha" value="', val.name, '">',
-		        		                     '<img src="', val.src, '" >', '</label>'].join('');
-					};
-				}
-			});
-		}
-		createCaptcha();
-		document.getElementById('okBtn').onclick = function(e){
-			var form = $(this).parents('form')[0];
-			var data = new Object;
-			var inputs = filterNodes(form.getElementsByTagName('input'),
-				                     function(input){return input.getAttribute('name')});
-			inputs.forEach(function(input){
-				var t = input.getAttribute('type');
-				if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ) data[input.getAttribute('name')] = input.value
-			});
-			if(data.address) {
-				var items = filterNodes(document.getElementsByClassName('some-item'),
-					                   function(item){return item.getElementsByClassName('some-item-body-title')[0].innerText == data.address});
-				if(items.length>=1) data.address = data.address + '|' + items[0].getElementsByClassName('some-item-date').innerText;
-			}
-			request({
-				post: true,
-				path: 'doit',
-				data: data,
-				success: function(data){
-					node2array( document.getElementsByClassName('has-error') ).forEach(function(el){
-						removeClass( el, 'has-error');
-					});
-					node2array( document.getElementsByClassName('help-error') ).forEach(function(el){showHideElBlock(el);});
-					if(data.doit === undefined){ 
-						for(var field in data){
-							var err = data[field];
-							var errInput = document.querySelectorAll('[name=' + field + ']');
-							var formGroup = $(errInput).parents('.form-group')[0];
-							addClass( formGroup, 'has-error');
-							var errText = formGroup.getElementsByClassName( 'help-error' )[0];
-							showHideElBlock(errText, true)
-							errText.innerText = err;
-						}
-					} else {
-						showHideModal( document.getElementById('doit') );
-						showHideModal( document.getElementById('doitOk'), true );
-					}
-					createCaptcha();
-				}
-			})
-		}
-		
-	})
+	document.getElementById('okBtn').onclick = doitOkBtnClick;
 </script>
 {% endblock %}
 {% block main-top-left %}
@@ -216,7 +141,7 @@
             <div class="some-item-body">
                 <span class="some-item-body-title">{{ point.address }}</span>
                 <div class="some-item-body-text" > 
-                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit"  onclick="open_doit_modal(this)"
+                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit"  data-toggle="modal"
                 		href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
             	</div>
             </div>
@@ -233,7 +158,7 @@
             <div class="some-item-body">
                 <span class="some-item-body-title">{{ point.address }}</span>
                 <div class="some-item-body-text" > 
-                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit" onclick="open_doit_modal(this)"
+                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit" data-toggle="modal"
                 		href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
             	</div>
             </div>

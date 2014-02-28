@@ -3,10 +3,170 @@ var menuSettings = {
     hide : { h: 0, b: 'none'},
     normal: { h: 253, b: '1px solid #DADADA'}
 };
+var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
+var numInput = filterVisible(document.querySelectorAll('[name=num]'));
+var streetTips = document.getElementById('streetTips'); 
+
+/*--------------------Buttons Section----------------*/
+
+function initRadioButtons(){
+	node2array(document.querySelectorAll('[type=radio]')).forEach(function(input){
+		var btnGroup = findParent('[data-toggle="buttons"]', input);
+		var label = findParent('.btn', input);
+		var labels = node2array(btnGroup.getElementsByClassName('btn'))
+		input.onclick = function(){
+			labels.forEach(function(el){removeClass(el, 'active')})
+			addClass(label, 'active')
+		}
+	});	
+}
+
+/*-----------------------------------------------*/
+
+/*--------------------Modal Section----------------*/
+var preModalFn;
+function showHideModal(el, show){
+    var classes = getClass(el);
+    if(show){
+    	el.style.display = 'block';
+    	setTimeout(function(){
+    		addClass(el, 'in');
+	    	var div = document.createElement('div');
+	    	addClass(div, 'modal-backdrop fade in');
+	    	if(document.body != null) document.body.appendChild(div); 
+    	}, 50);
+    }else{
+        removeClass(el, 'in');
+        setTimeout(function(){
+        	el.style.display = 'none'
+	        removeEl('.modal-backdrop');
+        }, 50);
+    }
+    el.setAttribute('aria-hidden', show ? false : true)
+}
+
+function clickModalA(a){
+	if(preModalFn) preModalFn(a);
+	var id = a.getAttribute('href').slice(1);
+	var modal = document.getElementById( trim(id) );
+	if(modal) showHideModal(modal, true)
+}
+
+function initModal(){
+	node2array(document.querySelectorAll('[data-dismiss=modal]')).forEach(
+		//find and set all modal dismiss buttons
+		function(btn){
+			btn.onclick = function(e){
+				var modal = findParent('.modal', this);
+				if(modal) showHideModal(modal);
+			}
+	 	}
+	);
+	node2array(document.querySelectorAll('[data-toggle=modal]')).forEach(
+		//find and set all modal open elements (<a>)
+		function(a){
+			if( findParent('#myMapId', a) ) console.log(a)
+			a.onclick = function(){clickModalA(this);}
+		}
+	);
+}
+/*-----------------------------------------------*/
+
+/*----------------Carusel Section---------------*/
+
+
+/*-----------------------------------------------*/
+
+/*------------------Map Section-----------------*/
+
+function initMap(){
+    //Find and set 2GisMap
+    var mapId = 'myMapId';
+    var mymap = document.getElementById(mapId);
+    if( mymap ){
+        function map_in_little_window(){
+            var items = node2array(document.getElementById('simmularItems').getElementsByClassName('some-item')).length;
+            if( window.innerWidth<712 && !items){ 
+            	showHideElBlock(mymap) 
+            } else{
+                showHideElBlock(mymap, true);
+                if( window.mapH === undefined ) mapH = new M(mapId, numInput, streetInput);
+            }
+        }
+        map_in_little_window();
+        window.onresize = map_in_little_window;
+    }	
+}
+
+/*-----------------------------------------------------------*/
+
+window.onload = function(){
+	initMap();
+	initModal();
+}
 
 
 /*--------------------//letsfox.html//------------------------*/
+function createCaptcha(id){
+	var captcha = document.getElementById(id);
+	captcha.innerHTML = '';
+	request({
+		path: 'captcha',
+		success: function(data){
+			if(!data || data.length == 0) return;
+			document.querySelectorAll('[name=captcha_key]').value = data.key;
+			for (var i = 0; i < data.images.length; i++) {
+				var val = data.images[i]
+        		captcha.innerHTML = [captcha.innerHTML, '<label class="btn btn-default mybtn">',
+        		                     '<input type="radio" name="captcha" value="', val.name, '">',
+        		                     '<img src="', val.src, '" >', '</label>'].join('');
+			};
+			initRadioButtons()
+		}
+	});
+}
 
+function doitOkBtnClick(e){
+	var form = findParent('form', this);
+	var data = new Object;
+	var inputs = filterNodes(form.getElementsByTagName('input'),
+		                     function(input){return input.getAttribute('name')});
+	inputs.forEach(function(input){
+		var t = input.getAttribute('type');
+		if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ) data[input.getAttribute('name')] = input.value
+	});
+	if(data.address) {
+		var items = filterNodes(document.getElementsByClassName('some-item'),
+			                   function(item){return item.getElementsByClassName('some-item-body-title')[0].innerText == data.address});
+		if(items.length>=1) data.address = data.address + '|' + items[0].getElementsByClassName('some-item-date').innerText;
+	}
+	request({
+		post: true,
+		path: 'doit',
+		data: data,
+		success: function(data){
+			node2array( document.getElementsByClassName('has-error') ).forEach(function(el){
+				removeClass( el, 'has-error');
+			});
+			node2array( document.getElementsByClassName('help-error') ).forEach(function(el){showHideElBlock(el);});
+			if(data.doit === undefined){ 
+				for(var field in data){
+					var err = data[field];
+					var errInput = document.querySelectorAll('[name=' + field + ']')[0];
+					var formGroup =  findParent('.form-group', errInput);
+					addClass( formGroup, 'has-error');
+					var errText = formGroup.getElementsByClassName( 'help-error' )[0];
+					showHideElBlock(errText, true)
+					errText.innerText = err;
+				}
+			} else {
+				showHideModal( document.getElementById('doit') );
+				showHideModal( document.getElementById('doitOk'), true );
+			}
+			createCaptcha('captcha');
+		}
+	});
+}
 
 
 /*--------------------//payment-limit.html//------------------------*/
@@ -27,7 +187,58 @@ function enlargeLimit(){
 }
 
 
-/*--------------------------------------------*/
+/*--------------------//payment-terminal.html//------------------------*/
+
+function selectPayment(){
+	if( window.mapH === undefined ) return
+	function showHideGroup(group, show){
+    	for (var i = group.getAll.length - 1; i >= 0; i--) {
+    		var val = group.getAll[i].val;
+    		showhideEl(val.id, show)
+    	};
+        if(show) group.show();
+        else group.hide();
+    }
+    var payment = this.options[this.selectedIndex].value;
+    if( payment ){
+    	for(var name in mapH.markerGroups){
+    		if(mapH.markerGroups.hasOwnProperty(name))
+        		showHideGroup( mapH.markerGroups[name], name == payment );
+    	}
+    } else{
+    	for (var name in mapH.markerGroups){
+    		showHideGroup(mapH.markerGroups[name], true)
+    	};
+    }
+}
+
+
+function searchPaymentTermonal(e){
+	if( window.mapH === undefined ) return
+    var code = e.keyCode || e.which;
+    if( code==27 ){/*esc*/
+    	this.blur();
+    	return
+    }
+    var key = this.value, markersList = mapH.map.markers.getAll();
+    function showHideMarker(m, show){
+        showhideEl(m.val.id, show);
+        if(show) m.show();
+        else m.hide();
+    }
+    for (var i = markersList.length - 1; i >= 0; i--) {
+        var m = markersList[i];
+        if(key.length>2){
+            var key = key.toLowerCase(), query = m.val.query.toLowerCase();
+            if( !(query.indexOf(key)+1) ) showHideMarker(m);
+            else showHideMarker(m, true)
+        } else{
+        	showHideMarker(m, true)
+        }
+    };
+}
+
+/*------------------------------------------------------------------*/
 
 tagnameEach( 'table',  function(el){ addClass(el, "table table-bordered") } );
 tagnameEach( 'img', function(el){ addClass(el, "img-responsive") });
@@ -35,13 +246,7 @@ tagnameEach( 'input', function(el){ el.setAttribute('autocomplete','off') }); //
 node2array( document.getElementsByClassName('map') ).forEach(function(el){ showHideElBlock(el, true) });
 
 
-function filterVisible(nodes){
-    var vis = node2array(nodes).filter(function(el){return el.offsetWidth!==0});
-    return vis.length ? vis[0] : undefined
-}    
-var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
-var numInput = filterVisible(document.querySelectorAll('[name=num]'));
-var streetTips = document.getElementById('streetTips');    
+
 
 
 (function(){
@@ -141,26 +346,4 @@ var streetTips = document.getElementById('streetTips');
     }
 })();
 
-
-$(document).ready(function(){
-    (function(){
-        //Find and set 2GisMap
-        var mymap = document.getElementById('myMapId' )
-        if( mymap ){
-            function map_in_little_window(){
-                var items = node2array(document.getElementById('simmularItems').getElementsByClassName('some-item')).length;
-                if( window.innerWidth<712 && !items) showHideElBlock(mymap);
-                else{
-                    showHideElBlock(mymap, true);
-                    if(window.mapH === undefined){
-                        mapH = $(mymap).mapHelper()
-                        mapH.getMarkers()
-                    }
-                }
-            }
-            map_in_little_window()
-            window.onresize = map_in_little_window;
-        }
-    })();
-})
 

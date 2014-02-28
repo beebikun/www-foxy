@@ -10,13 +10,10 @@
 
 <body>
 <div id="map" style="height:800px;"></div>
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
-		function tostr(l){
-		    return l.toString()
-		}
+    window.onload = function(){
+		function tostr(l){return l.toString() }
 		var map = new DG.Map("map");
 		map.controls.add(new DG.Controls.Zoom());
 		map.setCenter( new DG.GeoPoint(127.534884, 50.2866410303),13);
@@ -25,7 +22,7 @@
 			var point = e.getGeoPoint();
 			var message = 'Latitude: ' + tostr(point.lat) +'\nLongitude: ' + tostr(point.lon)
 			alert(message)
-		})
-	});
+		})        
+    }
 </script>
 </body>

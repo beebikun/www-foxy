@@ -4,47 +4,8 @@
 {% block title %}Televox -  Оплата наличными{% endblock %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	document.getElementById('searchInPoints').onkeydown = function(e){
-        if(window.mapH===undefined) return
-        var code = e.keyCode || e.which;
-        if(code==27){/*esc*/this.blur();return}
-        var key = this.value, markersList = mapH.map.markers.getAll();
-        function showHideMarker(m, show){
-            showhideEl(m.val.id, show)
-            if(show) m.show();
-            else m.hide();
-        }
-        for (var i = markersList.length - 1; i >= 0; i--) {
-            var m = markersList[i]
-            if(key.length>2){
-                var key = key.toLowerCase(); var query = m.val.query.toLowerCase();
-                if(!(query.indexOf(key)+1)) showHideMarker(m)
-                else showHideMarker(m, true)
-            }
-            else{showHideMarker(m, true)}
-        };
-    }
-
-    document.getElementById.onchange = function(){
-    	function showHideGroup(group, show){
-	    	for (var i = group.getAll.length - 1; i >= 0; i--) {
-	    		var val = group.getAll[i].val;
-	    		showhideEl(val.id, show)
-	    	};
-	        if(show) group.show();
-	        else group.hide();
-	    }
-        if(window.mapH===undefined) return
-        var payment = this.options[this.selectedIndex].value;
-        if(payment){
-        	for (var i = mapH.markerGroups.length - 1; i >= 0; i--) {
-        		var name = mapH.markerGroups[i]
-        		if(name!=payment) showHideGroup(mapH.markerGroups[name]);
-                else showHideGroup(mapH.markerGroups[name], true);
-        	};
-        }
-        else{for (var name in mapH.markerGroups) showHideGroup(mapH.markerGroups[name], true);}
-    };
+	document.getElementById('searchInPoints').onkeydown = searchPaymentTermonal;
+    document.getElementById('paymentSelect').onchange = selectPayment;
 </script>
 {% endblock %}
 {% block payment-title %}
