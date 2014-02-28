@@ -1,3 +1,19 @@
+function findParent(parentSellector, el, nodes){
+	var parent = el.parentNode;
+	var nodes = nodes || node2array(document.querySelectorAll(parentSellector));
+	return nodes.filter(function(el){return el == parent}).length ? parent : 
+		   parent != document ?	findParent(parentSellector, parent, nodes) :
+		   null
+}
+
+function removeEl(selector, parent){
+	var parent = parent || document.body;
+	node2array(document.querySelectorAll(selector)).forEach(function(el){
+		parent.removeChild(el);		
+	});
+}
+
+
 function showhideEl(id, show){
     var el = typeof id == 'string' ? document.getElementById(id) : id;
     el.getElementById(id).style.display = show ? 'inline-block' : 'none'
@@ -87,15 +103,22 @@ function animate(el, params, duration) {
         });
     }
 }
-
 function showHideModal(el, show){
     var classes = getClass(el);
     if(show){
-    	el.style.display = 'block'
-    	addClass(el, 'in')
+    	el.style.display = 'block';
+    	setTimeout(function(){
+    		addClass(el, 'in');
+	    	var div = document.createElement('div');
+	    	addClass(div, 'modal-backdrop fade in');
+	    	if(document.body != null) document.body.appendChild(div); 
+    	}, 10);    	
     }else{
-        el.style.display = 'none'
-        removeClass(el, ' in');
+        removeClass(el, 'in');
+        setTimeout(function(){
+        	el.style.display = 'none'
+	        removeEl('.modal-backdrop');
+        }, 50);
     }
     el.setAttribute('aria-hidden', show ? false : true)
 }

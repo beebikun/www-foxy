@@ -5,7 +5,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
 	function open_doit_modal(point){
-		console.log(1)
 		var contacts = document.getElementById('doit_contacts');
 		var params = {
 			address:point.getAttribute('address'),
@@ -24,6 +23,13 @@
 		var modal = document.getElementById(point.getAttribute('href').slice(1));
 		showHideModal(modal, true)
 	}
+
+	node2array(document.querySelectorAll('[data-dismiss=modal]')).forEach(function(btn){
+		btn.onclick = function(e){
+			var modal = findParent('.modal', this);
+			if(modal) showHideModal(modal);
+		}
+	});
 
 
 	$(document).ready(function(){		
@@ -118,7 +124,7 @@
 {% block connectBut %}  
 {% endblock %}   
 {% block main-bottom-left %}
-	<div class="modal fade" id="doitOk" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal fade" id="doitOk" tabindex="-1" role="dialog" aria-hidden="true" >
 	    <div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
