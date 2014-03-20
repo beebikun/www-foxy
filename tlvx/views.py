@@ -210,7 +210,7 @@ def news(request, pk=None, template='news'):
         )
         try:
             params = dict([(k, int(v)) for (k, v) in params.items()])
-        except ValueError, e:
+        except ValueError:
             params = dict(count=settings.NOTE_COUNT, page=1)
         first = params['count']*(params['page']-1)
         end = params['count']*params['page']
@@ -232,7 +232,7 @@ def news(request, pk=None, template='news'):
 
 def payment(request, name=None):
     if name:
-        template_name = 'way' if name not in ['limit'] else name
+        template_name = 'way' if name != 'limit' else name
         return StaticPage(
             request=request, name='payment-%s' % name,
             template='payment-%s' % template_name).response
@@ -240,7 +240,11 @@ def payment(request, name=None):
         return my_response(request, name='payment')
 
 
-def paymentcard(request):    
+def paymentelmoney(request):
+    return my_response(request, name='payment-card')
+
+
+def paymentcard(request):
     objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
     data = [serializers.PaymentSerializer(instance=obj).data
             for obj in objects]
@@ -248,9 +252,9 @@ def paymentcard(request):
 
 
 def paymentmobile(request):
-    context = dict()
     gray_ip = is_gray_ip(request.META['REMOTE_ADDR'])
-    return my_response(request, name="payment-mobile", context=dict(gray_ip=gray_ip))
+    return my_response(request, name="payment-mobile",
+                       context=dict(gray_ip=gray_ip))
 
 
 def paymentterminal(request):
@@ -317,12 +321,14 @@ class Rates:
 def rates(request):
     return Rates(request, name='p', template='rates').response
 
+
 def rates_simple(request, name):
     return Rates(request, name).response
 
 
 def simple_content(request, page=None):
     return StaticPage(request=request, template='simple-content').response
+
 
 def vacancy(request):
     return StaticPage(request=request, model='VacancyPage').response

@@ -10,14 +10,15 @@
 {% block extrahead %}{% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
 <!-- <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script> -->
-<script src="{{ STATIC_URL }}js/libs/tinymce/4.0.10/js/tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery-1.9.1.min.js"></script>
+<script src="{{ STATIC_URL }}js/libs/tinymce/4.0.20/js/tinymce/tinymce.min.js"></script>
 <script type="text/javascript">
     tinymce.PluginManager.load('moxiemanager', '{{ STATIC_URL }}js/libs/moxiemanager/plugin.min.js');
 
     tinymce.init({
     selector: "textarea",
     plugins: [
-        "advlist autolink lists link image charmap print preview anchor",
+        "advlist autolink lists image link charmap print preview anchor",
         "searchreplace visualblocks code fullscreen",
         "insertdatetime media table contextmenu paste moxiemanager"
     ],

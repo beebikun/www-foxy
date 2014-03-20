@@ -6,14 +6,19 @@
 	function showArchive(){
 		var btnText1 = "Архив тарифов";
 		var btnText2 = "Скрыть";
-		var isShow =  archive.style.display == 'inline-block' ? true : false;
+		var isShow =  archive.style.display == 'block' ? true : false;
 		showHideElBlock(archive, !isShow);
 		moreItemsSpan.innerText = moreItemsSpan.innerText == btnText1 ? btnText2 : btnText1;
 	}
 	var archive = document.getElementsByClassName('rates-archive')[0];
 	var moreItems = document.getElementsByClassName('more-items-btn')[0]
 	var moreItemsSpan = moreItems.getElementsByTagName('span')[0]
-	moreItemsSpan.onclick = showArchive
+	moreItemsSpan.onclick = showArchive;
+	if(window.location.hash){
+		showArchive();
+		var rate = document.getElementById(window.location.hash.slice(1));
+		window.scrollTo(rate.getBoundingClientRect().top, 0)
+	}	
 
 	if(archive.childElementCount) showHideElBlock(moreItems, true);
 </script>
@@ -55,9 +60,9 @@
 		{% for rates in data %}{% if not rates.active %}
 			<div class="table-box some-item">
 				<div class="some-item-body">
-					<div class="some-item-body-title">
+					<a class="some-item-body-title" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>
 						Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
-					</div>
+					</a>
 					<div class="some-item-body-text margin-top">
 						{{ rates.tables|safe }}
 					</div>

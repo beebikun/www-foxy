@@ -45,7 +45,7 @@ function showhideEl(id, show){
 
 function showHideElBlock(id, show){
     var el = typeof id == 'string' ? document.getElementById(id) : id;
-    el.style.display = show ? 'inline-block' : 'none'
+    el.style.display = show ? 'block' : 'none'
 }
 
 
