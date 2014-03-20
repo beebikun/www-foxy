@@ -6,12 +6,16 @@
 	function showArchive(){
 		var btnText1 = "Архив тарифов";
 		var btnText2 = "Скрыть";
-		$(".rates-archive").toggle();	
-		$(".more-items-btn>span").text( ($(".more-items-btn>span").text()==btnText1) ? btnText2 : btnText1 )
+		var isShow =  archive.style.display == 'inline-block' ? true : false;
+		showHideElBlock(archive, !isShow);
+		moreItemsSpan.innerText = moreItemsSpan.innerText == btnText1 ? btnText2 : btnText1;
 	}
-  	$(document).ready(function(){
-  		if($(".rates-archive").children().length>0)$(".more-items-btn").show()
-  });
+	var archive = document.getElementsByClassName('rates-archive')[0];
+	var moreItems = document.getElementsByClassName('more-items-btn')[0]
+	var moreItemsSpan = moreItems.getElementsByTagName('span')[0]
+	moreItemsSpan.onclick = showArchive
+
+	if(archive.childElementCount) showHideElBlock(moreItems, true);
 </script>
 {% endblock %}
 {% block rates-btn-active %}active{% endblock %}
@@ -61,7 +65,7 @@
 			</div>
 		{% endif %}{% endfor %}		
 		</div>
-		<div class="more-items-btn" style="display:none"><span onclick="showArchive()">Архив тарифов</span></div>
+		<div class="more-items-btn" style="display:none"><span>Архив тарифов</span></div>
 	</div>
 	{% endblock %}
 {% endblock %}

@@ -35,7 +35,7 @@
                     <a class="some-item-body-title" href="{% url 'client-newsdetail' note.id %}">
                         {{ note.header }}
                     </a>
-                    <div class="some-item-body-text">
+                    <div class="some-item-body-text" style="min-height:5.6 em">
                         {{ note.text|safe }}
                     </div>
 		    <a class="some-item-body-detail" href="{% url 'client-newsdetail' note.id %}" >Читать далее...</a>
