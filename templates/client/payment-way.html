@@ -1,33 +1,44 @@
 {% extends "client/base.html" %}
+
+<!-- Set menu active -->
 {% block payment-btn-active %}active{% endblock %}
 
+
 {% block main-top-left %}
-	<div class="some-item">
-		<div class=""> 
-			<ul class="pager some-item-date" style="margin-top:0px;">
-			    <li class="previous">
-				    <a href="{% url 'client-payment' %}">&larr; Назад</a>
-			    </li>		    
-				<li class="pull-right">
-					<a class="title">
-					{% block payment-title %}
-						{{data.display_name}}					
-					{% endblock %} </a>
-				</li>
-			</ul>
-		</div>
-		<div class="some-item-body">
-			{% block payment %}
-				{{data.content|safe}}		
-			{% endblock %}   
-		</div>
-	</div>
-	
-	
-{% endblock %}   
-{% block connectBut %}  
+<!-- Хедер страницы платежа -->
+    <div class="some-item">
+        <div>
+            <ul class="pager some-item-date" style="margin-top:0px;">
+<!-- Ссылка на страницы выбора способа платежа -->
+                <li class="previous">
+                    <a href="{% url 'client-payment' %}">&larr; Назад</a>
+                </li>
+<!-- Заголовок страницы платежа -->
+                <li class="pull-right">
+                    <a class="title">
+                    {% block payment-title %}
+                        {{data.display_name}}
+                    {% endblock %} </a>
+                </li>
+            </ul>
+        </div>
+
+<!-- Контент страницы платежа -->
+        <div class="some-item-body">
+            {% block payment %}
+                {{data.content|safe}}
+            {% endblock %}
+        </div><!-- /.some-item-body -->
+    </div><!-- /.some-item -->
 {% endblock %}
+
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
+{% endblock %}
+
+
 {% block main-bottom-left %}
-	{% block simitems %}
-	{% endblock %} 
+    {% block simitems %}
+    {% endblock %}
 {% endblock %}

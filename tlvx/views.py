@@ -240,15 +240,19 @@ def payment(request, name=None):
         return my_response(request, name='payment')
 
 
-def paymentelmoney(request):
-    return my_response(request, name='payment-card')
-
-
 def paymentcard(request):
     objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
     data = [serializers.PaymentSerializer(instance=obj).data
             for obj in objects]
     return my_response(request, data, name='payment-card')
+
+
+def paymentelmoney(request):
+    page = lambda n: serializers.StaticPageSerializer(
+        instance=models.StaticPage.objects.get(name=n)).data
+    data = dict(instruction=page('asist-instruction'),
+                returns=page('asist-returns'), inn=page('payment-elmoney-inn'))
+    return my_response(request, data, name='payment-elmoney')
 
 
 def paymentmobile(request):

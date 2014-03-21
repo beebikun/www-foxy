@@ -1,30 +1,44 @@
 {% extends "client/about.html" %}
+
+
 {% block content %}Телевокс - Вакансии{% endblock %}
 {% block title %}Televox -  Вакансии{% endblock %}
+
+
 {% block jsscript %}
-{% endblock %}    
+{% endblock %}
+
+
 {% block about %}
 <div  class="link-list">
-	{% if data %}
-		<ul>
-			<div> {{ data.content|safe }} </div>
-			{% for vacancy in data.childs %}
-			<li>
-				<a href="#{{vacancy.name}}"> {{ vacancy.display_name }} </a>
-			</li>
-			{% endfor %}
-		</ul>
-	{% endif %}
+    {% if data %}
+        <ul>
+<!-- Page top content -->
+            <div> {{ data.content|safe }} </div>
+
+<!-- Список доступных вакансий -->
+            {% for vacancy in data.childs %}
+            <li>
+                <a href="#{{vacancy.name}}"> {{ vacancy.display_name }} </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 </div>
-{% endblock %}    
+{% endblock %}
+
+
 {% block main-bottom-left %}
+<!-- Описание вакансий -->
 <div id="fqaAnsw" class="link-list">
-	{% if data %}
-		{% for vacancy in data.childs %}
-			<a href="#{{vacancy.name}}" id="{{vacancy.name}}"> <strong>{{ vacancy.display_name }}</strong> </a>
-			<a href="" class="pull-right"><i class="fa fa-arrow-up"></i></a>
-			<div> {{ vacancy.content|safe }} </div>
-		{% endfor %}
-	{% endif %}
+    {% if data %}
+        {% for vacancy in data.childs %}
+            <a href="#{{vacancy.name}}" id="{{vacancy.name}}">
+            	<strong>{{ vacancy.display_name }}</strong>
+            </a>
+            <a href="" class="pull-right"><i class="fa fa-arrow-up"></i></a>
+            <div> {{ vacancy.content|safe }} </div>
+        {% endfor %}
+    {% endif %}
 </div>
-{% endblock %} 
+{% endblock %}

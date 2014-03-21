@@ -1,13 +1,20 @@
 {% extends "client/payment-way.html" %}
+
+
 {% block content %}Телевокс - Оплата пластиковыми картами{% endblock %}
 {% block title %}Televox -  Оплата пластиковыми картами{% endblock %}
+
+
 {% block payment-title %}
-	Пластиковые карты, 0%
+    Пластиковые карты, 0%
 {% endblock %}
-{% block payment %} 
+
+
+{% block payment %}
 <div id="payment-card">
-	{% for payment in data %}
-		{% ifnotequal payment.name "ДВ-пэй" %}
+    {% for payment in data %}
+        {% ifnotequal payment.name "ДВ-пэй" %}
+<!-- Модальное окно с описанием способа оплаты оператора -->
         <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -25,31 +32,36 @@
                     </form>
                 </div>
             </div>
-        </div>      
-        {% endifnotequal %}     
+        </div>
+        {% endifnotequal %}
+
+<!-- Оператор -->
         <div class="some-item">
             <a class="some-item-body"  {% ifnotequal payment.name "ДВ-пэй" %}data-toggle="modal" href="#modal{{ payment.id }}"{% else %}href="http://tlvxplat.ru/index.html"{% endifnotequal %}   >
-                <span class="some-item-body-title">{{ payment.name|safe }}</span>        
-                <div class="some-item-body-text"> 
-                    {{ payment.hint_line|safe }}                        
+                <span class="some-item-body-title">{{ payment.name|safe }}</span>
+                <div class="some-item-body-text">
+                    {{ payment.hint_line|safe }}
                     <div class="how-play-btn">
                         {% ifnotequal payment.name "ДВ-пэй" %}Как оплатить{% else %}Оплатить{% endifnotequal %}
                     </div>
                 </div>
             </a>
         </div>
-	{% endfor %}
-	{% comment %}
-	<div class="some-item">
-		<div class="some-item-body">
-			<div class="some-item-body-text"> 
-				<strong>On-line платеж</strong>
-				<div>
-					{{data.main.content|safe}}
-				</div>
-			</div>
-		</div>
-	</div>
-	{% endcomment %}
-</div>	
-{% endblock %}  
+    {% endfor %}
+
+    {% comment %}
+<!-- Не совсем помню, что это за оператор -->
+    <div class="some-item">
+        <div class="some-item-body">
+            <div class="some-item-body-text">
+                <strong>On-line платеж</strong>
+                <div>
+                    {{data.main.content|safe}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endcomment %}
+
+</div><!-- /#payment-card -->
+{% endblock %}

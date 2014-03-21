@@ -45,13 +45,15 @@ urlpatterns = patterns(
 
     #Оплата услуг
     url(r'^!/payment/?$', 'tlvx.views.payment', name='client-payment'),
-    url(r'^!/payment/card/?$', 'tlvx.views.paymentcard',
-        name='client-paymentcard'),
-    # url(r'^!/payment/limit/?$', 'tlvx.views.paymentlimit', name='client-paymentlimit'),
     url(r'^!/payment/terminal/?$', 'tlvx.views.paymentterminal',
         name='client-paymentterminal'),
+    url(r'^!/payment/card/?$', 'tlvx.views.paymentcard',
+        name='client-paymentcard'),
     url(r'^!/payment/mobile/?$',
         'tlvx.views.paymentmobile', name='client-paymentmobile'),
+    url(r'^!/payment/elmoney/?$', 'tlvx.views.paymentelmoney',
+        name='client-paymentelmoney'),
+    # url(r'^!/payment/limit/?$', 'tlvx.views.paymentlimit', name='client-paymentlimit'),
     url(r'^!/payment/(?P<name>\w+)/?$',
         'tlvx.views.payment', name='client-payment'),
 

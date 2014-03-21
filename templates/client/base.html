@@ -8,16 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="icon" type="image/png" href="{{ STATIC_URL }}img/favicon.png" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-3.0.0/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome-4.0.3/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome-4.0.3/css/font-awesome.min.css" />
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/mobile.css" media='all and (max-width: 711px)'/> 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/tablet.css" media='all and (min-width: 712px) and (max-width: 989px)'/> 
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/mobile.css" media='all and (max-width: 711px)'/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/tablet.css" media='all and (min-width: 712px) and (max-width: 989px)'/>
     <!--[if IE]> <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" /> <![endif]-->
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" media='all and (min-width: 990px)'/> 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/tlvx.css" /> 
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" media='all and (min-width: 990px)'/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/tlvx.css" />
 
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/fonts.css" />    
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/fonts.css" />
 
 
     <title>{% block title %}Televox -  Интернет в каждый дом{% endblock %}</title>
@@ -36,167 +36,179 @@
 </head>
 
 <body>
-	<div id="wrap" >
-	    <header>
-	        {% block header %}
-	        	<div class="content-inner">
-		        	<section>
-			        	<div class="content-inner-right">
-		        			<section>
-		        			{% block topmenu-right %}
-		        				<div class="phones-block">
-			        				<div class="phone-num">
-			        					23-17-17
-			        				</div>
-			        				<div class="phone-descr">
-			        					Отдел продаж
-			        				</div>			
-		        				</div>
-		        			{% endblock %}		
-		        			</section>
-		        			<section>
-			        			{% block header-bottom-right %}
-			        				<div class="phones-block">
-				        				<div class="phone-num">			        					
-				        					777-444
-				        				</div>
-				        				<div class="phone-descr">
-				        					Техническая поддержка
-				        				</div>		
-			        				</div>
-			        			{% endblock %}			
-		        			</section>
-		        		</div>
-		        		<div class="content-inner-left">
-			        		<div id="topmenu">
-		        			{% block topmenu %}
-			        			{% block topmenu-left %}
-			        				<nav id="topnav">
-			        					<ul>
-			        						<li><a href="http://hub.tlvx.ru/" >Hub</a></li>
-											<li><a href="http://turbina.tele-vox.ru/downloads2.cgi?sorted=end_download&category=all" >Turbina</a></li>
-											<li><a href="ftp://ftp.tele-vox.ru/" >FTP-сервер</a></li>
-											<li><a href="http://local.tele-vox.ru/wiki/" >Поддержка</a></li>
-											<li class="orange"><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
-			        					</ul>
-			        					<a href="/"  id="logo">
-			        						<img src="{{ STATIC_URL }}img/logo.png" alt="Телевокс - Интернет в каждый дом">
-			        					</a>
-			        					<button id="collapseMenuBtn" class="btn btn-link mybtn-link">
-			        						<i class="fa fa-bars fa-2x"></i>
-			        					</button>
-			        				</nav>
-			        			{% endblock %}
-			        		{% endblock %}
-			        			
-			        		</div>
-			        	</div>
-		        	</section>
-	        		<div class="content-inner-left">
-	        			{% block header-bottom %}			   
-		        		<section id="makeConReq">
-			        			{% block makeconreq %}
-		        			<form class="form-inline" role="form"  action="{% url 'client-letsfox' %}" method="post">
-	        					{% csrf_token %}
-	        					<div class="form-group" id="makeConReqTitle">
-								Возможность подключения:
-		        				</div>
-		        				<div class="form-group" id="makeConReqStreet">Улица</div>
-		        				<div class="form-group" id="makeConReqSelect">
-		        					<input type="text" class="form-control input-sm makeConReqStreetVa"  name="street" value="{% if data.params.street %}{{data.params.street}}{% endif %}" placeholder="Улица">
-		        					<div id="streetTips"> <ul> </ul> </div>
-								</div>
-								<div class="form-group" id="makeConReqHouse">Дом</div>
-								<div class="form-group makeConReqInput">
-									<input type="text" class="form-control input-sm" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
-								</div>
-								<div class="form-group makeConReqBut">
-									<button type="submit" class="btn btn-default btn-sm" value='Проверить' >Проверить</button>
-								</div>
-		        			</form>
-		        			{% endblock %}
-		        		</section>
-		        		{% endblock %}
-	        		</div>
-	        		
-	        	</div>        	
-	        {% endblock %}
-	    </header>    
-	    <section id="main" class="clearfix">
-	        {% block main %}
-	        	<section>
-		        	<div class="content-inner" id="mainTop" >
-		        		{% block main-top %}
-			        		<div class="content-inner-right" >
-			        			{% block mainmenu %}
-			        				<nav id="mainMenu">
-				        				<a href="{% url 'client-letsfox' %}" class="btn btn-default btn-orange mybtn mybtn-block">Подключить</a>
-				        				<!-- <a href="http://www.tele-vox.ru/" class="btn btn-default btn-orange mybtn mybtn-block">Личный кабинет</a> -->
-				        				<a href="{% url 'client-news' %}" class="btn btn-default mybtn mybtn-block {% block new-btn-active %}{% endblock %}" id="news">Новости</a>
-				        				<a href="{% url 'client-simple_content' page='internet' %}" class="btn btn-default mybtn mybtn-block {% block internet-btn-active %}{% endblock %}" id="internet">Интернет</a>
-				        				<a href="{% url 'client-rates' %}" class="btn btn-default mybtn mybtn-block {% block rates-btn-active %}{% endblock %}" id="rates">Тарифы</a>
-				        				<a href="{% url 'client-payment' %}" class="btn btn-default mybtn mybtn-block {% block payment-btn-active %}{% endblock %}" id="payment">Оплата услуг</a>
-				        				<a href="{% url 'client-about' %}" class="btn btn-default mybtn mybtn-block {% block about-btn-active %}{% endblock %}" id="about">О компании</a>
-				        				<a href="{% url 'client-faq' %}" class="btn btn-default mybtn mybtn-block {% block how-btn-active %}{% endblock %}" id="faq">Справка</a>
-			        				</nav>
-			        			{% endblock %}			
-			        		</div>
-			        		<div class="content-inner-left">
-			        			{% block main-top-left %}
-			        			{% endblock %}
-			        			{% block connectBut %}		        					
-			        			<div class="text-center"  id="connectButton">
-									<a href="{% url 'client-letsfox' %}"  class="btn btn-default  mybtn">Подключить</a>
-								</div>
-			        			{% endblock %}	
-			        		</div>
-		        		{% endblock %}			
-		        	</div>
-	        	</section>
-	        	<section>
-		        	<div class="content-inner">
-		        		{% block main-bottom %}
-			        		<div class="content-inner-left">
-			        			{% block main-bottom-left %}{% endblock %}
-			        		</div>
-			        		<div class="content-inner-right" >
-		        				{% block menuBottom %} {% endblock %}
-			        		</div>
-		        		{% endblock %}			
-		        	</div>
-	        	</section>
-	        {% endblock %}
-	    </section>
-    </div>
+    <div id="wrap" >
+        <header>
+            {% block header %}
+                <div class="content-inner">
+                    <section>
+                        <div class="content-inner-right">
+                            <section>
+                            {% block topmenu-right %}
+                                <div class="phones-block">
+                                    <div class="phone-num">
+                                        23-17-17
+                                    </div>
+                                    <div class="phone-descr">
+                                        Отдел продаж
+                                    </div>
+                                </div>
+                            {% endblock %}
+                            </section>
+
+                            <section>
+                                {% block header-bottom-right %}
+                                    <div class="phones-block">
+                                        <div class="phone-num">
+                                            777-444
+                                        </div>
+                                        <div class="phone-descr">
+                                            Техническая поддержка
+                                        </div>
+                                    </div>
+                                {% endblock %}
+                            </section>
+                        </div><!-- /.content-inner-right -->
+
+                        <div class="content-inner-left">
+                            <div id="topmenu">
+                            {% block topmenu %}
+                                {% block topmenu-left %}
+                                    <nav id="topnav">
+                                        <ul>
+                                            <li><a href="http://hub.tlvx.ru/" >Hub</a></li>
+                                            <li><a href="http://turbina.tele-vox.ru/downloads2.cgi?sorted=end_download&category=all" >Turbina</a></li>
+                                            <li><a href="ftp://ftp.tele-vox.ru/" >FTP-сервер</a></li>
+                                            <li><a href="http://local.tele-vox.ru/wiki/" >Поддержка</a></li>
+                                            <li class="orange"><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
+                                        </ul>
+                                        <a href="/"  id="logo">
+                                            <img src="{{ STATIC_URL }}img/logo.png" alt="Телевокс - Интернет в каждый дом">
+                                        </a>
+                                        <button id="collapseMenuBtn" class="btn btn-link mybtn-link">
+                                            <i class="fa fa-bars fa-2x"></i>
+                                        </button>
+                                    </nav><!-- /#topnav -->
+                                {% endblock %}
+                            {% endblock %}
+                            </div><!-- /#topmenu -->
+                        </div><!-- /.content-inner-left -->
+                    </section>
+
+                    <div class="content-inner-left">
+                        {% block header-bottom %}
+                        <section id="makeConReq">
+                                {% block makeconreq %}
+                            <form class="form-inline" role="form"  action="{% url 'client-letsfox' %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group" id="makeConReqTitle">
+                                Возможность подключения:
+                                </div>
+                                <div class="form-group" id="makeConReqStreet">Улица</div>
+                                <div class="form-group" id="makeConReqSelect">
+                                    <input type="text" class="form-control input-sm makeConReqStreetVa"  name="street" value="{% if data.params.street %}{{data.params.street}}{% endif %}" placeholder="Улица">
+                                    <div id="streetTips"> <ul> </ul> </div>
+                                </div>
+                                <div class="form-group" id="makeConReqHouse">Дом</div>
+                                <div class="form-group makeConReqInput">
+                                    <input type="text" class="form-control input-sm" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
+                                </div>
+                                <div class="form-group makeConReqBut">
+                                    <button type="submit" class="btn btn-default btn-sm" value='Проверить' >Проверить</button>
+                                </div>
+                            </form>
+                            {% endblock %}
+                        </section><!-- /#makeConReq -->
+                        {% endblock %}
+                    </div><!-- /.content-inner-left -->
+
+                </div><!-- /.content-inner -->
+            {% endblock %}
+        </header>
+
+
+        <section id="main" class="clearfix">
+            {% block main %}
+                <section>
+                    <div class="content-inner" id="mainTop" >
+                        {% block main-top %}
+                            <div class="content-inner-right" >
+                                {% block mainmenu %}
+                                    <nav id="mainMenu">
+                                        <a href="{% url 'client-letsfox' %}" class="btn btn-default btn-orange mybtn mybtn-block">Подключить</a>
+                                        <!-- <a href="http://www.tele-vox.ru/" class="btn btn-default btn-orange mybtn mybtn-block">Личный кабинет</a> -->
+                                        <a href="{% url 'client-news' %}" class="btn btn-default mybtn mybtn-block {% block new-btn-active %}{% endblock %}" id="news">Новости</a>
+                                        <a href="{% url 'client-simple_content' page='internet' %}" class="btn btn-default mybtn mybtn-block {% block internet-btn-active %}{% endblock %}" id="internet">Интернет</a>
+                                        <a href="{% url 'client-rates' %}" class="btn btn-default mybtn mybtn-block {% block rates-btn-active %}{% endblock %}" id="rates">Тарифы</a>
+                                        <a href="{% url 'client-payment' %}" class="btn btn-default mybtn mybtn-block {% block payment-btn-active %}{% endblock %}" id="payment">Оплата услуг</a>
+                                        <a href="{% url 'client-about' %}" class="btn btn-default mybtn mybtn-block {% block about-btn-active %}{% endblock %}" id="about">О компании</a>
+                                        <a href="{% url 'client-faq' %}" class="btn btn-default mybtn mybtn-block {% block how-btn-active %}{% endblock %}" id="faq">Справка</a>
+                                    </nav><!-- /#mainMenu -->
+                                {% endblock %}
+                            </div><!-- /.content-inner-right -->
+
+                            <div class="content-inner-left">
+                                {% block main-top-left %}
+                                {% endblock %}
+                                {% block connectBut %}
+                                <div class="text-center"  id="connectButton">
+                                    <a href="{% url 'client-letsfox' %}"  class="btn btn-default  mybtn">Подключить</a>
+                                </div><!-- #connectButton -->
+                                {% endblock %}
+                            </div><!-- /.content-inner-left -->
+                        {% endblock %}
+                    </div><!-- /#mainTop.content-inner -->
+                </section>
+
+                <section>
+                    <div class="content-inner">
+                        {% block main-bottom %}
+                            <div class="content-inner-left">
+                                {% block main-bottom-left %}{% endblock %}
+                            </div>
+                            <div class="content-inner-right" >
+                                {% block menuBottom %} {% endblock %}
+                            </div>
+                        {% endblock %}
+                    </div><!-- /.content-inner -->
+                </section>
+            {% endblock %}
+        </section> <!-- /#main.clearfix -->
+    </div><!-- /#wrap -->
+
+
     <footer>
-    	{% block footer %}
-    	<div class="content-inner">
+        {% block footer %}
+        <div class="content-inner">
             <div class="content-inner-left">
-    			{% block footer-left %}
+                {% block footer-left %}
                 <div id="footer-phones">
                     <div><span class="footer-phones-num">23-17-23</span> отдел продаж</div>
                     <div><span class="footer-phones-num">777-444</span> техподдержка</div>
-                </div>
+                </div><!-- /#footer-phones -->
+
                 <ul id="bottomnav">
                     <li><a href="http://hub.tlvx.ru/" >Hub</a></li>
                     <li><a href="http://turbina.tele-vox.ru/downloads2.cgi?sorted=end_download&category=all" >Turbina</a></li>
                     <li><a href="ftp://ftp.tele-vox.ru/" >FTP-сервер</a></li>
                     <li><a href="http://local.tele-vox.ru/wiki/" >Поддержка</a></li>
                     <li><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
-                </ul>
+                </ul><!-- /#bottomnav -->
+
                 <div id="license-info">
-        			&copy;ООО "Телевокс", 2008-2013<br>
-        			Свидетельство о регистрации СМИ  Эл № ФС77-46508 от 09.09.2011 г. выданное Федеральной службой по надзору в сфере связи, информационных технологий и массовых коммуникаций (Роскомнадзор)
-                </div>
-    			{% endblock %}
-    		</div>
-    		<div class="content-inner-right">
-    			{% block footer-right %}
-    			{% endblock %}
-    		</div>
-    	</div>    	
-    	{% endblock %}
-    </footer>
+                    &copy;ООО "Телевокс", 2008-2013<br>
+                    Свидетельство о регистрации СМИ  Эл № ФС77-46508 от 09.09.2011 г. выданное Федеральной службой по надзору в сфере связи, информационных технологий и массовых коммуникаций (Роскомнадзор)
+                </div><!-- #license-info -->
+                {% endblock %}
+            </div><!-- /.content-inner-left -->
+
+            <div class="content-inner-right">
+                {% block footer-right %}
+                {% endblock %}
+            </div><!-- /.content-inner-right -->
+        </div><!-- /.content-inner -->
+        {% endblock %}
+    </footer><!-- /footer -->
+
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/js/helpers.js"></script>
 <script type="text/javascript">

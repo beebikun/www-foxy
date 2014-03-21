@@ -1,15 +1,25 @@
 {% extends "client/base.html" %}
+
+
 {% block content %}Телевокс - Новости{% endblock %}
 {% block title %}Televox -  Новости{% endblock %}
+
+<!-- No js here -->
 {% block jsscript %}
 {% endblock %}
+
+
+<!-- Set menu active -->
 {% block new-btn-active %}active{% endblock %}
+
+
 {% block main-top-left %}
 <div id="bigParent">
-    <div id="newsCont"> 
+    <div id="newsCont">
+<!-- News items -->
         {% for note in data.result %}
             <div class="some-item">
-                <div class="some-item-date"> 
+                <div class="some-item-date">
                     {{ note.date|date:"d E Y" }}
                 </div>
                 <div class="some-item-body">
@@ -19,38 +29,39 @@
                     <div class="some-item-body-text">
                         {{ note.text|safe }}
                     </div>
-                </div>
-            </div>
+                </div><!-- /.some-item-body -->
+            </div><!-- /.some-item -->
         {% endfor %}
-    </div>
+    </div><!-- /#newsCont -->
+
+
+<!-- Paginator -->
     {% if data.display_page %}
         <div class="text-center">
             <ul class="pagination">
                 <li id="less" class="moreless">
                     <a href="?page={{ data.prev_page }}">&laquo;</a>
-                </li>
+                </li><!-- /#less.moreless -->
+
                 {% for i in data.display_page %}
-                    <li class="
-                        {% if i == data.page %} {{ 'active' }}  
-                        {% else %} {% if i == '...' %} {{ 'disabled'}}
-                        {% else %} {{''}}
-                        {% endif %}{% endif %}
-                        ">
-                        <a href="?page={{ i }}">
-                            <span>
-                                <span>{{ i }}</span>
-                            </span>
-                        </a>
-                    </li>
+                    <li class="paginator-item
+                        {% if i == data.page %} {{ ' active' }}
+                        {% else %} {% if i == '...' %} {{ ' disabled'}}
+                        {% else %} {{''}} {% endif %}{% endif %}">
+                        <a href="?page={{ i }}"> <span> <span>{{ i }}</span> </span> </a>
+                    </li><!-- /.paginator-item -->
                 {% endfor %}
+
                 <li id="more" class="moreless">
                     <a href="?page={{ data.next_page }}">&raquo;</a>
-                </li>
-            </ul>
+                </li><!-- /#more.moreless -->
+            </ul> <!-- /#pagination -->
         </div>
     {% endif %}
-</div>
+</div><!-- /#bigParent -->
+{% endblock %}
 
-{% endblock %}      
-{% block connectBut %}  
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
 {% endblock %}

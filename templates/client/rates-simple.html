@@ -1,76 +1,93 @@
 {% extends "client/base.html" %}
+
+
 {% block content %}Телевокс - Тарифы{% endblock %}
 {% block title %}Televox -  Тарифы{% endblock %}
+
+
 {% block jsscript %}
 <script type="text/javascript">
-	function showArchive(){
-		var btnText1 = "Архив тарифов";
-		var btnText2 = "Скрыть";
-		var isShow =  archive.style.display == 'block' ? true : false;
-		showHideElBlock(archive, !isShow);
-		moreItemsSpan.innerText = moreItemsSpan.innerText == btnText1 ? btnText2 : btnText1;
-	}
-	var archive = document.getElementsByClassName('rates-archive')[0];
-	var moreItems = document.getElementsByClassName('more-items-btn')[0]
-	var moreItemsSpan = moreItems.getElementsByTagName('span')[0]
-	moreItemsSpan.onclick = showArchive;
-	if(window.location.hash){
-		showArchive();
-		var rate = document.getElementById(window.location.hash.slice(1));
-		window.scrollTo(rate.getBoundingClientRect().top, 0)
-	}	
+    function showArchive(){
+        var btnText1 = "Архив тарифов";
+        var btnText2 = "Скрыть";
+        var isShow =  archive.style.display == 'block' ? true : false;
+        showHideElBlock(archive, !isShow);
+        moreItemsSpan.innerText = moreItemsSpan.innerText == btnText1 ? btnText2 : btnText1;
+    }
+    var archive = document.getElementsByClassName('rates-archive')[0];
+    var moreItems = document.getElementsByClassName('more-items-btn')[0]
+    var moreItemsSpan = moreItems.getElementsByTagName('span')[0]
+    moreItemsSpan.onclick = showArchive;
+    if(window.location.hash){
+        showArchive();
+        var rate = document.getElementById(window.location.hash.slice(1));
+        window.scrollTo(rate.getBoundingClientRect().top, 0)
+    }
 
-	if(archive.childElementCount) showHideElBlock(moreItems, true);
+    if(archive.childElementCount) showHideElBlock(moreItems, true);
 </script>
 {% endblock %}
+
+
+<!-- Set menu active -->
 {% block rates-btn-active %}active{% endblock %}
+
+
 {% block main-top-left %}
 <div id="ratesCont" class="content">
-	<div class="content-menu">
-		<a href="{% url 'client-rates' %}">Физ лица</a>
-		<a href="{% url 'client-ratessimple' name='jp' %}">Юр лица</a>
-		<a href="{% url 'client-ratessimple' name='other' %}">Доп услуги</a>
-	</div>
-	{% block rates %}
-	<div> 
-		{% for rates in data %}
-			{% if rates.active%}			
-			<div class="table-box some-item">
-				<div class="some-item-body">
-					<div class="some-item-body-title">
-						Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
-					</div>
-					<div class="some-item-body-text margin-top">
-						{{ rates.tables|safe }}
-					</div>
-				</div>
-			</div>
-		 	{% endif %}
-		 {% endfor %}
-		</div>
-	{% endblock %}      
+    <div class="content-menu">
+        <a href="{% url 'client-rates' %}">Физ лица</a>
+        <a href="{% url 'client-ratessimple' name='jp' %}">Юр лица</a>
+        <a href="{% url 'client-ratessimple' name='other' %}">Доп услуги</a>
+    </div>
+
+    {% block rates %}
+    <div>
+        {% for rates in data %}
+            {% if rates.active%}
+            <div class="table-box some-item">
+                <div class="some-item-body">
+                    <div class="some-item-body-title">
+                        Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
+                    </div>
+                    <div class="some-item-body-text margin-top">
+                        {{ rates.tables|safe }}
+                    </div>
+                </div>
+            </div>
+             {% endif %}
+         {% endfor %}
+        </div>
+    {% endblock %}
 </div>
-{% endblock %}      
+
+{% block helptext %}<!-- Место для подкаруселького текста в разделе "Физ лица" -->{% endblock %}
+{% endblock %}
+
+
 {% block main-bottom-left %}
-	{% block helptext %}
-	{% endblock %}
-	{% block archive %}
-	<div id="simmularItems"> 
-		<div class="rates-archive">
-		{% for rates in data %}{% if not rates.active %}
-			<div class="table-box some-item">
-				<div class="some-item-body">
-					<a class="some-item-body-title" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>
-						Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
-					</a>
-					<div class="some-item-body-text margin-top">
-						{{ rates.tables|safe }}
-					</div>
-				</div>
-			</div>
-		{% endif %}{% endfor %}		
-		</div>
-		<div class="more-items-btn" style="display:none"><span>Архив тарифов</span></div>
-	</div>
-	{% endblock %}
+    {% block archive %}
+    <div id="simmularItems">
+<!-- Rates archive -->
+        <div class="rates-archive">
+            {% for rates in data %}{% if not rates.active %}
+                <div class="table-box some-item">
+                    <div class="some-item-body">
+                        <a class="some-item-body-title" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>
+                            Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
+                        </a>
+                        <div class="some-item-body-text margin-top">
+                            {{ rates.tables|safe }}
+                        </div>
+                    </div><!-- /.some-item-body -->
+                </div><!-- /.table-box.some-item -->
+            {% endif %}{% endfor %}
+        </div><!-- /.rates-archive -->
+
+<!-- Show/hide an archive -->
+        <div class="more-items-btn" style="display:none">
+            <span>Архив тарифов</span>
+        </div>
+    </div><!-- /#simmularItems -->
+    {% endblock %}
 {% endblock %}

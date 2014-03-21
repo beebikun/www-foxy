@@ -1,102 +1,118 @@
 {% extends "client/rates-simple.html" %}
-{% block rates %}
-<div id="" style="height:330px;overflow:hidden;text-align:center;">        
-    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="7000">
-    	<ol class="carousel-indicators">
-            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-        	 
-            <div class="item active">
-            	<div class="ratesGraph">
-					<ul>
-						<li>
-							<span class="name">Топ 700</span>
-							<span class="speed">4<i>Мб/с</i></span>
-							<div>
-								<span>100<i>Мб/с</i></span>
-							</div>
-							<span class="pay">700<i>руб</i></span>
-						</li>
-						<li>
-							<span class="name">Топ 1000</span>
-							<span class="speed">8<i>Мб/с</i></span>
-							<div>
-								<span>100<i>Мб/с</i></span>
-							</div>
-							<span class="pay">1000<i>руб</i></span>
-						</li>
-						<li>
-							<span class="name">Топ 1500</span>
-							<span class="speed">15<i>Мб/с</i></span>
-							<div>
-								<span>100<i>Мб/с</i></span>
-							</div>
-							<span class="pay">1500<i>руб</i></span>
-						</li>
-					</ul>
-					<div class="graphLine">
-						<i class="fa fa-caret-right"></i>
-					</div>
-				</div>	
-            </div>
-<div class="item">
-            		<!-- <h4>Линейка "ТОП"</h4> -->
-            	<div class="ratesGraph" id="ratesHit">
-					<ul>
-						<li>
-							<span class="name">Хит 700</span>
-							<span class="speed">10<i>Мб/с</i></span>
-							<div class="traffic">
-								<span>40<i>Гб</i></span>
-							</div>
-							<span class="pay">700<i>руб</i></span>
-						</li>
-						<li>
-							<span class="name">Хит 1000</span>
-							<span class="speed">15<i>Мб/с</i></span>
-							<div class="traffic">
-								<span>50<i>Гб</i></span>
-							</div>
-							<span class="pay">1000<i>руб</i></span>
-						</li>
-						<li>
-							<span class="name">Хит 1500</span>
-							<span class="speed">20<i>Мб/с</i></span>
-							<div class="traffic">
-								<span>60<i>Гб</i></span>
-							</div>
-							<span class="pay">1500<i>руб</i></span>
-						</li>
-					</ul>
-					<div class="graphLine">
-						<i class="fa fa-caret-right"></i>
-					</div>
-				</div>	
-            </div>
-        </div>
-    </div>
-</div>
-<p>
-	<strong class="orange">Бесплатно на каждом тарифе:</strong>
-	<ul class="big-ul">
-		<li><a href="{% url 'client-faq' %}#sms_notification">SMS-оповещение</a></li>			
-		<li><a href="http://local.tele-vox.ru/wiki/%D0%A5%D0%B0%D0%B1_DC">Файлообменная сеть DC++</a></li>
-		<li><a href="http://hub.tlvx.ru">Хаб Телевокс онлайн </a></li>
-		<li><a href="{% url 'client-payment' name='limit' %}">Обещанный платеж</a></li>
-		<li><a href="{% url 'client-simple_content' page='free-support' %}">Круглосуточная поддержка</a></li>
-	</ul>
 
-{% endblock %} 	   
+
+{% block rates %}
+<div style="height:330px;overflow:hidden;text-align:center;">
+<!-- Каруселька с тарифами -->
+    <div id="carousel-rates" class="carousel slide" data-ride="carousel" data-interval="7000">
+<!-- Навигация карусельки -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-rates" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-rates" data-slide-to="1"></li>
+        </ol><!-- /.carousel-indicators -->
+
+        <div class="carousel-inner">
+<!-- Линейка "Топ" -->
+            <div class="item active" id="ratesTops">
+                <div class="ratesGraph">
+                    <ul>
+                        <li>
+                            <span class="name">Топ 700</span>
+                            <span class="speed">4<i>Мб/с</i></span>
+                            <div>
+                                <span>100<i>Мб/с</i></span>
+                            </div>
+                            <span class="pay">700<i>руб</i></span>
+                        </li>
+                        <li>
+                            <span class="name">Топ 1000</span>
+                            <span class="speed">8<i>Мб/с</i></span>
+                            <div>
+                                <span>100<i>Мб/с</i></span>
+                            </div>
+                            <span class="pay">1000<i>руб</i></span>
+                        </li>
+                        <li>
+                            <span class="name">Топ 1500</span>
+                            <span class="speed">15<i>Мб/с</i></span>
+                            <div>
+                                <span>100<i>Мб/с</i></span>
+                            </div>
+                            <span class="pay">1500<i>руб</i></span>
+                        </li>
+                    </ul>
+
+                    <div class="graphLine">
+                        <i class="fa fa-caret-right"></i>
+                    </div>
+                </div>
+            </div><!-- /#ratesTops.item -->
+
+<!-- Линейка "Хит" -->
+            <div class="item">
+                <div class="ratesGraph" id="ratesHit">
+                    <ul>
+                        <li>
+                            <span class="name">Хит 700</span>
+                            <span class="speed">10<i>Мб/с</i></span>
+                            <div class="traffic">
+                                <span>40<i>Гб</i></span>
+                            </div>
+                            <span class="pay">700<i>руб</i></span>
+                        </li>
+                        <li>
+                            <span class="name">Хит 1000</span>
+                            <span class="speed">15<i>Мб/с</i></span>
+                            <div class="traffic">
+                                <span>50<i>Гб</i></span>
+                            </div>
+                            <span class="pay">1000<i>руб</i></span>
+                        </li>
+                        <li>
+                            <span class="name">Хит 1500</span>
+                            <span class="speed">20<i>Мб/с</i></span>
+                            <div class="traffic">
+                                <span>60<i>Гб</i></span>
+                            </div>
+                            <span class="pay">1500<i>руб</i></span>
+                        </li>
+                    </ul>
+
+                    <div class="graphLine">
+                        <i class="fa fa-caret-right"></i>
+                    </div>
+                </div>    <!-- /#ratesHit.item -->
+            </div>
+        </div><!-- /.carousel-inner -->
+    </div><!-- /#carousel-rates -->
+</div>
+
+<!-- Подкарусельковый текст -->
+<p id="ratesAdv">
+    <strong class="orange">Бесплатно на каждом тарифе:</strong>
+
+    <ul class="big-ul">
+        <li><a href="{% url 'client-faq' %}#sms_notification">SMS-оповещение</a></li>
+        <li><a href="http://local.tele-vox.ru/wiki/%D0%A5%D0%B0%D0%B1_DC">Файлообменная сеть DC++</a></li>
+        <li><a href="http://hub.tlvx.ru">Хаб Телевокс онлайн </a></li>
+        <li><a href="{% url 'client-payment' name='limit' %}">Обещанный платеж</a></li>
+        <li><a href="{% url 'client-simple_content' page='free-support' %}">Круглосуточная поддержка</a></li>
+    </ul>
+</p> <!-- #ratesAdv -->
+
+{% endblock %}
+
+
+
 {% block helptext %}
-<span class="help-block">
-	Все цены указаны в рублях с учетом всех налогов<br>
-	Скорость доступа к сети может отличаться от заявленной на 15% и только на сети Оператора, за ее пределами отклонение может быть значительно большим.<br>
-	При недостатке денежных средств на лицевом счете происходит блокировка, для разблокировки счета необходимо внести полную сумму ежемесячной абонентской платы<br>
-	<strong>Для тарифов линейки "Топ":</strong><br>
-	В период с 02-00 до 18-00 в рабочие дни и в период с 02-00 до 10-00 в выходные и праздничные дни скорость доступа к сети достигает 100 Мбит/сек<br>
-	<strong>Для тарифов линейки "Хит":</strong><br>
-	Трафик обнуляется на 1 число месяца. После превышения лимита включенного трафика скорость понижается до 0,5Мбит/сек
-</span>
-{% endblock %} 	   
+<!-- Сноски к тарифам -->
+<span class="help-block" id="ratesNotes">
+    Все цены указаны в рублях с учетом всех налогов<br>
+    Скорость доступа к сети может отличаться от заявленной на 15% и только на сети Оператора, за ее пределами отклонение может быть значительно большим.<br>
+    При недостатке денежных средств на лицевом счете происходит блокировка, для разблокировки счета необходимо внести полную сумму ежемесячной абонентской платы<br>
+    <strong>Для тарифов линейки "Топ":</strong><br>
+    В период с 02-00 до 18-00 в рабочие дни и в период с 02-00 до 10-00 в выходные и праздничные дни скорость доступа к сети достигает 100 Мбит/сек<br>
+    <strong>Для тарифов линейки "Хит":</strong><br>
+    Трафик обнуляется на 1 число месяца. После превышения лимита включенного трафика скорость понижается до 0,5Мбит/сек
+</span><!-- /#ratesNotes -->
+{% endblock %}

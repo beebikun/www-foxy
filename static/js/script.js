@@ -3,9 +3,9 @@ var menuSettings = {
     hide : { h: 0, b: 'none'},
     normal: { h: 253, b: '1px solid #DADADA'}
 };
-var streetInput;
-var numInput;
-var streetTips;
+var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
+var numInput = filterVisible(document.querySelectorAll('[name=num]'));
+var streetTips = document.getElementById('streetTips'); 
 
 /*--------------------Buttons Section----------------*/
 
@@ -101,10 +101,6 @@ function initMap(){
 /*-----------------------------------------------------------*/
 
 window.onload = function(){
-	var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
-	var numInput = filterVisible(document.querySelectorAll('[name=num]'));
-	var streetTips = document.getElementById('streetTips'); 
-
 	initMap();
 	initModal();
 

@@ -1,13 +1,20 @@
 {% extends "client/base.html" %}
+
+
 {% block jsscript %}
-{% endblock %} 
-{% block internet-btn-active %} 
-	{% ifequal data.name "internet" %}
+{% endblock %}
+
+
+{% block internet-btn-active %}
+<!-- Display the button on the Internet section -->
+    {% ifequal data.name "internet" %}
         active
     {% endifequal %}
 {% endblock %}
+
+
 {% block main-top-left %}
 <div class="content">
-	{{ data.content|safe }}
+    {{ data.content|safe }}
 </div>
-{% endblock %}   
+{% endblock %}

@@ -1,41 +1,58 @@
 {% extends "client/payment-way.html" %}
-{% block jsscript %}
+
+
 {% block content %}Телевокс - Оплата наличными{% endblock %}
 {% block title %}Televox -  Оплата наличными{% endblock %}
+
+
+{% block jsscript %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	document.getElementById('searchInPoints').onkeydown = searchPaymentTermonal;
+    document.getElementById('searchInPoints').onkeydown = searchPaymentTermonal;
     document.getElementById('paymentSelect').onchange = selectPayment;
 </script>
 {% endblock %}
+
+
 {% block payment-title %}
-    Наличные, 0%     
+    Наличные, 0%
 {% endblock %}
+
+
 {% block payment %}
+<!-- Контейнер карты -->
     <div id="myMapId" class="map margin-bottom"></div>
     <noscript>Для просмотра карты и поиска нужного терминала необходим javascript. Пожалуйста, включите его в настройках вашего браузера.</noscript>
-    <span class="help-block">На карте в виде маркеров обозначены места, в которых вы можете заплатить за услуги "Телевокс"</span>    
-    <div class="margin-bottom margin-top">    
-           <select class="form-control input-sm" id="paymentSelect">
-                <option value="" selected="selected">Все</option>
-               {% for payment in data %}
-                   <option id="{{payment.id}}">{{ payment.name|safe }}</option>
+    <span class="help-block">На карте в виде маркеров обозначены места, в которых вы можете заплатить за услуги "Телевокс"</span>
+
+<!-- Выбор оператора -->
+    <div class="margin-bottom margin-top">
+        <select class="form-control input-sm" id="paymentSelect">
+            <option value="" selected="selected">Все</option>
+            {% for payment in data %}
+               <option id="{{payment.id}}">{{ payment.name|safe }}</option>
             {% endfor %}
-        </select>
-        <span class="help-block">Вы можете выбрать конкретного оператора из списка</span>    
+        </select><!-- /.paymentSelect -->
+        <span class="help-block">Вы можете выбрать конкретного оператора из списка</span>
     </div>
-    <div >
+
+<!-- Поиск терминала -->
+    <div>
         <input type="text" class="form-control input-sm" placeholder="Название или адрес" id="searchInPoints">
-        <span class="help-block">Введите название местоположения или адрес терминала, чтобы найти его. Например, &laquo;Зейская&raquo; или &laquo;От и До&raquo;. При этом маркеры и список внизу отфильтруются согласно вашему запросу.</span>    
+        <span class="help-block">Введите название местоположения или адрес терминала, чтобы найти его. Например, &laquo;Зейская&raquo; или &laquo;От и До&raquo;. При этом маркеры и список внизу отфильтруются согласно вашему запросу.</span>
     </div>
-{% endblock %}   
+
+{% endblock %}
+
+
 {% block simitems %}
 <div id="simmularItems" class="items-area">
     {% for payment in data %}
+<!-- Модальное окно с описанием способа оплаты оператора -->
         <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form role="form"> 
+                    <form role="form">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
@@ -49,19 +66,21 @@
                     </form>
                   </div>
             </div>
-        </div>    
+        </div><!-- /.modal.fade -->
+
+<!-- Список терминалов оператора -->
         {% for point in payment.points.result %}
             <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.marker}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
                 <p class="some-item-date">{{ payment.name }} </p>
                 <div class="some-item-body">
                     <span class="some-item-body-title">{{ point.address }}</span>
-                    <div class="some-item-body-text"> 
+                    <div class="some-item-body-text">
                         {{ point.name|safe }}
                         <div><a data-toggle="modal" class="how-play-btn bold-a" href="#modal{{ payment.id }} ">Как оплатить</a></div>
-                    </div>
-                </div>
-            </div>
+                    </div><!-- /.some-item-body-text -->
+                </div><!-- /.some-item-body -->
+            </div><!-- /.some-item -->
         {% endfor %}
     {% endfor %}
-</div>
-{% endblock %}        
+</div><!-- /#simmularItems.items-area -->
+{% endblock %}

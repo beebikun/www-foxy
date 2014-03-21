@@ -1,169 +1,226 @@
 {% extends "client/base.html" %}
+
+
 {% block content %}Телевокс - Подключиться{% endblock %}
 {% block title %}Televox -  Подключиться{% endblock %}
+
+
 {% block jsscript %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 <script type="text/javascript">
-	var preModalFn = function(point){
-		var contacts = document.getElementById('doit_contacts');
-		var params = {
-			address:point.getAttribute('address'),
-			co:point.getAttribute('co')
-		};
-		if(params.co && params.co!='None') {
-			showHideElBlock(contacts, true);
-			contacts.getElementsByTagName('span')[0].getElementsByTagName('span')[0].innerText = params.co;
-		} else showHideElBlock(contacts);
+    var preModalFn = function(point){
+        var contacts = document.getElementById('doit_contacts');
+        var params = {
+            address:point.getAttribute('address'),
+            co:point.getAttribute('co')
+        };
+        if(params.co && params.co!='None') {
+            showHideElBlock(contacts, true);
+            contacts.getElementsByTagName('span')[0].getElementsByTagName('span')[0].innerText = params.co;
+        } else showHideElBlock(contacts);
 
-		for(var p in params){
-			var el = document.querySelectorAll("[name=" + p + "]");
-			if(el.length) el[0].value = params[p]
-		}
-	}
-	
-	createCaptcha('captcha');	
+        for(var p in params){
+            var el = document.querySelectorAll("[name=" + p + "]");
+            if(el.length) el[0].value = params[p]
+        }
+    }
 
-	document.getElementById('okBtn').onclick = doitOkBtnClick;
+    createCaptcha('captcha');
+
+    document.getElementById('okBtn').onclick = doitOkBtnClick;
 </script>
 {% endblock %}
+
+
 {% block main-top-left %}
 <div id="letsfoxCont" class="content">
-	<div id="LetsfoxMakeReq" >
-		<form role="form"  action="{% url 'client-letsfox' %}" method="post">
-			{% csrf_token %}
-			<div class="form-group">
-				<input type="text" class="form-control makeConReqStreetVal" name="street" value="{% if data.params.street %}{{data.params.street}}{% endif %}" placeholder="Улица">
-			</div>
-			<div class="form-group makeConReqInput">
-				<input type="text" class="form-control" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
-			</div>
-			<div class="form-group makeConReqBut">
-				<button type="submit" class="btn btn-default mybtn-block" value='Проверить' >Проверить</button>
-			</div>
-		</form>
-	</div>
-	<div id="myMapId" class="map map-full-size"></div>
-	<noscript>Для того, чтобы оставить заявку вам нужен javascript. Пожалуйста, включите его или оставьте заявку по одному из <a href="{% url 'client-about' %}">телефонов компании</a></noscript>
-</div>
-{% endblock %}   
-{% block connectBut %}  
-{% endblock %}   
+    <div id="LetsfoxMakeReq" > <!-- Форма запроса для мобильных -->
+        <form role="form"  action="{% url 'client-letsfox' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control makeConReqStreetVal" name="street" value="{% if data.params.street %}{{data.params.street}}{% endif %}" placeholder="Улица">
+            </div>
+            <div class="form-group makeConReqInput">
+                <input type="text" class="form-control" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
+            </div>
+            <div class="form-group makeConReqBut">
+                <button type="submit" class="btn btn-default mybtn-block" value='Проверить' >Проверить</button>
+            </div>
+        </form>
+    </div><!-- /#LetsfoxMakeReq -->
+
+    <div id="myMapId" class="map map-full-size"><!-- Контейнер длля карты -->
+    </div> <!-- /#myMapId -->
+
+    <noscript>Для того, чтобы оставить заявку вам нужен javascript. Пожалуйста, включите его или оставьте заявку по одному из <a href="{% url 'client-about' %}">телефонов компании</a></noscript>
+</div><!-- /#letsfoxCont.content -->
+{% endblock %}
+
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
+{% endblock %}
+
+
 {% block main-bottom-left %}
-	<div class="modal fade" id="doitOk" tabindex="-1" role="dialog" aria-hidden="true" >
-	    <div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Вы восхитительны!</h4>					
-				</div>
-				<div class="modal-body">
-					Благодарим за заявку, с Вами свяжутся в течение 3 дней.
-				</div>
-				<div class="modal-footer">
-		        	<button type="button" class="btn btn-default" data-dismiss="modal"> Ок </button>
-		        </div>
-	      	</div>
-		</div>
-	</div>
-	<div class="modal fade" id="doit" tabindex="-1" role="dialog"  aria-hidden="true">
-	    <div class="modal-dialog">
-			<div class="modal-content">
-				<form role="form" > 	
-					{% csrf_token %}					
-			        <div class="modal-header">
-			        	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			        	<h4 class="modal-title">Заявка на подключение</h4>
-			        </div>
-			        <div class="modal-body">
-			        	<label>Контактная информация</label>
-						<div class="form-group">
-					    	<input type="text" class="form-control" placeholder="Фамилия, Имя, Отчество" name="fio">
-					    	<span class="help-block help-error"></span>
-				    	</div>
-				    	<div class="form-group">
-					    	<input type="text" class="form-control my-form-control" placeholder="Телефон" name="phone">
-					    	<span class="help-block help-error"></span>
-				    	</div>
-				    	<div class="form-group">
-					    	<input type="email" class="form-control my-form-control" placeholder="Email"  name="email">							
-					    	<span class="help-block help-error">Укажите либо телефон, либо электронный адрес</span>
-						</div>
-					    <label>Адрес подключения</label>
-						<div class="form-group ">
-						    <div class="col-lg-6" id="address">
-						    	<input type="text" class="form-control" readonly name="address">
-						    </div>
-						    <div class="col-lg-6">
-					    		<input type="text" class="form-control" id="flat" placeholder="Номер квартиры" name="flat">
-					    		<span class="help-block help-error"></span>
-				    		</div>
-				    		<br>
-						</div>					
-						<label>Откуда узнали о нас</label>
-						<div class="form-group">
-							<input type="text" class="form-control" name="source">
-							<span class="help-block">Пожалуйста, укажите источник, откуда вы узнали о нас</span>
-						</div>
-						<label>Комментарий</label>
-						<div class="form-group">
-							<span class="help-block">Здесь вы можете указать желательное время звонка или оставить какой-нибудь комментарий</span>
-							<input type="text" class="form-control"  placeholder=""  name="comment">
-						</div>
-						<span class="help-block">
-						Чтобы доказать, что вы не робот, укажите, пожалуйста, на какой из трех картинок изображен логотип лучшей компании
-						</span>
-						<div class="form-group">
-							<input type="hidden" name="captcha_key" value="iTXdGapMHgYOrSlGn1ED7cbMoQLhkSoU">
-							<div class="btn-group btn-group-justified" data-toggle="buttons" id="captcha">	
-							</div>		
-							<span class="help-block help-error"></span>			
-						</div>
-						<div class="form-group" id="doit_contacts">
-							<br>						
-							<span class="help-block">
-								Для получения более подробной информации обратитесь в офис компании:<br>
-								<span></span>
-							</span>
-						</div>
-			        </div>
-			        <div class="modal-footer">
-			        	<button type="button" class="btn btn-default pull-left" data-dismiss="modal"> Отмена </button>
-			        	<button type="button" class="btn btn-default btn-orange" id="okBtn">Оставить</button>
-			        </div>
-		        </form>
-	      	</div>
-		</div>
-	</div>
-	<div class="items-area" id="result">
-	{% for point in data.result %}{% if point.result %}
-		<div class="some-item" style="cursor:pointer" id="visible-result">
-            <p class="some-item-date"> {% if point.active %} Подключен {% else %}{% if point.plan %} Сбор заявок {% else %} Не подключен {% endif %}{% endif %} </p>
+<!-- Модальное окно подтверждающее, что заявка отправлена -->
+    <div class="modal fade" id="doitOk" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Вы восхитительны!</h4>
+                </div><!-- /.modal-header -->
+
+                <div class="modal-body">
+                    Благодарим за заявку, с Вами свяжутся в течение 3 дней.
+                </div><!-- /.modal-body -->
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> Ок </button>
+                </div><!-- /.modal-footer -->
+              </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /#doitOk -->
+
+
+<!-- Модальное окно с формой заявки -->
+    <div class="modal fade" id="doit" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" >
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Заявка на подключение</h4>
+                    </div><!-- /.modal-header -->
+
+                    <div class="modal-body">
+                        <label for="requestContacts">Контактная информация</label>
+                        <section id="requestContacts">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Фамилия, Имя, Отчество" name="fio">
+                                <span class="help-block help-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control my-form-control" placeholder="Телефон" name="phone">
+                                <span class="help-block help-error"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="email" class="form-control my-form-control" placeholder="Email"  name="email">
+                                <span class="help-block help-error">Укажите либо телефон, либо электронный адрес</span>
+                            </div>
+                        </section><!-- /#requestContacts -->
+
+                        <label for="requestAddres">Адрес подключения</label>
+                        <section id="requestAddres">
+                            <div class="form-group ">
+                                <div class="col-lg-6" id="address">
+                                    <input type="text" class="form-control" readonly name="address">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" id="flat" placeholder="Номер квартиры" name="flat">
+                                    <span class="help-block help-error"></span>
+                                </div>
+                                <br>
+                            </div>
+                        </section><!-- /#requestAddres -->
+
+                        <label for="requsetSrc">Откуда узнали о нас</label>
+                        <section id="requsetSrc">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="source">
+                                <span class="help-block">Пожалуйста, укажите источник, откуда вы узнали о нас</span>
+                            </div>
+                        </section><!-- /#requsetSrc -->
+
+                        <label for="requsetCmnt">Комментарий</label>
+                        <section id="requsetCmnt">
+                            <div class="form-group">
+                                <span class="help-block">Здесь вы можете указать желательное время звонка или оставить какой-нибудь комментарий</span>
+                                <input type="text" class="form-control"  placeholder=""  name="comment">
+                            </div>
+                        </section><!-- /#requsetCmnt -->
+
+                        <section id="requsetCaptcha">
+                            <span class="help-block">
+                            Чтобы доказать, что вы не робот, укажите, пожалуйста, на какой из трех картинок изображен логотип лучшей компании
+                            </span>
+                            <div class="form-group">
+                                <input type="hidden" name="captcha_key" value="iTXdGapMHgYOrSlGn1ED7cbMoQLhkSoU">
+                                <div class="btn-group btn-group-justified" data-toggle="buttons" id="captcha">
+                                    <!-- Place for captcha -->
+                                </div><!-- /#captcha -->
+                                <span class="help-block help-error"></span>
+                            </div>
+                        </section><!-- /#requsetCaptcha -->
+
+                        <section class="form-group" id="doit_contacts">
+                            <br>
+                            <span class="help-block">
+                                Для получения более подробной информации обратитесь в офис компании:<br>
+                                <span></span>
+                            </span>
+                        </section><!-- /#doit_contacts -->
+                    </div><!-- /.modal-body -->
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal"> Отмена </button>
+                        <button type="button" class="btn btn-default btn-orange" id="okBtn">Оставить</button>
+                    </div><!-- /.modal-footer -->
+                </form>
+              </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- #doit -->
+
+
+<!-- Результат с полным совпадением адреса -->
+    <div class="items-area" id="result">
+    {% for point in data.result %}{% if point.result %}
+        <div class="some-item" style="cursor:pointer" id="visible-result">
+            <p class="some-item-date">
+                {% if point.active %} Подключен
+                {% else %}{% if point.plan %} Сбор заявок
+                {% else %} Не подключен {% endif %}{% endif %}
+            </p><!-- /.some-item-date -->
+
             <div class="some-item-body">
                 <span class="some-item-body-title">{{ point.address }}</span>
-                <div class="some-item-body-text" > 
-                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit"  data-toggle="modal"
-                		href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
-            	</div>
-            </div>
-        </div>
-	{% endif %}{% endfor %}	
-	</div>
-	<div id="simmularItems" class="items-area">
-		<div id="simmularItemsLabel" style="margin:10px 0"> </div>					
-	{% for point in data.result %}
-		<div class="some-item" data-lat="{{point.lat}}" data-lng="{{point.lng}}" co="{{point.co}}" 
-            	data-ico="{% if point.active %}active{% else %}{% if point.plan %}plan{% else %}not_in_list{% endif %}{% endif %}" 
-            	{% if point.result %} id="result-item"  style="display:none" {% else %}  id="simmularItemsID_{{point.id}}"  {% endif %} >
-            <p class="some-item-date"> {% if point.active %} Подключен {% else %}{% if point.plan %} Сбор заявок {% else %} Не подключен {% endif %}{% endif %} </p>
-            <div class="some-item-body">
-                <span class="some-item-body-title">{{ point.address }}</span>
-                <div class="some-item-body-text" > 
-                	<a class="btn btn-link mybtn-link no-margin no-padding open-doit" data-toggle="modal"
-                		href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
-            	</div>
-            </div>
-        </div>
-	{% endfor %}
-	</div>
-{% endblock %}   
+                <div class="some-item-body-text" >
+                    <a class="btn btn-link mybtn-link no-margin no-padding open-doit"  data-toggle="modal"
+                        href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
+                </div><!-- /.some-item-body-text -->
+            </div><!-- /some-item-body -->
+        </div><!-- /.some-item -->
+    {% endif %}{% endfor %}
+    </div><!-- #result.items-area -->
+
+    <div id="simmularItems" class="items-area">
+        <div id="simmularItemsLabel" style="margin:10px 0">
+        </div><!-- /#simmularItemsLabel -->
+
+<!-- Остальные результаты -->
+        {% for point in data.result %}
+            <div class="some-item" data-lat="{{point.lat}}" data-lng="{{point.lng}}" co="{{point.co}}"
+                    data-ico="{% if point.active %}active{% else %}{% if point.plan %}plan{% else %}not_in_list{% endif %}{% endif %}"
+                    {% if point.result %} id="result-item"  style="display:none" {% else %}  id="simmularItemsID_{{point.id}}"  {% endif %} >
+                <p class="some-item-date">
+                    {% if point.active %} Подключен
+                    {% else %}{% if point.plan %} Сбор заявок
+                    {% else %} Не подключен {% endif %}{% endif %}
+                </p> <!-- /.some-item-date -->
+
+                <div class="some-item-body">
+                    <span class="some-item-body-title">{{ point.address }}</span>
+                    <div class="some-item-body-text" >
+                        <a class="btn btn-link mybtn-link no-margin no-padding open-doit" data-toggle="modal"
+                            href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
+                    </div><!-- /.some-item-body-text -->
+                </div><!-- /.some-item-body -->
+            </div><!-- /.some-item -->
+        {% endfor %}
+    </div><!-- /#simmularItems.items-area -->
+{% endblock %}
 

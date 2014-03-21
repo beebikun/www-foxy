@@ -1,23 +1,31 @@
 {% extends "client/payment-way.html" %}
+
+
 {% block content %}Телевокс - Обещанный платеж{% endblock %}
 {% block title %}Televox -  Обещанный платеж{% endblock %}
+
+
 {% block payment %}
 {{data.content|safe}}
+<!-- Форма авторизации в лк -->
 <div class="form-inline form-group" role="form" id="limit_form">
-	{% csrf_token %}
-  	<div class="form-group">
-    	<input type="text" class="form-control" placeholder="Номер договора" name="user"> 
-  	</div>
-  	<div class="form-group">    	
-    	<input type="password" class="form-control" placeholder="Пароль" name="pswd" >
-  	</div>
-  	<button id="limit_ok" class="btn btn-default disable">Подключить</button>
-</div>
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Номер договора" name="user">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" placeholder="Пароль" name="pswd" >
+    </div>
+    <button id="limit_ok" class="btn btn-default disable">Подключить</button>
+</div><!-- #limit_form -->
+
+<!-- Ответ от лк -->
 <p id="message"></p>
 {% endblock %}
 
+
 {% block jsscript %}
 <script type="text/javascript">
-	document.getElementById("limit_ok").onclick = enlargeLimit;
+    document.getElementById("limit_ok").onclick = enlargeLimit;
 </script>
 {% endblock %}

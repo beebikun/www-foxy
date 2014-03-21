@@ -1,34 +1,51 @@
 {% extends "client/base.html" %}
+
+
 {% block content %}Телевокс - Контакты{% endblock %}
 {% block title %}Televox -  Контакты{% endblock %}
+
+
 {% block jsscript %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
 {% endblock %}
+
+
+<!-- Set menu active -->
 {% block about-btn-active %}active{% endblock %}
+
+
+<!-- Top submenu -->
 {% block main-top-left %}
 <div id="aboutCont" class="content">
- 	<div class="content-menu">
-		<a href="{% url 'client-about' %}">Контакты</a>
-		<a href="{% url 'client-documents' %}">Документы</a>
-		<a href="{% url 'client-vacancy' %}">Вакансии</a>
-	</div>
-	{% block about %}	
-	<div id="myMapId" class="map map-on-page-with-tp"></div>
-	{% endblock %}    	
-</div>
-{% endblock %}  
-{% block connectBut %}  
-{% endblock %}    
+    <div class="content-menu">
+        <a href="{% url 'client-about' %}">Контакты</a>
+        <a href="{% url 'client-documents' %}">Документы</a>
+        <a href="{% url 'client-vacancy' %}">Вакансии</a>
+    </div><!-- /.content-menu -->
+
+    {% block about %}
+    <div id="myMapId" class="map map-on-page-with-tp"></div>
+    {% endblock %}
+</div><!-- /#aboutCont -->
+{% endblock %}
+
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
+{% endblock %}
+
+
+<!-- Set items for map -->
 {% block main-bottom-left %}
 <div id="simmularItems" class="items-area">
-        {% for point in data.result %}
-            <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{point.ico}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
-                <div class="some-item-date">{{ point.address }}</div>
-                <div class="some-item-body">
-                    <span class="some-item-body-title">{{ point.contacts }}</span>
-                    <div class="some-item-body-text"> {{ point.schedule }} </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %} 
+    {% for point in data.result %}
+        <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{point.ico}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
+            <div class="some-item-date">{{ point.address }}</div>
+            <div class="some-item-body">
+                <span class="some-item-body-title">{{ point.contacts }}</span>
+                <div class="some-item-body-text"> {{ point.schedule }} </div>
+            </div><!-- /.some-item-body -->
+        </div><!-- /.some-item -->
+    {% endfor %}
+</div><!-- #simmularItems -->
+{% endblock %}
