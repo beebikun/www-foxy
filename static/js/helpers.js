@@ -1,39 +1,39 @@
 function filterVisible(nodes, returnFull){
-	var list = nodes instanceof Array ? nodes : node2array(nodes);
+    var list = nodes instanceof Array ? nodes : node2array(nodes);
     var vis = list.filter(function(el){return el.offsetWidth!==0});
     return returnFull ? vis : vis.length ? vis[0] : undefined
-}    
+}
 
 
 function popAttribute(elem, attr){
-	var val = elem.getAttribute(attr);
-	elem.removeAttribute(name);
-	return val;
+    var val = elem.getAttribute(attr);
+    elem.removeAttribute(name);
+    return val;
 }
 
 
 function attrs2obj(elem, attrs_list, obj) { //covert needed elem attrs into obj; attrs_list = [[attr_name, fn || null], .. ]
-	var obj = obj || new Object;
-	var attr = attrs_list.pop(), name = attr[0], fn = attr[1] || function(val){return val};
-	obj[name.replace('data-','')] = fn(popAttribute(elem, name));
-	return attrs_list.length ? attrs2obj(elem, attrs_list, obj) : obj
+    var obj = obj || new Object;
+    var attr = attrs_list.pop(), name = attr[0], fn = attr[1] || function(val){return val};
+    obj[name.replace('data-','')] = fn(popAttribute(elem, name));
+    return attrs_list.length ? attrs2obj(elem, attrs_list, obj) : obj
 };
 
 
 function findParent(parentSellector, el, nodes){
-	var parent = el.parentNode;
-	var nodes = nodes || node2array(document.querySelectorAll(parentSellector));
-	return nodes.filter(function(el){return el == parent}).length ? parent : 
-		   parent != document ?	findParent(parentSellector, parent, nodes) :
-		   null
+    var parent = el.parentNode;
+    var nodes = nodes || node2array(document.querySelectorAll(parentSellector));
+    return nodes.filter(function(el){return el == parent}).length ? parent :
+           parent != document ?    findParent(parentSellector, parent, nodes) :
+           null
 }
 
 
 function removeEl(selector, parent){
-	var parent = parent || document.body;
-	node2array(document.querySelectorAll(selector)).forEach(function(el){
-		parent.removeChild(el);		
-	});
+    var parent = parent || document.body;
+    node2array(document.querySelectorAll(selector)).forEach(function(el){
+        parent.removeChild(el);
+    });
 }
 
 
@@ -113,8 +113,8 @@ function toggleClass(el, name){
 
 function animate(el, params, duration) {
     var s = 10;
-    function _animate(fn) {  
-        var start = new Date; // сохранить время начала 
+    function _animate(fn) {
+        var start = new Date; // сохранить время начала
         var timer = setInterval(function() {
             // вычислить сколько времени прошло
             var progress = (new Date - start) / duration;
@@ -126,10 +126,10 @@ function animate(el, params, duration) {
     }
     var style = window.getComputedStyle(el);
     for(var p in params){
-    	var start = parseInt(style[p]);
+        var start = parseInt(style[p]);
         var dif = parseInt(params[p])- start;
-        _animate(function(progress){        	
-        	var newval = start + dif*progress;
+        _animate(function(progress){
+            var newval = start + dif*progress;
             el.style[p] =  newval + 'px';
         });
     }
@@ -137,7 +137,7 @@ function animate(el, params, duration) {
 
 
 function filterNodes(nodes, fn){
-	return node2array(nodes).filter( fn )
+    return node2array(nodes).filter( fn )
 }
 
 
@@ -167,7 +167,7 @@ function request(params){
     if(error===undefined) var error = function(e){console.log(e.data)};
     xhr.open(method, path, true);
     if(data){
-	    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var data = serialize(data);
     }
     xhr.onerror = error;
@@ -185,136 +185,136 @@ function request(params){
 
 /*----------------------------------------------------------------------------*/
 var M = function(id, numInput, streetInput, prnts){
-	this._init(id, numInput, streetInput, prnts)
+    this._init(id, numInput, streetInput, prnts)
 }
 
 M.prototype._init = function(id, numInput, streetInput, prnts) {
-	this.option = this._options()
-	this.numInput = numInput;
-	this.streetInput = streetInput;
-	this.el_parents = prnts || node2array(document.getElementById('simmularItems').getElementsByClassName('some-item'));
-	this.map = new DG.Map(id);
-	this.markerGroups = new Object;
-	this.map.setCenter( this.option.zeroCenter, this.option.zeroZoom);
-	this._setMarkers()
+    this.option = this._options()
+    this.numInput = numInput;
+    this.streetInput = streetInput;
+    this.el_parents = prnts || node2array(document.getElementById('simmularItems').getElementsByClassName('some-item'));
+    this.map = new DG.Map(id);
+    this.markerGroups = new Object;
+    this.map.setCenter( this.option.zeroCenter, this.option.zeroZoom);
+    this._setMarkers()
 };
 
-M.prototype.createMarker = function(src) {	
-	function _getFloat(val){return parseFloat(val.replace(',','.')) }
-	var point = attrs2obj( src, [['data-lat', _getFloat], ['data-lng', _getFloat], ['data-ico', null]]);
-	point.id = src.getAttribute('id')
+M.prototype.createMarker = function(src) {
+    function _getFloat(val){return parseFloat(val.replace(',','.')) }
+    var point = attrs2obj( src, [['data-lat', _getFloat], ['data-lng', _getFloat], ['data-ico', null]]);
+    point.id = src.getAttribute('id')
 
-	function _getChildHtml(childClass){return src.getElementsByClassName(childClass)[0].innerHTML }
-	point.header = _getChildHtml("some-item-date");
-	point.cont = _getChildHtml("some-item-body-title");
-	point.footer = _getChildHtml("some-item-body-text");
+    function _getChildHtml(childClass){return src.getElementsByClassName(childClass)[0].innerHTML }
+    point.header = _getChildHtml("some-item-date");
+    point.cont = _getChildHtml("some-item-body-title");
+    point.footer = _getChildHtml("some-item-body-text");
 
-	var cont = ['header', 'cont', 'footer']
-	for (var i = 0; i < cont.length; i++) {
-		var el = point[cont[i]], indx = el.indexOf('data-toggle="modal"');
-		if( indx >= 0 ) 
-			point[cont[i]] = el.slice(0, indx) + ' onclick="clickModalA(this)" ' + el.slice(indx);
-	};
+    var cont = ['header', 'cont', 'footer']
+    for (var i = 0; i < cont.length; i++) {
+        var el = point[cont[i]], indx = el.indexOf('data-toggle="modal"');
+        if( indx >= 0 )
+            point[cont[i]] = el.slice(0, indx) + ' onclick="clickModalA(this)" ' + el.slice(indx);
+    };
 
-	point.query = point.cont + point.header;
+    point.query = point.cont + point.header;
 
-	var ico = this.getPointIco(point);
-	var marker = new DG.Markers.MarkerWithBalloon({
-		balloonOptions: {
-			headerContentHtml: '<div class="markerHeader">' + point.header +'</div>',
-			contentHtml: '<div class="markerCont">' + point.cont +'</div>',
-			footerContentHtml: '<div class="markerFooter">' + point.footer +'</div>',
-			contentSize: new DG.Size(155, 35)
-		},
-	    // Местоположение на которое указывает маркер:
-	    geoPoint: new DG.GeoPoint(point.lng,point.lat),
-	    hoverIcon: ico,
-	    clickIcon: ico,
-	});
+    var ico = this.getPointIco(point);
+    var marker = new DG.Markers.MarkerWithBalloon({
+        balloonOptions: {
+            headerContentHtml: '<div class="markerHeader">' + point.header +'</div>',
+            contentHtml: '<div class="markerCont">' + point.cont +'</div>',
+            footerContentHtml: '<div class="markerFooter">' + point.footer +'</div>',
+            contentSize: new DG.Size(155, 35)
+        },
+        // Местоположение на которое указывает маркер:
+        geoPoint: new DG.GeoPoint(point.lng,point.lat),
+        hoverIcon: ico,
+        clickIcon: ico,
+    });
 
-	var payment = src.getAttribute('data-payment');
-	if(payment === undefined){ 
-		this.map.markers.add(marker);
-	}
-	else{
-		src.removeAttribute('data-payment')
-		if(this.markerGroups[payment] === undefined) this.markerGroups[payment] = this.map.markers.createGroup(payment);
-		this.map.markers.add(marker, payment);
-	}
+    var payment = src.getAttribute('data-payment');
+    if(payment === undefined){
+        this.map.markers.add(marker);
+    }
+    else{
+        src.removeAttribute('data-payment')
+        if(this.markerGroups[payment] === undefined) this.markerGroups[payment] = this.map.markers.createGroup(payment);
+        this.map.markers.add(marker, payment);
+    }
 
-	marker.setIcon(ico);
+    marker.setIcon(ico);
 
-	marker.val = point;
+    marker.val = point;
 
-	var self = this;
-	function _clickEL(e){
-		if(e.clientY>400){
-			self.createCenter(marker);
-			window.scrollTo(0, 0);
-		}
-	}	
+    var self = this;
+    function _clickEL(e){
+        if(e.clientY>400){
+            self.createCenter(marker);
+            window.scrollTo(0, 0);
+        }
+    }
 
-	src.onclick = _clickEL
+    src.onclick = _clickEL
 
-	if(src.getAttribute('id') == 'result-item'){
-		this.createCenter(marker)
-		document.getElementById('visible-result').onclick = _clickEL
-	}
-	return {marker: marker, val: point}
+    if(src.getAttribute('id') == 'result-item'){
+        this.createCenter(marker)
+        document.getElementById('visible-result').onclick = _clickEL
+    }
+    return {marker: marker, val: point}
 };
 
 M.prototype._setMarkers = function() {
-	var self = this;
-	request({
-		path: 'markers',
-		success: function(data){
-			if(!data || data.length == 0) return;
-        	self.icons = new Object;
-        	for (var i = 0; i < data.length; i++) {
-        		var ico = data[i]
-    			if (ico.height>42){
-					ico.width = ico.width*42/ico.height;
-					ico.height = 42
-				}
-				self.icons[ico.name] = new DG.Icon( ico.path, new DG.Size(ico.width, ico.height) )
-        	};
-			self.icons.icoNotFound = new DG.Icon('../static/img/markers/marker-icon-gray.png', new DG.Size(25, 41))
-			self.el_parents.forEach(function(elem){ //create markers for each source elements from bottoms of site (items in #simmularItems)
-				self.createMarker(elem)
-			});
-			var alterTextLabel = document.getElementById('simmularItemsLabel');
-			if( alterTextLabel ){
-				alterTextLabel.innerHTML = (function(){
-					if( self.numInput.value == '' || self.streetInput.value == '') return 'Пожалуйста, укажите адрес';
-					var simular = filterVisible(self.el_parents, true).length;
-					var result = document.getElementById('result').childElementCount;
-					if(result && simular) return 'Возможно, вы искали:'	
-					if(result && !simular) return ''
-					if(!result && simular) return 'Ничего не найдено. Возможно, вы искали: '
-					if(!result && !simular) return 'Ничего не найдено <i class="fa fa-frown-o fa-lg"></i>'
-				})();
-			}
-		}
-	})
+    var self = this;
+    request({
+        path: 'markers',
+        success: function(data){
+            if(!data || data.length == 0) return;
+            self.icons = new Object;
+            for (var i = 0; i < data.length; i++) {
+                var ico = data[i]
+                if (ico.height>42){
+                    ico.width = ico.width*42/ico.height;
+                    ico.height = 42
+                }
+                self.icons[ico.name] = new DG.Icon( ico.path, new DG.Size(ico.width, ico.height) )
+            };
+            self.icons.icoNotFound = new DG.Icon('../static/img/markers/marker-icon-gray.png', new DG.Size(25, 41))
+            self.el_parents.forEach(function(elem){ //create markers for each source elements from bottoms of site (items in #simmularItems)
+                self.createMarker(elem)
+            });
+            var alterTextLabel = document.getElementById('simmularItemsLabel');
+            if( alterTextLabel ){
+                alterTextLabel.innerHTML = (function(){
+                    if( self.numInput.value == '' || self.streetInput.value == '') return 'Пожалуйста, укажите адрес';
+                    var simular = filterVisible(self.el_parents, true).length;
+                    var result = document.getElementById('result').childElementCount;
+                    if(result && simular) return 'Возможно, вы искали:'
+                    if(result && !simular) return ''
+                    if(!result && simular) return 'Ничего не найдено. Возможно, вы искали: '
+                    if(!result && !simular) return 'Ничего не найдено <i class="fa fa-frown-o fa-lg"></i>'
+                })();
+            }
+        }
+    })
 };
 
 M.prototype._options = function() {
-	return {
-		zeroUser: {lng:127.534884, lat:50.258376},
-		zeroCenter: new DG.GeoPoint(127.540081175, 50.2866410303),
-		zeroZoom: 12,
-	}
+    return {
+        zeroUser: {lng:127.534884, lat:50.258376},
+        zeroCenter: new DG.GeoPoint(127.540081175, 50.2866410303),
+        zeroZoom: 12,
+    }
 };
 
 M.prototype.getPointIco = function(val) {
-	return !this.icons ? undefined :
-			val.ico ? this.icons[val.ico] :
-			this.icons.icoDefault
+    return !this.icons ? undefined :
+            val.ico ? this.icons[val.ico] :
+            this.icons.icoDefault
 };
 
 M.prototype.createCenter = function(center) {
-	center.showBalloon()
-	this.map.setCenter(center.lonlat, 15);
+    center.showBalloon()
+    this.map.setCenter(center.lonlat, 15);
 };
 
 /*----------------------------------------------------------------------------*/
