@@ -33,7 +33,7 @@ class BuildingAdmin(admin.ModelAdmin):
                     'co', 'active', 'plan')
     list_editable = ('co', 'square', 'active', 'plan')
     list_filter = ['active', 'plan', 'co', 'date', 'street']
-    search_fields = ['street', 'num', 'street_alt', 'num_alt']
+    search_fields = ['street__name', 'num', 'street_alt__name', 'num_alt']
     ordering = ('street__name', 'num', 'street_alt__name', 'num_alt')
     #save_on_top = True
     save_as = True
@@ -115,7 +115,7 @@ class PaymentPointAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_address', 'payment')
     list_filter = ['payment']
     list_display_links = ('name', 'get_address')
-    search_fields = ['address', 'name']
+    search_fields = ['address__street__name', 'address__num', 'name']
     list_per_page = 15
 admin.site.register(PaymentPoint, PaymentPointAdmin)
 

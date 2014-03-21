@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
+_eng_chars = u'~!@#$%^&qwertyuiop[]asdfghjkl;\'zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?'
+_rus_chars = u'ё!\"№;%:?йцукенгшщзхъфывапролджэячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,'
+_both_chars = u'.,'
+_trans_table = dict(zip(_eng_chars, _rus_chars))
 
-def change_keyboard(word):
-    alphabet = {
-        'q': u'й', 'Q': u'Й', 'w': u'ц', 'W': u'Ц', 'e': u'у', 'E': u'У',
-        'r': u'к', 'R': u'К', 't': u'е', 'T': u'Е', 'y': u'н', 'Y': u'Н',
-        'u': u'г', 'U': u'Г', 'i': u'ш', 'I': u'Ш', 'o': u'щ', 'O': u'Щ',
-        'p': u'з', 'P': u'З', '[': u'х', '[': u'Х', ']': u'ъ', ']': u'Ъ',
-        'a': u'ф', 'A': u'Ф', 's': u'ы', 'S': u'Ы', 'd': u'в', 'D': u'В',
-        'f': u'а', 'F': u'А', 'g': u'п', 'G': u'П', 'h': u'р', 'H': u'Р',
-        'j': u'о', 'J': u'О', 'k': u'л', 'K': u'Л', 'l': u'д', 'L': u'Д',
-        ';': u'ж', ':': u'Ж', '\'': u'э', '"': u'Э', 'z': u'я', 'Z': u'Я',
-        'x': u'ч', 'X': u'Ч', 'c': u'с', 'C': u'С', 'v': u'м', 'V': u'М',
-        'b': u'и', 'B': u'И', 'n': u'т', 'N': u'Т', 'm': u'ь', 'M': u'Ъ',
-        ',': u'б', '<': u'Б', '.': u'ю', '>': u'Ю'}
-    return word and ('').join(map(lambda i: alphabet.get(i, i), word))
+
+def change_keyboard(s):
+    def _check(i, c):
+        is_tmp = 0 if (c not in _both_chars or is_ch) else (i, c)
+        return _trans_table.get(c, c), is_tmp
+    is_ch = False
+    s, tmp = zip(*[_check(i, c) for i, c in enumerate(s)])
+    tmp = filter(lambda v: isinstance(v, tuple), tmp)
+    s = list(s)
+    if tmp and not is_ch:
+        for i, c in tmp:
+            s[i] = c
+    return u''.join(s)
