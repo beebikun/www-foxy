@@ -20,7 +20,7 @@
             <caption>
                 <strong>{{app.name}}</strong>
             </caption>
-            {% for model in app.models %}                   
+            {% for model in app.models %}
                     <tr>
                     {% if model.admin_url %}
                         <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
@@ -48,7 +48,7 @@
             <caption>
                 <strong>Objects</strong>
             </caption>
-            {% for model in app.models %}  
+            {% for model in app.models %}
                 {% if model.name == 'Buildings' or model.name == 'Central offices' or model.name == 'Marker icons' or model.name == 'Note types' or model.name == 'Rates types' or model.name == 'Payments' or model.name == 'Payment points' or model.name == 'Squares' or model.name == 'Streets'  %}
                     <tr>
                     {% if model.admin_url %}
@@ -76,7 +76,7 @@
             <caption>
                 <strong>Dynamic Page</strong>
             </caption>
-            {% for model in app.models %}            
+            {% for model in app.models %}
                 {% if model.name == 'Ratess' or model.name == 'Notes' %}
                     <tr>
                     {% if model.admin_url %}
@@ -104,8 +104,8 @@
             <caption>
                 <strong>Tree Page</strong>
             </caption>
-            {% for model in app.models %}       
-                {% if model.name == 'Help pages' or model.name == 'Vacancy pages' or model.name == 'Documents pages' %}     
+            {% for model in app.models %}
+                {% if model.name == 'Help pages' or model.name == 'Vacancy pages' or model.name == 'Documents pages' %}
                     <tr>
                     {% if model.admin_url %}
                         <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
@@ -132,8 +132,8 @@
             <caption>
                 <strong>Static Page</strong>
             </caption>
-            {% for model in app.models %}       
-                {% if model.name == 'Static pages' %}     
+            {% for model in app.models %}
+                {% if model.name == 'Static pages' or model.name == 'Images' %}
                     <tr>
                     {% if model.admin_url %}
                         <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
@@ -160,8 +160,8 @@
             <caption>
                 <strong>Captcha</strong>
             </caption>
-            {% for model in app.models %}       
-                {% if model.name == 'Captcha images' or model.name == 'Captcha image clones' %}     
+            {% for model in app.models %}
+                {% if model.name == 'Captcha images' or model.name == 'Captcha image clones' %}
                     <tr>
                     {% if model.admin_url %}
                         <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
@@ -187,9 +187,9 @@
             <table>
             <caption>
                 <strong>ConnReaqest</strong>
-            </caption>            
-            {% for model in app.models %}       
-                {% if model.name == 'Conn requests'%}     
+            </caption>
+            {% for model in app.models %}
+                {% if model.name == 'Conn requests'%}
                     <tr>
                     {% if model.admin_url %}
                         <th scope="row"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>

@@ -5,7 +5,7 @@ from django.db import models
 # from django.contrib.gis.db import models
 from django.utils import timezone
 from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
-    GIS_CONFIG, DATE_FORMAT, CONN_SPAM
+    GIS_CONFIG, DATE_FORMAT, CONN_SPAM, DEFAULT_IMAGE_HOST_URL
 import urllib2
 import json
 import re
@@ -731,6 +731,9 @@ class CaptchaImageClone(Captcha):
     )
 
 
+# ConnRequest
+
+
 class ConnRequest(models.Model):
     fio = models.CharField(max_length=128)
     phone = models.CharField(max_length=128, blank=True)
@@ -804,3 +807,37 @@ class ConnRequest(models.Model):
             self.is_send = True
             self.date_send = timezone.now()
             self.save()
+
+
+# Image
+
+class Image(models.Model):
+    def get_photo_path(self, filename):
+        return os.path.join(self.directory, filename)
+
+    def get_img_absolute_urls(self, host_url=DEFAULT_IMAGE_HOST_URL):
+        return str(host_url) + self.img.url
+
+    name = lambda self: self.img.name
+
+    directory = models.SlugField(
+        blank=True, null=True,
+        help_text="Directory for save. Image will available by full path:\
+        %_SITE_URL_%/media/%_DIRECTORY_%/%_IMAGE_NAME_%")
+    img = imagekit_models.ProcessedImageField(
+        upload_to=get_photo_path, options={'quality': 85},
+    )
+    description = models.CharField(max_length=256)
+
+    # Banner cfg
+    is_displ = models.BooleanField(
+        default=False, help_text="If value is True - image will displayed in \
+        a banner on index.html")
+    num = models.IntegerField(
+        blank=True, null=True, help_text="Order of a display image in the \
+        banner. If not num or nums will equals - img will display by date \
+        (first in last out).")
+    href = models.URLField(blank=True, null=True, )
+
+    def __unicode__(self):
+        return self.get_img_absolute_urls()

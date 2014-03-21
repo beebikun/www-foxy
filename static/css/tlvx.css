@@ -11,18 +11,18 @@ gray (text):        #333;
 /*===================Footer*/
 /*=========================================================*/
 /*Прибиваем футер к низу*/
-* { margin:0; padding:0; } 
+* { margin:0; padding:0; }
 html, body, #wrap { height: 100%;}
 body > #wrap {height: auto; min-height: 100%;position: relative;}
-#main { 
+#main {
 	min-height: 520px;
 	padding-bottom: 120px;}  /* must be same height as the footer */
-footer{ 	
+footer{
 	position: relative;
     margin-top: -80px; /* negative value of footer height */
     height: 80px;
     clear:both;
-} 
+}
 .clearfix:after {
 	content: ".";
     display: block;
@@ -44,7 +44,7 @@ footer{
 	padding-bottom: 10px;
 }
 footer>.content-inner{
-	border-top:1px double ;	
+	border-top:1px double ;
 	border-color: #DADADA;
 	padding-top: 10px;
 }
@@ -64,7 +64,7 @@ footer>.content-inner{
 #bottomnav{
 	font-size: 1em;
 	margin-top: 10px;
-	list-style: none;	
+	list-style: none;
 	text-align: center;
 }
 
@@ -76,7 +76,7 @@ footer>.content-inner{
 /*=========================================================*/
 body{
 	background-color: white;
-	color:#444;	
+	color:#444;
 	text-align: center;
 }
 select,select:focus,opttion,opttion:focus{
@@ -99,12 +99,12 @@ a,a:hover,a:visited,a:link,a:focus,a:active{
 a, a:visited, a:link{color:#444;}
 a:hover,a:active, a:focus{color:#ff6600;border-color:#ff6600 }
 .form-control, .form-control:focus, .form-control:active, .form-control:hover {
-	border-color:#CCC;	
+	border-color:#CCC;
 	box-shadow: none;
 }
 input, select, input:active, select:active, input:focus, select:focus, input:hover, select:hover{
 	margin:0;
-    border:1px solid ;    
+    border:1px solid ;
     box-shadow:none;
 }
 input[type='text']:focus, input[type='email']:focus {
@@ -120,9 +120,9 @@ input[type='text']:focus, input[type='email']:focus {
 }
 .mybtn{
 	text-decoration: none;
-	border-color: #9c9c9c;	
+	border-color: #9c9c9c;
 	background-color: #fff;
-	color:#444;	
+	color:#444;
 	margin-top: 15px;
 	padding: 12px 60px;
 	bottom: 0;
@@ -130,7 +130,7 @@ input[type='text']:focus, input[type='email']:focus {
 }
 .mybtn-link{
 	color:#444;
-	border: none;	
+	border: none;
 	padding: 0px;
 	margin: 0px;
 }
@@ -144,7 +144,7 @@ input[type='text']:focus, input[type='email']:focus {
 	max-width:100%;
 }
 .btn-orange,.btn-orange:hover,.btn-orange:visited,.btn-orange:link,.btn-orange:focus,.btn-orange:active{
-	color:white;	
+	color:white;
 	border-color:#ff6600;
 	background: #fe812f;
 }
@@ -163,7 +163,7 @@ ol{margin-left:20px;}
 }
 td{
 	min-width: 0;
-	/*word-wrap: break-word; 
+	/*word-wrap: break-word;
 	word-break: break-all;*/
 }
 /*--------Iframe--------*/
@@ -173,7 +173,7 @@ iframe{
 }
 
 /*--------Настраиваем сетку--------*/
-.content-inner{		
+.content-inner{
 	text-align: justify;
 }
 
@@ -183,7 +183,7 @@ iframe{
 }
 
 .content-inner-right{
-	position: relative;		
+	position: relative;
 	/*clear: both;*/
 }
 
@@ -192,7 +192,7 @@ iframe{
 }
 
 #mainTop{
-	margin-bottom:40px; 
+	margin-bottom:40px;
 }
 
 
@@ -212,7 +212,7 @@ header section{
 }
 
 header section:last-child{
-	margin-bottom: 0	
+	margin-bottom: 0
 }
 
 #topnav{
@@ -240,15 +240,15 @@ header section:last-child{
 	padding:0;
 }
 
-#topnav>ul{		
-	clear: both;	
+#topnav>ul{
+	clear: both;
 	margin: 0;
 }
 
-#topnav>ul>li{	
+#topnav>ul>li{
 	display: inline-block;
 	text-align: center;
-	margin:0; 
+	margin:0;
 	margin-top:24px;
 	margin-left:34px;
 	vertical-align:-50%;
@@ -269,14 +269,14 @@ header section:last-child{
 	position: absolute;
 	text-align: center;
 	border:1px solid;
-	border-radius: 4px;	
-	border-color: #DADADA;	
+	border-radius: 4px;
+	border-color: #DADADA;
 	background: white;
 	max-height:4.4em;
 	margin-top:2px;
 	z-index:2000;
 	display: none;
-} 
+}
 
 #streetTips>ul{
 	list-style: none
@@ -294,8 +294,8 @@ header section:last-child{
 
 #makeConReq{
 	border:1px solid;
-	border-radius: 4px;	
-	border-color: #DADADA;	
+	border-radius: 4px;
+	border-color: #DADADA;
 }
 
 #makeConReq>form{
@@ -333,7 +333,7 @@ header section:last-child{
 
 .phone-descr{
 	text-align: center;
-	margin-top:-5px;	
+	margin-top:-5px;
 }
 
 .phone-num{
@@ -376,7 +376,7 @@ header section:last-child{
 /*--------Menu bottom (2gis)--------*/
 
 #gisBan{
-	text-align: left;	
+	text-align: left;
 	font-weight: normal;
 	padding: 0.3em 0;
 	white-space: normal;
@@ -402,7 +402,7 @@ header section:last-child{
 }
 
 #social>a:first-child{
-	margin-left:4px;	
+	margin-left:4px;
 }
 
 #menuBottom{
@@ -414,7 +414,7 @@ header section:last-child{
 
 /*--------Items--------*/
 .some-item{
-	text-align: left;	
+	text-align: left;
 	margin-bottom: 15px;
 }
 .some-item-date{
@@ -425,7 +425,7 @@ header section:last-child{
 }
 .some-item-body, .some-item-body-title{
 	max-width:100%;
-	margin-top: 5px;	
+	margin-top: 5px;
 	text-decoration: none;
 }
 .some-item-body, .some-item-body-title:focus{
@@ -437,7 +437,7 @@ header section:last-child{
 }
 .some-item-body-title{
 	display: inline-block;
-	font-weight: bold;	
+	font-weight: bold;
 	border-bottom: 1px solid;
 	white-space: nowrap;
 	text-overflow:ellipsis;
@@ -447,7 +447,7 @@ header section:last-child{
 	text-decoration: none;
 }
 .some-item-body a:hover{}
-.some-item-body-text{	
+.some-item-body-text{
 	min-height: 1.5em;
 	margin-top: 5px;
 	max-width: 100%;
@@ -457,7 +457,7 @@ header section:last-child{
 }
 .more-items-btn{
 	text-decoration: underline;
-	font-weight: bold;	
+	font-weight: bold;
 }
 .more-items-btn>span{
 	cursor:pointer;
@@ -470,9 +470,9 @@ header section:last-child{
 .map{
 	overflow: hidden;
 	display:none;
-	width:100%;	
+	width:100%;
 	border:1px solid;
-	border-radius: 4px;	
+	border-radius: 4px;
 	border-color: #DADADA;
 }
 /*Style for marker's balloon*/
@@ -511,7 +511,7 @@ header section:last-child{
 .items-area>.some-item:last-child{
 	margin-right: 0;
 }
-.items-area>.some-item>.some-item-body>.some-item-body-text{	
+.items-area>.some-item>.some-item-body>.some-item-body-text{
 	overflow: hidden;
 	max-height: 2.7em;
 }
@@ -525,10 +525,10 @@ header section:last-child{
 @media (min-width: 712px){
 	.items-area>.some-item{
 		display: inline-block;
-		width:220px;	
-		margin-right:1em;	
+		width:220px;
+		margin-right:1em;
 	}
-	.items-area>.some-item>.some-item-body>.some-item-body-text{	
+	.items-area>.some-item>.some-item-body>.some-item-body-text{
 		max-height: 5.6em;
 	}
 }
@@ -550,18 +550,18 @@ header section:last-child{
 }
 .content-menu .active{
 	color:#ff6600;
-	border-color:#ff6600 
+	border-color:#ff6600
 }
 .content-menu a{
 	font-weight: normal;
 	text-align: center;
 	display: inline-block;
-	width: 20%;	
+	width: 20%;
 	margin-left: 10%;
 	text-decoration: underline;
 }
 .content-menu>a:hover{
-	text-decoration: underline;	
+	text-decoration: underline;
 }
 
 /*--------Letsfox--------*/
@@ -584,7 +584,7 @@ header section:last-child{
 	max-width: 30px;
 }
 #captcha label{
-	padding: 10px 30px;	
+	padding: 10px 30px;
 }
 
 /*--------Index--------*/
@@ -602,7 +602,7 @@ header section:last-child{
 }
 .ratesGraph i{
 	font-style: normal;
-	font-weight: normal;	
+	font-weight: normal;
 }
 .graphLine{
 	position: absolute;
@@ -616,44 +616,44 @@ header section:last-child{
 	bottom: 0;
 }
 .graphLine>i{
-	display: block;	
+	display: block;
 	margin-top:-4px;
-}	
+}
 .ratesGraph>ul{
 	list-style: none
 }
-.ratesGraph>ul>li{	
+.ratesGraph>ul>li{
 	display: inline-block;
 	cursor:default;
 	position: absolute;
 	text-align: center;
-	bottom: 0;		
+	bottom: 0;
 	width:24%;
 	left: 38%;
 	height: 75%;
 	border-radius: 4px 4px 0 0;
 	border:1px solid;
-	border-color:#ff6600; 
+	border-color:#ff6600;
 	background: #ff6600;
-}	
+}
 .ratesGraph>ul>li:hover{
 	box-shadow: 0 0 5px #ff6600;
 	text-shadow: 0 0 1px;
 }
 .ratesGraph>ul>li:first-child{
 	left:7%;
-	height: 50%		
+	height: 50%
 }
 .ratesGraph>ul>li:last-child{
 	left:69%;
 	height: 100%
-}	
+}
 .ratesGraph>ul>li>.speed{
 	font-weight: bold;
 	color:white;
 	top:24%;
 }
-.ratesGraph>ul>li:last-child>.speed{		
+.ratesGraph>ul>li:last-child>.speed{
 	top:29%;
 }
 .ratesGraph>ul>li>div{
@@ -667,7 +667,7 @@ header section:last-child{
 .ratesGraph>ul>li>div>span{
 	display: inline-block;
 	position: absolute;
-	font-weight: bold;	
+	font-weight: bold;
 	width: 100%;
 	left:0;
 }
@@ -675,7 +675,7 @@ header section:last-child{
 	display: inline-block;
 	position: absolute;
 	width:100%;
-	left:0;		
+	left:0;
 }
 .ratesGraph>ul>li>.name{
 	top:-2em;
@@ -691,7 +691,7 @@ header section:last-child{
 @media (max-width: 270px) {.ratesGraph>ul>li>.name{top:-2.3em;} }
 /*--------Payment--------*/
 .pager li > a{
-	color:#909090;	
+	color:#909090;
 }
 .pager li > a:hover{
 	color:#ff6600;
@@ -709,7 +709,7 @@ header section:last-child{
 	margin-bottom: 30px;
 	display: block;
 	min-height: 45px;
-}   
+}
 #paymentWays>.payment-items .icon-box{
 	float:left;
 	margin-top:-5px;
@@ -740,10 +740,10 @@ header section:last-child{
 	color: #ff6600;
 }
 
-#payment-card .some-item-body:hover, #payment-card .some-item-body{	
+#payment-card .some-item-body:hover, #payment-card .some-item-body{
 	text-decoration: none;
 	display: inline-block;
-	color: #444;	
+	color: #444;
 }
 /*--------About--------*/
 /*--------How (tree pages)--------*/
@@ -788,23 +788,23 @@ header section:last-child{
 .pagination > .disabled > a,
 .pagination > .disabled > a>span,
 .pagination > .disabled > a:hover>span{
-	color:#444;	
+	color:#444;
 }
 .pagination,
 .pagination>.active>a,
-.pagination>.active>a:hover{	
+.pagination>.active>a:hover{
 	border-color: #9c9c9c;
 }
-.pagination > li > a, 
+.pagination > li > a,
 .pagination > .active > a,
-.pagination > .active > a:hover, 
+.pagination > .active > a:hover,
 .pagination > li > a:hover,
 .pagination > .disabled > a,
-.pagination > .disabled > a>span, 
+.pagination > .disabled > a>span,
 .pagination > .disabled > a:hover>span{
 	border: none;
 }
-.pagination > li > a{	
+.pagination > li > a{
 	position: relative;
 	color:#909090;
 	width:2.5em;
@@ -823,7 +823,7 @@ header section:last-child{
 }
 .pagination > .moreless > a:hover{
 	color:#ff6600;
-	border-color:#ff6600 
+	border-color:#ff6600
 }
 .pagination > .active > a>span>span,
 .pagination > li > a:hover>span>span{
@@ -839,7 +839,7 @@ header section:last-child{
 	border:1px solid;
 	border-radius: 100%;
 }
-.pagination > li > a>span>span{	
+.pagination > li > a>span>span{
 	vertical-align: -9%;
 }
 /*=========================================================*/
@@ -850,6 +850,12 @@ header section:last-child{
 	text-align:center;
 }
 
+#carussel img{
+	display:inline-block;
+	max-width:100%;
+	max-height:100%;
+}
+
 .carousel-indicators{
 	top:0;
 	bottom: 94%;
@@ -858,10 +864,10 @@ header section:last-child{
 	width:auto;
 }
 .carousel-indicators>li{
-	border-color: #9c9c9c;	
+	border-color: #9c9c9c;
 }
 .carousel-indicators>.active{
-	background-color: #9c9c9c;		
+	background-color: #9c9c9c;
 }
 /*=========================================================*/
 /*===================Helper class*/

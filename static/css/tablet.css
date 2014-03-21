@@ -22,7 +22,7 @@ body{padding: 0 0;}
 .content-inner{
     display: inline-block;
     width: 712px;
-}   
+}
 .content-inner-left{
     display: inline-block;
     width: 100%;
@@ -49,7 +49,7 @@ body{padding: 0 0;}
 }
 
 #mainTop .content-inner-left{
-    margin-top: 15px; 
+    margin-top: 15px;
 }
 
 #mainTop .content-inner-right{
@@ -62,13 +62,13 @@ body{padding: 0 0;}
 /*=========================================================*/
 
 header{
-    height: auto;   
+    height: auto;
     position: static;
     margin-top: 0;
     border-bottom: none;
     padding-right: 0;
-    padding-left: 0; 
-    box-shadow: none;   
+    padding-left: 0;
+    box-shadow: none;
 }
 
 header section{
@@ -114,14 +114,14 @@ header .content-inner-right section:last-child .phones-block .phone-num{
     height: 55px;
 }
 
-#topnav>ul{ 
+#topnav>ul{
     float: right;
     text-align: right;
     margin: 0;
     display:block;
 }
 
-#topnav>ul>li{  
+#topnav>ul>li{
     margin-top:24px;
 }
 
@@ -151,7 +151,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
     display: inline-block;
 }
 
-.phone-num{    
+.phone-num{
     display: inline-block;
 }
 
@@ -161,7 +161,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 /*--------Main menu--------*/
 
 #mainMenu{
-    width: 100%;    
+    width: 100%;
     height: auto;
     position: static;
     border-top: none;
@@ -173,7 +173,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 
 #mainMenu .mybtn{
     border:1px solid #9c9c9c;
-    border-radius: 0;    
+    border-radius: 0;
     display: inline-block;
     margin-bottom: 15px;
     margin-left: -5px;
@@ -290,6 +290,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 /*=========================================================*/
 
 #carussel{
-    height: 424px;
+    height: 412px;
     display: block;
+    margin-bottom: 10px;
 }

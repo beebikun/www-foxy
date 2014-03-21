@@ -27,7 +27,7 @@ body{
 .content-inner{
     display: block;
     width: auto;
-}   
+}
 .content-inner-left{
     display: block;
     width: 100%;
@@ -54,7 +54,7 @@ body{
 }
 
 #mainTop .content-inner-left{
-    margin-top: 0px; 
+    margin-top: 0px;
     padding-top: 20px;
 }
 
@@ -68,12 +68,12 @@ body{
 /*=========================================================*/
 
 header{
-    height: 55px;   
+    height: 55px;
     position: fixed;
     margin-top: 0;
     border-bottom: 1px solid #DADADA;
     padding-right: 5px;
-    padding-left: 5px;    
+    padding-left: 5px;
     box-shadow: 0 4px 2px -2px #DADADA;
 }
 
@@ -96,7 +96,7 @@ header .content-inner-right section{
 }
 
 header .content-inner-right section:first-child .phones-block .phone-num{
-    text-align: left;       
+    text-align: left;
 }
 
 header .content-inner-right section:last-child .phones-block .phone-num{
@@ -120,14 +120,14 @@ header .content-inner-right section:last-child .phones-block .phone-num{
     height: 42px;
 }
 
-#topnav>ul{ 
+#topnav>ul{
     float: none;
     text-align: center;
     margin: 0;
     display: none;
 }
 
-#topnav>ul>li{  
+#topnav>ul>li{
     margin-top: 0;
 }
 
@@ -157,7 +157,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
     display: none;
 }
 
-.phone-num{    
+.phone-num{
     display: inline-block;
 }
 
@@ -167,11 +167,11 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 /*--------Main menu--------*/
 
 #mainMenu{
-    width: 100%;    
+    width: 100%;
     height: 0;
     position: fixed;
     border-top: none;
-    border-bottom: 1px solid red;    
+    border-bottom: 1px solid red;
     display: block;
     box-shadow: 0 4px 2px -2px #DADADA;
 }

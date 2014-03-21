@@ -142,7 +142,11 @@ def documents(request):
 
 
 def index(request):
-    return news(request, template='index')
+    images = models.Image.objects.filter(is_displ=True).order_by('num')
+    banner = [dict(serializers.ImageSerializer(instance=img).data,
+                   **{'url': img.get_img_absolute_urls(), 'num': i}) for i, img
+              in enumerate(images)]
+    return news(request, template='index', additional_data=dict(banner=banner))
 
 
 def how(request):
@@ -199,7 +203,7 @@ def letsfox(request):
     return my_response(request, data, 'letsfox')
 
 
-def news(request, pk=None, template='news'):
+def news(request, pk=None, template='news', additional_data=None):
     def get_data(obj):
         return serializers.NoteSerializer(instance=obj).data
     data = dict()
@@ -227,6 +231,8 @@ def news(request, pk=None, template='news'):
     else:
         objects = [get_object_or_404(models.Note, pk=pk)]
     data['result'] = map(get_data, objects)
+    if additional_data:
+        data.update(additional_data)
     return my_response(request, data, template)
 
 

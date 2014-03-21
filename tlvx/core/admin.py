@@ -17,6 +17,7 @@ class PaymentPointInline(admin.StackedInline):
 
 
 class BuildingAdmin(admin.ModelAdmin):
+    list_per_page = 15
     fieldsets = [
         (None,
             {'fields': ['street', 'num', 'active', 'plan', 'name', 'co']}),
@@ -70,10 +71,11 @@ admin.site.register(MarkerIcon, MarkerIconsAdmin)
 
 class NoteTAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_notes_sum')
-# admin.site.register(NoteType, NoteTAdmin)
+admin.site.register(NoteType, NoteTAdmin)
 
 
 class NoteAdmin(admin.ModelAdmin):
+    list_per_page = 15
     fieldsets = [
         (None,             {'fields': ['header', 'text']}),
         (u'Дополнительно',
@@ -100,6 +102,7 @@ class RatesAdmin(admin.ModelAdmin):
     list_editable = ('active', 'rtype')
     search_fields = ['tables', 'name']
     save_as = True
+    list_per_page = 15
 admin.site.register(Rates, RatesAdmin)
 
 
@@ -113,6 +116,7 @@ class PaymentPointAdmin(admin.ModelAdmin):
     list_filter = ['payment']
     list_display_links = ('name', 'get_address')
     search_fields = ['address', 'name']
+    list_per_page = 15
 admin.site.register(PaymentPoint, PaymentPointAdmin)
 
 
@@ -140,6 +144,21 @@ class StaticPageAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'have_content', 'display_name')
     search_fields = ['display_name', 'name', 'content', 'display_name']
 admin.site.register(StaticPage, StaticPageAdmin)
+
+
+class ImageAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['directory', 'img', 'description', ]}),
+        (u'Banner settings',
+            {'fields': ['is_displ', 'num', 'href'], 'classes': ['collapse']}),
+    ]
+    list_display = ('directory', 'get_img_absolute_urls', 'description',
+                    'is_displ', 'num')
+    list_editable = ('is_displ', 'num')
+    search_fields = ('directory', 'description', 'name', 'num')
+    list_filter = ('directory', 'is_displ', 'num')
+    list_per_page = 15
+admin.site.register(Image, ImageAdmin)
 
 
 class TreePageChildrenInline(admin.StackedInline):

@@ -212,3 +212,8 @@ class DoitSerializer(serializers.Serializer):
             return instance
         r = models.ConnRequest.objects.create(**attrs)
         return r
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Image

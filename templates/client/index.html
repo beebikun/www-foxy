@@ -18,10 +18,14 @@
             <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
           </ol>
           <!-- Wrapper for slides -->
-          <div class="carousel-inner">
-            <div class="item active">
-                {% include "client/banner.html" %}
+          <div class="carousel-inner" data-interval="1000">
+            {% for img in data.banner %}
+            <div class="item {% if img.num == 0 %}active{% endif %}">
+                <a href="{{img.href}}">
+                    <img src="{{img.url}}" >
+                </a>
             </div>
+            {% endfor %}
           </div>
         </div>
     </div><!-- /#carussel -->
