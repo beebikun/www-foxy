@@ -314,7 +314,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 /*------------------------------------------------------*/
 
 body.unwrap #mainMenu{
-    height: 300px!important;
+    height: 253px!important;
     position: absolute!important;
 }
 body.unwrap #collapseMenuBtn{
