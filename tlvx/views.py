@@ -12,6 +12,13 @@ from tlvx.helpers import change_keyboard
 
 
 def is_gray_ip(ip):
+    """Определяет, является ли полученный ip серым
+
+    Args:
+        ip - str
+    Returns:
+        True/False
+    """
     ip = re.match('[\d]+.[\d]+.[\d]+.[\d]+', ip)
     if not ip:
         return
@@ -26,42 +33,52 @@ def is_gray_ip(ip):
 
 
 def paginator(count, cur):
-    maxP = not settings.PAGINATOR_PAGE and settings.PAGINATOR_PAGE or \
-        settings.PAGINATOR_PAGE-1
-    displayP = maxP - 4
+    """Утилита для паджинатора(страница новости).
+    Паджинатор представляет собой уи, в котором можно перейти на
+    страницу вперед, на страницу назад, в нем отображается текущая страница,
+    а также некоторое количество(settings.PAGINATOR_PAGE) страниц, соседних
+    с текущей. Остальные страницы заменены на (..).
+    Т.е, паджинатор имеет вид
+    <-(1)(...)(10)(11)(12)(...)(LAST)->
+    Так вот, данная функция считает и возвращает список номеров страниц,
+    которые будут отображаться вместо (10)(11)(12).
+    Args:
+        - count - int, количество страниц всего
+        - cur - int, номер текущей страницы
+    Returns:
+        Список из int
+    """
+    #Проверяем, что settings.PAGINATOR_PAGE - нечетное. иначе - отнимаем 1
+    paginator_page = settings.PAGINATOR_PAGE if (
+        settings.PAGINATOR_PAGE % 2) else settings.PAGINATOR_PAGE - 1
+    #Определяем действительное количество отображаемых страниц
+    #Для этого отнимает 4 страницы(вперед, назад, (...), (...))
+    displayP = paginator_page - 4
+    empty = ['...']
+    #Определяем, какое количество страниц будет отображаться справа
+    #и слева от текущей
     half = (displayP-1)/2
-    display_page = []
-    for i in range(1, count+1):
-        if i == 1 or i == count or i == cur:
-            if i == cur:
-                display_page.append(i)
-            else:
-                display_page.append(i)
-        elif (displayP+half) > count:
-            if i >= (count-displayP):
-                display_page.append(i)
-            if i == (count-displayP-1):
-                display_page.append('...')
-        elif cur <= half:
-            if i <= displayP:
-                display_page.append(i)
-            if i == (displayP+1):
-                display_page.append('...')
-        else:
-            if (cur-half-1) == i:
-                display_page.append('...')
-            elif (cur-half) <= i and i < cur:
-                display_page.append(i)
-            elif (cur+half) >= i and i > cur:
-                display_page.append(i)
-            elif (cur+half+1) == i:
-                display_page.append('...')
-            else:
-                pass
-    return display_page
+    left = cur - half  # левый край
+    right = cur + half + 1  # правый край
+
+    if left <= 2:  # для случаев <-(1)(2)(3)(...)(LAST)->
+        pages = range(2, displayP + 1) + empty
+    elif right >= count:  # для случаев <-(1)(...)(51)(52)(53)->
+        pages = empty + range(count - displayP + 1, count)
+    else:  # для случаев <-(1)(...)(10)(11)(12)(...)(53)->
+        pages = empty + range(left, right) + empty
+    return [1] + pages + [count]
 
 
 def my_response(request, context={}, name=''):
+    """
+    Args:
+        -request
+        -context - контекст темлейта
+        -name - имя темплейта
+    Returns:
+        -HttpResponse с нужным темплейтом
+    """
     name = name or request.META.get('PATH_INFO').split('/')[-1]
     context = RequestContext(request, {'data': context})
     template = loader.get_template('client/%s.html' % name)
@@ -69,79 +86,54 @@ def my_response(request, context={}, name=''):
 
 
 class StaticPage:
+    """
+    """
     def __init__(self, request, name='', model='StaticPage', template=''):
+        """
+        Args:
+            -request
+            -name - имя страницы в бд
+            -template - имя нужного темлейта,
+                если он не совпадает с именем страницы в бд
+        Returns:
+            -my_response
+        """
         self.name = name or request.META.get('PATH_INFO').split('/')[-1]
         self.model = model
-        obj = self.get_obj()
-        self.data = self.get_data(obj)
-        if obj.get_child():
-            self.data['childs'] = self.get_child_data(obj)
-        template = template or name
-        self.response = my_response(request, self.data, template)
+        obj = self.get_obj()  # непосредственно сам объект
+        if obj.get_child():  # для страниц вида Tree (вакансии, справка)
+            self.data = self.get_child_data(obj)
+        else:
+            self.data = self.get_data(obj)  # сериализованные данные
+        self.response = my_response(request, self.data, template or name)
 
     def get_data(self, obj):
         return serializers.StaticPageSerializer(instance=obj).data
 
-    def sub_get_child_data(self, lst, obj):
-        i = lst.index(obj)
-        data = self.get_data(obj)
-        return i, data
-
     def get_child_data(self, obj):
-        child_list = obj.get_child()
-        for child_obj in child_list:
-            i, child_data = self.sub_get_child_data(child_list, child_obj)
-            sub_list = child_obj.get_child()
-            if sub_list:
-                for sub_obj in sub_list:
-                    sub_i, sub_data = self.sub_get_child_data(
-                        sub_list, sub_obj)
-                    sub_sub_list = sub_obj.get_child()
-                    if sub_sub_list:
-                        for sub_sub_obj in sub_sub_list:
-                            sub_sub_i, sub_sub_data = \
-                                self.sub_get_child_data(
-                                    sub_sub_list, sub_sub_obj)
-                            sub_sub_list[sub_sub_i] = sub_sub_data
-                        sub_data['childs'] = sub_sub_list
-                    sub_list[sub_i] = sub_data
-                child_data['childs'] = sub_list
-            child_list[i] = child_data
-        return child_list
+        """Рекурсивно обходит все obj, имеющие child и возвращает дата"""
+        data = self.get_data(obj)
+        if obj.get_child():
+            data['childs'] = map(self.get_child_data, obj.get_child())
+        return data
 
     def get_obj(self):
         return get_object_or_404(getattr(models, self.model), name=self.name)
 
 
-def map_page(request):
-    return my_response(request, name="map")
-
 ###############################################################################
 
+###############################
+########Служебнные страницы
+###############################
 
-def about(request):
-    def get_data(obj):
-        data = serializers.PaymentPointSerializer(instance=obj).data
-        data['ico'] = obj.marker and obj.marker.name
-        return data
-
-    def get_objects():
-        return models.CentralOffice.objects.filter(in_map=True)
-
-    objects = get_objects()
-    data = dict(result=[get_data(obj) for obj in objects])
-    return my_response(request, data)
-
-
-def accessdenied(request):
-    return my_response(request, name="access-denied")
-
-
-def documents(request):
-    return StaticPage(request=request, model='DocumentsPage').response
+def map_page(request):
+    """Служебная страница, где можно по клику получить координаты(lonlat)"""
+    return my_response(request, name="map")
 
 
 def index(request):
+    """Главная страница"""
     images = models.Image.objects.filter(is_displ=True).order_by('num')
     banner = [dict(serializers.ImageSerializer(instance=img).data,
                    **{'url': img.get_img_absolute_urls(), 'num': i}) for i, img
@@ -149,73 +141,76 @@ def index(request):
     return news(request, template='index', additional_data=dict(banner=banner))
 
 
-def how(request):
-    return StaticPage(request=request, model='HelpPage').response
+###############################
+########Static pages
+###############################
 
+def simple_content(request, page=None):
+    """Для отображения простых static page"""
+    return StaticPage(request=request, template='simple-content').response
+
+
+###############################
+########Menu sections
+###############################
+
+
+###############################
+#Подключиться
 
 def letsfox(request):
-    def filter_objects_simular(**params):
-        return filter(
-            lambda b: b.search_by_address(
-                street=params.get('street'), num=params.get('num')),
-            models.Building.objects.exclude(
-                id=params.get('result') and params.get('result').id or 0)
-            )
+    """В request.POST должны быть
+        'street' - название улицы, регистр и раскладка не важены,
+        'num' - номер дома
+    """
+    params = dict(
+        street=change_keyboard(request.POST.get('street')),
+        num=request.POST.get('num'))
 
-    def get_data(obj):
-        data = {}
-        if obj:
-            data = serializers.BuildingSerializer(instance=obj).data
-            data[u'co'] = obj.co and (obj.co.contacts + ', ' + obj.co.schedule)
+    def get_data(obj, result=False):
+        if not obj:
+            return
+        data = serializers.BuildingSerializer(instance=obj).data
+        data[u'co'] = obj.co and (obj.co.contacts + ', ' + obj.co.schedule)
+        data['result'] = result
         return data
-
-    def get_street(name):
-        serializer = serializers.StreetSerializer(data={'name': name})
-        if serializer.is_valid():
-            street = serializer.object
-        else:
-            street_set = filter(
-                lambda s: s.name.lower() == name.lower(),
-                models.Street.objects.all())
-            street = street_set and street_set[0]
-        return street
 
     def get(params):
         if not params.get('street') or not params.get('num'):
             return
         data = dict(result=[], params=params)
-        street = get_street(params['street'])
-        if street:
+        street_serializer = serializers.StreetSerializer(
+            data={'name': params['street']})
+        if street_serializer.is_valid():
+            street = street_serializer.object
             serializer = serializers.BuildingSerializer(
                 data={'num': params['num'], 'street': street.pk})
-            if not serializer.is_valid():
-                return
-            params['result'] = serializer.object
-            data['result'].append(
-                dict(result=True, **get_data(params['result'])))
-        data['result'] = data['result'] + \
-            map(get_data, filter_objects_simular(**params))
+            if serializer.is_valid():
+                params['result'] = serializer.object
+                data['result'] = [get_data(params['result'], True)]
+        data['result'].extend(map(get_data,
+                                  models.Building.filter_simmular(**params)))
         return data['result'] and data
-    params = dict(
-        street=change_keyboard(request.POST.get('street')),
-        num=request.POST.get('num'))
-    data = get(params) or {'params': params}
-    return my_response(request, data, 'letsfox')
 
+    return my_response(request, get(params) or dict(params=params), 'letsfox')
+
+
+###############################
+#Новости
 
 def news(request, pk=None, template='news', additional_data=None):
-    def get_data(obj):
-        return serializers.NoteSerializer(instance=obj).data
+    """Возвращаеи страницу со списком новостей. Также используется в index"""
+    get_data = lambda obj: serializers.NoteSerializer(instance=obj).data
     data = dict()
     if not pk:
-        params = dict(
-            count=request.GET.get('count') or settings.NOTE_COUNT,
-            page=request.GET.get('page') or 1
-        )
+        #Возвращаем требуемое settings.NOTE_COUNT
+        #новостей на требуемой странице
         try:
-            params = dict([(k, int(v)) for (k, v) in params.items()])
+            #Вместо page может быть прислана фигня, поэтому лучше проверить
+            page = int(request.GET.get('page', 1))
         except ValueError:
-            params = dict(count=settings.NOTE_COUNT, page=1)
+            page = 1
+        params = dict(count=settings.NOTE_COUNT, page=page)
         first = params['count']*(params['page']-1)
         end = params['count']*params['page']
         objects = models.Note.objects.all().order_by('num', '-date')[first:end]
@@ -224,29 +219,65 @@ def news(request, pk=None, template='news', additional_data=None):
             page_count=int(math.ceil(
                 models.Note.objects.all().count()/float(params['count'])))
         )
+        #Следующие 3 поля - для пэйджинатора, чтобы не делать этого в клиенте
         data['display_page'] = paginator(data['page_count'], data['page'])
         data['prev_page'] = data['page']-1 if data['page'] != 1 else 1
         data['next_page'] = data['page']+1 if (
             data['page'] != data['page_count']) else data['page_count']
     else:
+        #Возвращаем требуемую нововсть
         objects = [get_object_or_404(models.Note, pk=pk)]
     data['result'] = map(get_data, objects)
     if additional_data:
+        #Т.к эту же функцию использует еще и index, то есть возможность
+        #запихать в контекст что-нибудь еще
         data.update(additional_data)
     return my_response(request, data, template)
 
 
+###############################
+#Интернет -см static page
+
+
+###############################
+#Тарифы
+
+
+class Rates:
+    """Класс для rates и rates_simple"""
+
+    get_data = lambda self, obj: serializers.RatesSerializer(instance=obj).data
+
+    #Возвращает тарифы нужного типа(pp, jp, other),
+    #отсортированный по убыванию даты
+    get_obj = lambda self, name: models.Rates.objects.filter(
+        rtype__name=self.name).order_by('-date_in')
+
+    def __init__(self, request, name, template='rates-simple'):
+        data = map(self.get_data, self.get_object(name))
+        self.response = my_response(request, context=data, name=template)
+
+
+def rates(request):
+    """Тарифы для физ лиц"""
+    return Rates(request, name='p', template='rates').response
+
+
+def rates_simple(request, name):
+    """Тарифы для юр лиц и прочее"""
+    return Rates(request, name).response
+
+
+###############################
+#Оплата услуг
+
 def payment(request, name=None):
-    if name:
-        template_name = 'way' if name != 'limit' else name
-        return StaticPage(
-            request=request, name='payment-%s' % name,
-            template='payment-%s' % template_name).response
-    else:
-        return my_response(request, name='payment')
+    """Выбор типа оплаты"""
+    return my_response(request, name='payment')
 
 
 def paymentcard(request):
+    """Карты"""
     objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
     data = [serializers.PaymentSerializer(instance=obj).data
             for obj in objects]
@@ -254,6 +285,7 @@ def paymentcard(request):
 
 
 def paymentelmoney(request):
+    """Эл деньги (Асист)"""
     page = lambda n: serializers.StaticPageSerializer(
         instance=models.StaticPage.objects.get(name=n)).data
     data = dict(instruction=page('asist-instruction'),
@@ -261,13 +293,20 @@ def paymentelmoney(request):
     return my_response(request, data, name='payment-elmoney')
 
 
+def paymentlimit(request):
+    """Взятие лимита"""
+    return StaticPage(request=request, name='payment-limit').response
+
+
 def paymentmobile(request):
+    """Мобильные платежи"""
     gray_ip = is_gray_ip(request.META['REMOTE_ADDR'])
     return my_response(request, name="payment-mobile",
                        context=dict(gray_ip=gray_ip))
 
 
 def paymentterminal(request):
+    """Наличные и терминалы"""
     def get_point_data(obj):
         data = serializers.PaymentPointSerializer(instance=obj).data
         name = data['name'].replace('&', '&amp;')
@@ -314,40 +353,50 @@ def paymentterminal(request):
     return my_response(request, data, 'payment-terminal')
 
 
-class Rates:
-    def __init__(self, request, name, template='rates-simple'):
-        self.name = name
-        data = [self.get_data(obj) for obj in self.get_object()]
-        self.response = my_response(request, context=data, name=template)
+###############################
+#О компании
 
-    def get_object(self):
-        return models.Rates.objects.filter(
-            rtype__name=self.name).order_by('-date_in')
+def about(request):
+    """Контакты"""
+    def get_data(obj):
+        data = serializers.PaymentPointSerializer(instance=obj).data
+        data['ico'] = obj.marker and obj.marker.name
+        return data
 
-    def get_data(self, obj):
-        return serializers.RatesSerializer(instance=obj).data
-
-
-def rates(request):
-    return Rates(request, name='p', template='rates').response
+    data = dict(result=map(get_data,
+                           models.CentralOffice.objects.filter(in_map=True)))
+    return my_response(request, data)
 
 
-def rates_simple(request, name):
-    return Rates(request, name).response
-
-
-def simple_content(request, page=None):
-    return StaticPage(request=request, template='simple-content').response
+def documents(request):
+    """Документы (Tree Page)"""
+    return StaticPage(request=request, model='DocumentsPage').response
 
 
 def vacancy(request):
+    """Вакансии (Tree Page)"""
     return StaticPage(request=request, model='VacancyPage').response
 
+
+###############################
+#Справка
+
+def how(request):
+    """Справка"""
+    return StaticPage(request=request, model='HelpPage').response
+
+
+# def accessdenied(request):
+#     """
+#     """
+#     return my_response(request, name="access-denied")
 
 ########################################
 
 
-def main(request, name):
-    template = loader.get_template('client/%s.html' % name)
-    context = RequestContext(request, {})
-    return template.render(context)
+# def main(request, name):
+#     """
+#     """
+#     template = loader.get_template('client/%s.html' % name)
+#     context = RequestContext(request, {})
+#     return template.render(context)

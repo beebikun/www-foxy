@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from tlvx.tests import MainTest
 
 from django.test import TestCase
 from tlvx.core.models import *

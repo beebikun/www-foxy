@@ -825,8 +825,8 @@ header section:last-child{
 .pagination > li > a{
 	position: relative;
 	color:#909090;
-	width:2.5em;
-	height: 2.5em;
+	width:3.1em;
+	height: 3.1em;
 }
 .pagination > .active > a>span,
 .pagination > li > a:hover>span{
@@ -856,10 +856,9 @@ header section:last-child{
 	left:15%;
 	border:1px solid;
 	border-radius: 100%;
+	padding-top: 0.3em;
 }
-.pagination > li > a>span>span{
-	vertical-align: -9%;
-}
+
 /*=========================================================*/
 /*===================Carousel*/
 /*=========================================================*/

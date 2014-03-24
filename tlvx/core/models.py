@@ -168,7 +168,19 @@ class NoteType(models.Model):
         return self.name
 
 
+class BuildingManager(models.Manager):
+    def filter_simmular(self, street, num, result=None):
+        """Из списка всех зданий, за исключением того,
+        которое уже выдстся как результат, находит те, который в адресе или
+        альтернативном адресе содержат нужные паттерны названия улицы
+        и номера дома"""
+        fltr = self.exclude(id=result.id if result else 0).filter
+        return fltr(num__icontains=num, street__name__icontains=street) | \
+            fltr(num_alt__icontains=num, street_alt__name__icontains=street)
+
+
 class Building(models.Model):
+    objects = BuildingManager()
     num = models.CharField(max_length=256)
     street = models.ForeignKey("Street", related_name="buildings")
     #Для домов с двойным адресом

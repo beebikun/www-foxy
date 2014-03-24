@@ -8,11 +8,12 @@ _trans_table = dict(zip(_eng_chars, _rus_chars))
 
 def change_keyboard(s):
     def _check(i, c):
-        is_tmp = 0 if (c not in _both_chars or is_ch) else (i, c)
-        return _trans_table.get(c, c), is_tmp
-    is_ch = False
-    s, tmp = zip(*[_check(i, c) for i, c in enumerate(s)])
+        is_tmp = (i, c) if (c in _both_chars) else None
+        new_c = _trans_table.get(c)
+        return new_c or c, is_tmp, new_c and not is_tmp
+    s, tmp, is_ch = zip(*[_check(i, c) for i, c in enumerate(s)])
     tmp = filter(lambda v: isinstance(v, tuple), tmp)
+    is_ch = filter(lambda c: c, is_ch)
     s = list(s)
     if tmp and not is_ch:
         for i, c in tmp:
