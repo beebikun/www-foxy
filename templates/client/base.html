@@ -213,10 +213,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/js/helpers.js"></script>
 <script type="text/javascript">
- /*   var streetInputID = "[name=street]:visible";
-    var numInputID = "[name=num]:visible";
-    var streetTipsID = "#streetTips";
-    var paymentMobileOnSite = "#payment-mobile-onsite";*/
     var url = window.location.host + '/';
     var api = new Object;
     api.api = 'http://' + url + "api/"
@@ -225,7 +221,7 @@
     api.doit = api.api + 'doit';
     api.captcha = api.api + 'captcha';
     api.buildingSearch = api.api + 'buildings/search';
-    api.bg = {};
+    api.bg = new Object;
     api.bg.root = api.api + 'bg/';
     api.bglimit = api.bg.root + 'limit';
 </script>

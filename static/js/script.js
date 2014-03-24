@@ -116,14 +116,10 @@ window.onload = function(){
 
     (function(){
         //Open/close menu for mobile divices
-        var mainMenu = document.getElementById('mainMenu');
+        var body = document.getElementsByTagName('body')[0];
         document.getElementById('collapseMenuBtn').onclick = function(e){
             window.scrollTo(0,0);
-            var params = ( mainMenu.offsetHeight == menuSettings.normal.h ) ? menuSettings.hide : menuSettings.normal;
-            animate(mainMenu, { height: params.h + 'px'}, 200);
-            toggleClass(this, 'orange');
-            toggleClass(document.getElementsByTagName('header')[0], 'static-header')
-            toggleClass(mainMenu, 'static-header')
+            toggleClass( body, 'unwrap' );
         }
     })();
 
