@@ -825,7 +825,8 @@ class ConnRequest(models.Model):
 
 class Image(models.Model):
     def get_photo_path(self, filename):
-        return os.path.join(self.directory, filename)
+        directory = self.directory or ''
+        return os.path.join(directory, filename)
 
     def get_img_absolute_urls(self, host_url=DEFAULT_IMAGE_HOST_URL):
         return str(host_url) + self.img.url

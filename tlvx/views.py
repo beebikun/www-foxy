@@ -62,11 +62,8 @@ def paginator(count, cur):
     right = cur + half + 1  # правый край
     left_end = count - displayP + 1  # от конца и назад
     right_start = displayP + 1  # от начала и вперед
-    print 'L: ', left
-    print 'R: ', right
     if left_end <= 2 and right_start >= count:
         pages = range(2, count)
-        print '!', pages
     elif left <= 2:  # для случаев <-(1)(2)(3)(...)(LAST)->
         pages = range(2, right_start) + empty
     elif right >= count:  # для случаев <-(1)(...)(51)(52)(53)->
@@ -231,9 +228,8 @@ def news(request, pk=None, template='news', additional_data=None):
         )
         #Следующие 3 поля - для пэйджинатора, чтобы не делать этого в клиенте
         data['display_page'] = paginator(data['page_count'], data['page'])
-        data['prev_page'] = data['page']-1 if data['page'] != 1 else 1
-        data['next_page'] = data['page']+1 if (
-            data['page'] != data['page_count']) else data['page_count']
+        data['prev_page'] = max(1, data['page']-1)
+        data['next_page'] = min(data['page']+1, data['page_count'])
     else:
         #Возвращаем требуемую нововсть
         objects = [get_object_or_404(models.Note, pk=pk)]
@@ -261,10 +257,10 @@ class Rates:
     #Возвращает тарифы нужного типа(pp, jp, other),
     #отсортированный по убыванию даты
     get_obj = lambda self, name: models.Rates.objects.filter(
-        rtype__name=self.name).order_by('-date_in')
+        rtype__name=name).order_by('-date_in')
 
     def __init__(self, request, name, template='rates-simple'):
-        data = map(self.get_data, self.get_object(name))
+        data = map(self.get_data, self.get_obj(name))
         self.response = my_response(request, context=data, name=template)
 
 
