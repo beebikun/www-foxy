@@ -60,14 +60,22 @@ def paginator(count, cur):
     half = (displayP-1)/2
     left = cur - half  # левый край
     right = cur + half + 1  # правый край
-
-    if left <= 2:  # для случаев <-(1)(2)(3)(...)(LAST)->
-        pages = range(2, displayP + 1) + empty
+    left_end = count - displayP + 1  # от конца и назад
+    right_start = displayP + 1  # от начала и вперед
+    print 'L: ', left
+    print 'R: ', right
+    if left_end <= 2 and right_start >= count:
+        pages = range(2, count)
+        print '!', pages
+    elif left <= 2:  # для случаев <-(1)(2)(3)(...)(LAST)->
+        pages = range(2, right_start) + empty
     elif right >= count:  # для случаев <-(1)(...)(51)(52)(53)->
-        pages = empty + range(count - displayP + 1, count)
+        pages = empty + range(left_end, count)
     else:  # для случаев <-(1)(...)(10)(11)(12)(...)(53)->
         pages = empty + range(left, right) + empty
-    return [1] + pages + [count]
+    if count > 1:
+        pages.append(count)
+    return [1] + pages
 
 
 def my_response(request, context={}, name=''):
@@ -79,9 +87,11 @@ def my_response(request, context={}, name=''):
     Returns:
         -HttpResponse с нужным темплейтом
     """
-    name = name or request.META.get('PATH_INFO').split('/')[-1]
+    path_info = filter(lambda i: i and i != '!',
+                       request.META.get('PATH_INFO').split('/'))
+    name = 'client/%s.html' % (name if name else path_info[0])
     context = RequestContext(request, {'data': context})
-    template = loader.get_template('client/%s.html' % name)
+    template = loader.get_template(name)
     return HttpResponse(template.render(context))
 
 
