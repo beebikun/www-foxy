@@ -13,20 +13,23 @@
 {% block main-top-left %}
     <div id="carussel">
         <div id="carussel-main" class="carousel slide" data-ride="carousel" data-interval="10000">
-          <!-- Indicators -->
-          <ol class="carousel-indicators">
-            <!--<li data-target="#carussel-main" data-slide-to="0" class="active"></li>-->
-          </ol>
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner" data-interval="1000">
-            {% for img in data.banner %}
-            <div class="item {% if img.num == 0 %}active{% endif %}">
-                <a href="{{img.href}}">
-                    <img src="{{img.url}}" >
-                </a>
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for img in data.banner %}
+                <li data-target="#carussel-main" data-slide-to="{{img.num}}" class="{% if img.num == 0 %}active{% endif %}"></li>
+                {% endfor %}
+                <!---->
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" data-interval="1000">
+                {% for img in data.banner %}
+                <div class="item {% if img.num == 0 %}active{% endif %}">
+                    <a href="{{img.href}}">
+                        <img src="{{img.url}}" >
+                    </a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-          </div>
         </div>
     </div><!-- /#carussel -->
 {% endblock %}
