@@ -41,9 +41,9 @@
         </div><!-- /.payment-items-right -->
     </a><!-- /.text-left.payment-items -->
 
-{% comment %}
+
 <!-- Электронные деньги -->
-    <a class="text-left payment-items" href="{% url 'client-payment' name="electron" %}">
+    <a class="text-left payment-items" href="{% url 'client-paymentelmoney' %}">
         <div class="icon-box">
             <i style="" class="fa fa-3x fa-btc" ></i>
         </div><!-- /.icon-box -->
@@ -55,7 +55,7 @@
                 Оплата услуг с помощью электронных платежных систем (Яндекс-деньги, Веб-мани и т.д.).</span>
         </div><!-- /.payment-items-right -->
     </a><!-- /.text-left.payment-items -->
-{% endcomment %}
+
 
 <!-- Мобильные платежи -->
     <a class="text-left payment-items" href="{% url 'client-payment' name='mobile' %}">
