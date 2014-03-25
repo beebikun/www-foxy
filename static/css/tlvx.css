@@ -912,3 +912,7 @@ header section:last-child{
 footer .gray-text{
 	color: #909090;
 }
+
+.modal img{
+	max-width: 100%!important;
+}
