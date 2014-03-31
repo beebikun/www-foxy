@@ -104,6 +104,7 @@ function initMap(){
 
 /*-----------------------------------------------------------*/
 
+
 window.onload = function(){
     initMap();
     initModal();
@@ -111,7 +112,7 @@ window.onload = function(){
     tagnameEach( 'table',  function(el){ addClass(el, "table table-bordered") } );
     tagnameEach( 'img', function(el){ addClass(el, "img-responsive") });
     tagnameEach( 'input', function(el){ el.setAttribute('autocomplete','off') }); //Если js отключен - то пусть хоть такая подсказка остается
-    node2array( document.getElementsByClassName('map') ).forEach(function(el){ showHideElBlock(el, true) });
+    /*node2array( document.getElementsByClassName('map') ).forEach(function(el){ showHideElBlock(el, true) });*/
 
 
     (function(){
@@ -208,9 +209,8 @@ window.onload = function(){
         }
     })();
 
-
-
 }
+
 
 
 /*--------------------//letsfox.html//------------------------*/
@@ -347,3 +347,45 @@ function searchPaymentTermonal(e){
 
 /*------------------------------------------------------------------*/
 
+
+function initShapeHover() {
+    var speed = 330,
+        easing = mina.backout;
+
+    [].slice.call ( document.querySelectorAll( '.shapehover-item' ) ).forEach( function( el ) {
+        var svg = el.querySelector( 'svg' ), path = svg ? svg.querySelector('path') : null;
+        if(!path) return
+        var s = Snap( el.querySelector( 'svg' ) ), path = s.select( 'path' ),
+            pathConfig = {
+                from : path.attr( 'd' ),
+                to : el.getAttribute( 'data-path-hover' )
+            };
+        el.setAttribute('data-state', 'in')
+
+        function collapse(){
+            removeClass(el, 'shapeHover-in')
+            path.animate( { 'path' : pathConfig.from }, speed, easing );
+        }
+
+        function spread(){
+            addClass(el, 'shapeHover-in')
+            path.animate( { 'path' : pathConfig.to }, speed, easing );
+        }
+
+        el.addEventListener( 'click', function() {
+            if(hasClass(el, 'shapeHover-in')) collapse()
+            else spread()
+        } );
+
+        el.addEventListener( 'mouseenter', function() {
+            spread()
+        } );
+
+        el.addEventListener( 'mouseleave', function() {
+            collapse()
+        } );
+
+    } );
+}
+
+initShapeHover();

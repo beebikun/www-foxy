@@ -5,12 +5,14 @@ import math
 import pytz
 from random import randint, random, getrandbits
 import uuid
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
+from django.db.models import Max
 from django.test import TestCase
 from django.test.client import RequestFactory
 from tlvx import helpers, settings, views as tlvx_views
 from tlvx.core import models
-from django.core.files.uploadedfile import SimpleUploadedFile
+from tlvx.api import serializers
 
 
 def _stf(length=8):
@@ -30,6 +32,10 @@ def _random_date():
 def _rnd_obj(modelname, params={}):
     array = getattr(models, modelname).objects.filter(**params)
     return array[randint(0, array.count()-1)] if array.exists() else None
+
+
+def _rnd_float():
+    return round(random(), 10)
 
 
 class MainTest(TestCase):
@@ -96,6 +102,8 @@ class ChangeKeyboardTest(SimpleTest):
             (u'.erf', u'юука'),
             (u'.ука', u'.ука'),
             (u'.zка', u'юяка'),
+            (u'111', u'111'),
+            (u'f61c04be', u'а61с04иу'),
         ]
         self.fn = helpers.change_keyboard
 
@@ -164,50 +172,93 @@ class PaginatorTest(SimpleTest):
 
 
 class ViewsMainTest(TestCase):
-    def _get(self, name, kwargs={}, query=None):
-        def _get_data(context):
+    def _get_data(self, name, response):
+        def _get(context):
             for c in context:
                 if 'data' in c:
                     return c['data']
                 if isinstance(c, (list, dict)):
-                    return _get_data(c)
+                    return _get(c)
             return
+        data = _get(response.context)
+        self.assertTrue(
+            data, msg="No data for %s : \n%s" % (name, response.context))
+        return data
+
+    def _post(self, name, data):
+        response = self.client.post(reverse(name), data)
+        return self._get_data(name, response)
+
+    def _get(self, name, kwargs={}, query=None):
         query = '?' + '&'.join(
             ['%s=%s' % (k, v) for k, v in query.iteritems()]) if query else ''
         response = self.client.get(reverse(name, kwargs=kwargs) + query)
-        data = _get_data(response.context)
-        self.assertTrue(data, msg="No data for %s" % name)
-        return data
+        return self._get_data(name, response)
+
+    def _test_some_result(self, result, objects, serializer_name, fn=None):
+        if fn is None:
+            def fn(obj, d, i):
+                return d
+
+        obj_len = len(objects)
+        r_len = len(result)
+        self.assertEqual(obj_len, r_len, msg='%s - %s != %s' % (
+            objects[0].__class__, obj_len, r_len))
+
+        for i, obj in enumerate(objects):
+            _s = getattr(serializers, serializer_name)(instance=obj)
+            normal_data = fn(obj, _s.data, i)
+            msg = "%s(%s) - %s != %s" % (obj, i, result[i], normal_data)
+            self.assertEqual(normal_data, result[i], msg=msg)
+
+    def _gnrt_sp(self, i=None, name=None):
+        return models.StaticPage.objects.create(
+            content=_stf(200), name=name or _stf(10))
 
 
 class ViewsTest(ViewsMainTest):
     def _gnrt_rate(self, t, i=None):
         rt = models.RatesType.objects.get_or_create(name=t)[0]
-        models.Rates.objects.create(date_in=_random_date(), rtype=rt)
-
-    def _gnrt_sp(self, i=None):
-        return models.StaticPage.objects.create(
-            content=_stf(200), name=_stf(10))
+        return models.Rates.objects.create(date_in=_random_date(), rtype=rt)
 
     def test_simple_content(self):
         map(self._gnrt_sp, xrange(6))
         page = _rnd_obj('StaticPage')
         data = self._get('client-simple_content', kwargs=dict(page=page.name))
-        # @TODO - add data test here
+        normal_data = serializers.StaticPageSerializer(instance=page).data
+        self.assertEqual(data, normal_data)
 
     def test_rates(self):
-        map(self._gnrt_rates, xrange(20))
         for (t, name) in settings.RATES_TYPES:
+            #создаем группу тарифов
             [self._gnrt_rate(t) for i in xrange(20)]
+            #случайный делаем активным
             r = _rnd_obj('Rates', dict(rtype__name=t))
             r.active = True
             r.save()
+            rates = models.Rates.objects.filter(
+                rtype__name=t).order_by('-date_in')
+            if t == 'p':
+                data = self._get('client-rates')
+            else:
+                data = self._get('client-ratessimple', kwargs=dict(name=t))
+            self._test_some_result(data, rates, 'RatesSerializer')
 
 
 class ViewsNewsMainTest(ViewsMainTest):
     def _gnrt_note(self, i=None):
         return models.Note.objects.create(
             header=_stf(20), text=_stf(200), date=_random_date())
+
+    def _test_result(self, result, note=None):
+        first = 0
+        end = settings.NOTE_COUNT
+        if not note:
+            notes = models.Note.objects.all().order_by(
+                'num', '-date')[first:end]
+        else:
+            notes = [note]
+        self._test_some_result(result, notes, 'NoteSerializer')
 
     def setUp(self):
         map(self._gnrt_note, xrange(50))
@@ -219,7 +270,7 @@ class ViewsNewsTest(ViewsNewsMainTest):
     def test_news(self):
         data = self._get('client-news')
         self.assertIn('result', data)
-        # @TODO - add data['result'] test here
+        self._test_result(data['result'])
         self.assertIn('result', data)
         self.assertIn('next_page', data)
         self.assertIn('prev_page', data)
@@ -241,7 +292,7 @@ class ViewsNewsTest(ViewsNewsMainTest):
         note = _rnd_obj('Note')
         data = self._get('client-newsdetail', kwargs=dict(pk=note.id))
         self.assertIn('result', data)
-        # @TODO - add data['result'] test here
+        self._test_result(data['result'], note)
 
 
 class ViewsIndexTest(ViewsNewsMainTest):
@@ -260,13 +311,19 @@ class ViewsIndexTest(ViewsNewsMainTest):
             banner - banner info
         """
         map(self._gnrt_img, xrange(6))
+        images = models.Image.objects.filter(is_displ=True)
         data = self._get('client-index')
         self.assertIn('result', data)
-        # @TODO - add data['result'] test here
+        self._test_result(data['result'])
         self.assertIn('banner', data)
-        self.assertEqual(len(data['banner']),
-                         models.Image.objects.filter(is_displ=True).count())
-        # @TODO - add data['banner'] items test here
+        self.assertEqual(len(data['banner']), images.count())
+
+        def fn(obj, d, i):
+            d['num'] = i
+            d['url'] = obj.get_img_absolute_urls()
+            return d
+
+        self._test_some_result(data['banner'], images, 'ImageSerializer', fn)
 
 
 class ViewsAddresesMainTest(ViewsMainTest):
@@ -279,44 +336,215 @@ class ViewsAddresesMainTest(ViewsMainTest):
     def _gnrt_building(self, i=None):
         plan = _rnd_bool()
         return models.Building.objects.create(
-            num=randint(1, 300), lat=random(), lng=random(), plan=plan,
+            num=randint(1, 300), lat=_rnd_float(), lng=_rnd_float(), plan=plan,
             street=_rnd_obj('Street') or self._gnrt_street(),
             active=False if plan else _rnd_bool())
 
 
-class ViewsLetsfoxTest(ViewsAddresesMainTest):
-    def test_letsfox(self):
-        pass
-
-
 class ViewsCentrallOfficeMainTest(ViewsAddresesMainTest):
-    def _gnrt_co(self, i=None):
+    def _gnrt_co(self, i=None, in_map=None):
         return models.CentralOffice.objects.create(
-            name=_stf(), address=self._rnd_bld(), in_map=_rnd_bool)
+            name=_stf(), address=self._rnd_bld(),
+            in_map=_rnd_bool if in_map is None else in_map)
+
+
+class ViewsLetsfoxTest(ViewsCentrallOfficeMainTest):
+    def setUp(self):
+        [self._gnrt_building, xrange(30)]
+        [self._gnrt_co(in_map=True) for i in xrange(5)]
+        for b in models.Building.objects.iterator():
+            b.co = _rnd_obj('CentralOffice')
+            b.save()
+
+    def test_letsfox(self):
+        # @TODO: add test for other situations:
+        # - exact matching [done]
+        # - exact matching and simmular
+        # - only simmular
+        # - no result
+        bld = self._rnd_bld()
+        data = self._post('client-letsfox',
+                          dict(street=bld.street.name, num=bld.num))
+        self.assertIn('params', data)
+        street = tlvx_views.change_keyboard(bld.street.name)
+        num = str(bld.num)
+        self.assertEqual(street, data['params'].get('street'))
+        self.assertEqual(num, data['params'].get('num'))
+        result = data.get('result')
+        self.assertTrue(result)
+        bld_data = serializers.BuildingSerializer(instance=bld).data
+        bld_data['result'] = True
+        bld_data[u'co'] = bld.co and '%s, %s' % (
+            bld.co.contacts or '', bld.co.schedule or '')
+        self.assertIn(bld_data, result)
 
 
 class ViewsPaymentTest(ViewsCentrallOfficeMainTest):
+    page = lambda self, n: serializers.StaticPageSerializer(
+        instance=models.StaticPage.objects.get(name=n)).data
+
     def _gnrt_marker(self, i=None):
         return models.MarkerIcon.objects.create(name=_stf())
 
-    def _gnrt_payment(self, i=None, is_t=None):
+    def _gnrt_payment(self, i=None, is_t=None, name=None):
         return models.Payment.objects.create(
-            name=_stf(), is_terminal=_rnd_bool() if is_t is None else is_t,
+            name=name or _stf(),
+            is_terminal=_rnd_bool() if is_t is None else is_t,
             marker=_rnd_obj('MarkerIcon') or self._gnrt_marker())
 
-    def _gnrt_pp(self, i=None):
-        p = _rnd_obj('Payment', dict(is_terminal=True)) or self._gnrt_payment()
+    def _gnrt_pp(self, i=None, p=None):
+        p = p or _rnd_obj(
+            'Payment', dict(is_terminal=True)) or self._gnrt_payment()
         return models.PaymentPoint.objects.create(
             name=_stf(), address=self._rnd_bld(), payment=p)
+
+    def setUp(self):
+        map(self._gnrt_payment, xrange(3))
 
     def test_payment(self):
         pass
 
+    def test_paymentcard(self):
+        payments = models.Payment.objects.filter(
+            is_terminal=False).order_by('num')
+        data = self._get('client-paymentcard')
+        self._test_some_result(data, payments, 'PaymentSerializer')
+
+    def test_paymentelmoney(self):
+        instruction = self._gnrt_sp(name='asist-instruction')
+        returns = self._gnrt_sp(name='asist-returns')
+        inn = self._gnrt_sp(name='payment-elmoney-inn')
+        data = self._get('client-paymentelmoney')
+        self.assertIn('instruction', data)
+        self.assertIn('returns', data)
+        self.assertIn('inn', data)
+        self.assertEqual(self.page(instruction), data['instruction'])
+        self.assertEqual(self.page(returns), data['returns'])
+        self.assertEqual(self.page(inn), data['inn'])
+
+    def test_paymentlimit(self):
+        limit = self._gnrt_sp(name='payment-limit')
+        data = self._get('client-paymentlimit')
+        self.assertEqual(self.page(limit), data)
+
+    def test_paymentmobile(self):
+        data = self._get('client-paymentmobile')
+        self.assertIn('gray_ip', data)
+        self.assertTrue(isinstance(data['gray_ip'], bool))
+
+    def test_paymentterminal(self):
+        def _clear(s):
+            if not s:
+                return
+            s = s.replace('&', '&amp;')
+            while s.find('"') >= 0:
+                i = s.find('"')
+                s = s[:i] + '&laquo;' + s[i+1:]
+                i = s.find('"')
+                s = s[:i] + '&raquo;' + s[i+1:]
+            return s
+
+        def _equal(data, obj, values):
+            name = values.pop()
+            self.assertEqual(_clear(getattr(obj, name)),
+                             data.get(name))
+            return _equal(data, obj, values) if values else None
+
+        def fn(obj, data, i):
+            def _unclear(s, values=None):
+                if not s:
+                    return
+                if values is None:
+                    values = [('&amp;', '&'), ('&laquo;', '"'),
+                              ('&raquo;', '"')]
+                v = values.pop()
+                s = s.replace(v[0], v[1])
+                return _unclear(s, values) if values else s
+
+            data['name'] = _unclear(data['name'])
+            data['address'] = _unclear(data['address'])
+            if isinstance(obj, models.CentralOffice):
+                data['id'] = models.PaymentPoint.objects.aggregate(
+                    Max('id')).get('id__max') + data['id']
+            return data
+
+        map(self._gnrt_co, xrange(5))
+        co = self._gnrt_payment(name=u'Офисы продаж')
+        map(self._gnrt_pp, xrange(30))
+        payments = models.Payment.objects.filter(is_terminal=True)
+        data = self._get('client-paymentterminal')
+        self.assertEqual(payments.count(), len(data))
+        for p in data:
+            self.assertTrue(isinstance(p.get('id'), int))
+            payment = models.Payment.objects.get(id=p.get('id'))
+            _equal(p, payment, ['name', 'description'])
+            self.assertIn('points', p)
+            self.assertIn('result', p['points'])
+            if payment != co:
+                points = payment.get_points()
+            else:
+                points = models.CentralOffice.objects.filter(in_map=True)
+            self.assertEqual(len(points), len(p['points']['result']))
+            self._test_some_result(p['points']['result'], points,
+                                   'PaymentPointSerializer', fn)
+
 
 class ViewsAboutTest(ViewsCentrallOfficeMainTest):
     def test_about(self):
+        co = [self._gnrt_co(in_map=True) for i in xrange(5)]
+        [self._gnrt_co(in_map=False) for i in xrange(5)]
+        data = self._get('client-about')
+        result = data.get('result')
+        self.assertTrue(result)
+        self.assertEqual(len(co), len(result))
+
+        def fn(obj, data, i):
+            data['ico'] = obj.marker and obj.marker.name
+            return data
+
+        self._test_some_result(result, co, 'PaymentPointSerializer', fn)
+
+
+class ViewsTreePageMainTest(ViewsMainTest):
+    def _gnrt_page(self, i=None, parent=None):
+        params = dict(name=_stf(), display_name=_stf(), content=_stf())
+        if parent:
+            params['parent'] = parent
+        page = self.model.objects.create(**params)
+        if _rnd_bool():
+            self._gnrt_page(parent=page)
+        return page
+
+    def setUp(self):
+        map(self._gnrt_page, xrange(10))
+
+
+class ViewsDocumentTest(ViewsTreePageMainTest):
+    model = models.DocumentsPage
+
+    def test(self):
         pass
 
-test_document!
-test_vacancy!
-test_how!
+
+class ViewsHowTest(ViewsTreePageMainTest):
+    model = models.HelpPage
+
+    def test(self):
+        pass
+
+
+class ViewsVacancyTest(ViewsTreePageMainTest):
+    model = models.VacancyPage
+
+    def _gnrt_page(self, parent=None):
+        root = self.model.objects.get_or_create(name='vacancy')[0]
+        return self.model.objects.create(
+            parent=root, name=_stf(), display_name=_stf())
+
+    def test(self):
+        pass
+
+
+
+# test_clientrequest
+# test captcha

@@ -16,11 +16,11 @@ html, body, #wrap { height: 100%;}
 body > #wrap {height: auto; min-height: 100%;position: relative;}
 #main {
 	min-height: 520px;
-	padding-bottom: 120px;}  /* must be same height as the footer */
+	padding-bottom: 150px;}  /* must be same height as the footer */
 footer{
 	position: relative;
-    margin-top: -80px; /* negative value of footer height */
-    height: 80px;
+    margin-top: -130px; /* negative value of footer height */
+    height: 130px;
     clear:both;
 }
 .clearfix:after {
@@ -81,7 +81,7 @@ footer>.content-inner{
 /*=========================================================*/
 /*===================General*/
 /*=========================================================*/
-body{
+html{
 	background-color: white;
 	color:#444;
 	text-align: center;
@@ -202,7 +202,6 @@ iframe{
 
 .content-inner-right{
 	position: relative;
-	/*clear: both;*/
 }
 
 .content-inner-right section{
@@ -476,6 +475,7 @@ header section:last-child{
 .more-items-btn{
 	text-decoration: underline;
 	font-weight: bold;
+	margin-top: 30px;
 }
 .more-items-btn>span{
 	cursor:pointer;
@@ -549,6 +549,9 @@ header section:last-child{
 	.items-area>.some-item>.some-item-body>.some-item-body-text{
 		max-height: 5.6em;
 	}
+	.index-page .items-area>.some-item>.some-item-body>.some-item-body-text{
+		min-height: 5.6em;
+	}
 }
 /*=========================================================*/
 /*===================Pages*/
@@ -562,9 +565,11 @@ header section:last-child{
 	text-decoration: underline;
 }
 
+.index-page .phones-block,.index-page  #mainMenu{position: static;}
+.index-page .items-area img{display: none}
 /*--------Nav in page--------*/
 .content-menu{
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 .content-menu .active{
 	color:#ff6600;
@@ -599,7 +604,7 @@ header section:last-child{
 #captcha img{
 	max-height: 100%;
 	display: inline-block;
-	max-width: 30px;
+	max-width: 30px!important;
 }
 #captcha label{
 	padding: 10px 30px;
@@ -609,10 +614,55 @@ header section:last-child{
 /*--------News--------*/
 /*--------Internet (simple-pages)--------*/
 /*--------Rates--------*/
+/* Tables */
+.rates-shapeover{
+    position: relative;
+}
+
+.rates-shapeover>.shapehover-section{
+    position:absolute;
+    top:-50px;
+}
+
+.rates-shapeover section{
+    width: 712px;
+}
+
+.rates-shapeover table{
+    margin-top:90px;
+    border: none!important;
+}
+
+.rates-shapeover table>thead{
+    display: none;
+}
+
+.rates-shapeover table td{
+    width: 142px;
+    height: 55px;
+    vertical-align: middle!important;
+    border: none!important;
+    position: relative;
+}
+
+.rates-shapeover table tr>td{
+    -webkit-box-shadow: 0 -1px 0 0 rgba(100, 100, 100,0.2) inset;
+    box-shadow: 0 -1px 0 0 rgba(100, 100, 100,0.2) inset;
+}
+
+.rates-shapeover table tr:last-child>td{
+    box-shadow: none;
+}
+
+.rates-shapeover table td[rowspan="3"]{
+    box-shadow: none;
+}
+
 .rates-archive{
 	display: none;
 }
-.ratesGraph{
+
+/*.ratesGraph{
 	position: relative;
 	height: 240px;
 	margin-bottom:60px;
@@ -706,7 +756,7 @@ header section:last-child{
 #ratesHit .speed{top: 13% }
 #ratesHit>ul>li:last-child .speed{top:14%; }
 #ratesHit .traffic{height:50%; }
-@media (max-width: 270px) {.ratesGraph>ul>li>.name{top:-2.3em;} }
+@media (max-width: 270px) {.ratesGraph>ul>li>.name{top:-2.3em;} }*/
 /*--------Payment--------*/
 .pager li > a{
 	color:#909090;
@@ -723,29 +773,34 @@ header section:last-child{
 	color:#909090;
 }
 
-#paymentWays>.payment-items{
+.paymentWays>.payment-items{
 	margin-bottom: 30px;
 	display: block;
 	min-height: 45px;
+	webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
 }
-#paymentWays>.payment-items .icon-box{
+.paymentWays>.payment-items .icon-box{
 	float:left;
 	margin-top:-5px;
 	width:45px;
 	text-align:center;
 }
 
-#paymentWays>.payment-items .payment-items-description {
+.paymentWays>.payment-items .payment-items-description {
 	display: inline-block;
 	font-size: 1em;
 	color:#444;
+	font-weight: normal!important;
 }
 
-#paymentWays>.payment-items .payment-items-name{
+.paymentWays>.payment-items .payment-items-name{
 	font-weight:bold;
 }
 
-#paymentWays>.payment-items .payment-items-right{
+.paymentWays>.payment-items .payment-items-right{
 	margin-left:60px;
 }
 

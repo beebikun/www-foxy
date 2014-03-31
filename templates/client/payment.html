@@ -14,7 +14,7 @@
 
 
 {% block main-top-left %}
-<div id="paymentWays" >
+<div class="paymentWays" >
 <!-- Терминалы -->
     <a class="text-left payment-items" href="{% url 'client-paymentterminal' %}">
         <div class="icon-box">
@@ -41,7 +41,7 @@
         </div><!-- /.payment-items-right -->
     </a><!-- /.text-left.payment-items -->
 
-
+{% comment %}
 <!-- Электронные деньги -->
     <a class="text-left payment-items" href="{% url 'client-paymentelmoney' %}">
         <div class="icon-box">
@@ -55,7 +55,7 @@
                 Оплата услуг с помощью электронных платежных систем (Яндекс-деньги, Веб-мани и т.д.).</span>
         </div><!-- /.payment-items-right -->
     </a><!-- /.text-left.payment-items -->
-
+{% endcomment %}
 
 <!-- Мобильные платежи -->
     <a class="text-left payment-items" href="{% url 'client-payment' name='mobile' %}">

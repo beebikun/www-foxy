@@ -15,10 +15,11 @@
     <!--[if IE]> <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" /> <![endif]-->
     <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" media='all and (min-width: 990px)'/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/tlvx.css" />
-
-
     <link rel="stylesheet" href="{{ STATIC_URL }}css/fonts.css" />
 
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ShapeHoverEffectSVG/css/component.css" />
+    <script src="{{ STATIC_URL }}ShapeHoverEffectSVG/js/snap.svg-min.js"></script>
 
     <title>{% block title %}Televox -  Интернет в каждый дом{% endblock %}</title>
 <script type="text/javascript">
@@ -35,7 +36,7 @@
 {% block style-block %}{% endblock %}
 </head>
 
-<body>
+<body class="{% block bodyclass %}{% endblock %}">
     <div id="wrap" >
         <header>
             {% block header %}
@@ -113,7 +114,7 @@
                                     <input type="text" class="form-control input-sm" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
                                 </div>
                                 <div class="form-group makeConReqBut">
-                                    <button type="submit" class="btn btn-default btn-sm" value='Проверить' >Проверить</button>
+                                    <button type="submit" class="btn btn-default btn-sm " value='Проверить' >Проверить</button>
                                 </div>
                             </form>
                             {% endblock %}
@@ -196,7 +197,7 @@
                 </ul><!-- /#bottomnav -->
 
                 <div id="license-info">
-                    &copy;ООО "Телевокс", 2008-2013<br>
+                    &copy;ООО "Телевокс", 2008-2014<br>
                     Свидетельство о регистрации СМИ  Эл № ФС77-46508 от 09.09.2011 г. выданное Федеральной службой по надзору в сфере связи, информационных технологий и массовых коммуникаций (Роскомнадзор)
                 </div><!-- #license-info -->
                 {% endblock %}

@@ -170,15 +170,17 @@ def letsfox(request):
         'street' - название улицы, регистр и раскладка не важены,
         'num' - номер дома
     """
+    strt = request.POST.get('street', '')
     params = dict(
-        street=change_keyboard(request.POST.get('street')),
-        num=request.POST.get('num'))
+        street=change_keyboard(strt) if strt else strt,
+        num=request.POST.get('num', ''))
 
     def get_data(obj, result=False):
         if not obj:
             return
         data = serializers.BuildingSerializer(instance=obj).data
-        data[u'co'] = obj.co and (obj.co.contacts + ', ' + obj.co.schedule)
+        data[u'co'] = obj.co and '%s, %s' % (
+            obj.co.contacts or '', obj.co.schedule or '')
         data['result'] = result
         return data
 
@@ -195,8 +197,8 @@ def letsfox(request):
             if serializer.is_valid():
                 params['result'] = serializer.object
                 data['result'] = [get_data(params['result'], True)]
-        data['result'].extend(map(get_data,
-                                  models.Building.filter_simmular(**params)))
+        data['result'].extend(
+            map(get_data, models.Building.objects.filter_simmular(**params)))
         return data['result'] and data
 
     return my_response(request, get(params) or dict(params=params), 'letsfox')
@@ -269,6 +271,10 @@ def rates(request):
     return Rates(request, name='p', template='rates').response
 
 
+def rates_tests(request):
+    return Rates(request, name='p', template='__ratestests').response
+
+
 def rates_simple(request, name):
     """Тарифы для юр лиц и прочее"""
     return Rates(request, name).response
@@ -313,47 +319,38 @@ def paymentmobile(request):
 
 def paymentterminal(request):
     """Наличные и терминалы"""
+    def _clear(s):
+        if not s:
+            return
+        s = s.replace('&', '&amp;')
+        while s.find('"') >= 0:
+            i = s.find('"')
+            s = s[:i] + '&laquo;' + s[i+1:]
+            i = s.find('"')
+            s = s[:i] + '&raquo;' + s[i+1:]
+        return s
+
     def get_point_data(obj):
         data = serializers.PaymentPointSerializer(instance=obj).data
-        name = data['name'].replace('&', '&amp;')
-        while name.find('"') >= 0:
-            i = name.find('"')
-            name = name[:i] + '&laquo;' + name[i+1:]
-            i = name.find('"')
-            name = name[:i] + '&raquo;' + name[i+1:]
-        data['name'] = name or data['address']
-        del data['schedule']
-        del data['contacts']
+        data['name'] = _clear(data.get('name', data.get('address')))
+        if isinstance(obj, models.CentralOffice):
+            #Заменяем ид в офисах продаж, потому что
+            #их ид уже заняты другими ppoint
+            data['id'] = models.PaymentPoint.objects.aggregate(
+                Max('id')).get('id__max') + data['id']
         return data
 
     def get_data(obj):
         data = serializers.PaymentSerializer(instance=obj).data
-        data['points'] = {}
+        data['name'] = _clear(data['name'])
         if data['name'] != u'Офисы продаж':
-            name = data['name'].replace(u'&', u'&amp;')
-            while name.find('"') >= 0:
-                i = name.find('"')
-                name = name[:i] + '&laquo;' + name[i+1:]
-                i = name.find('"')
-                name = name[:i] + '&#187;' + name[i+1:]
-            data['name'] = name
-            point_total = obj.get_values()
-            point_result = map(get_point_data, obj.get_points())
+            points = obj.get_points()
         else:
-            co_list = models.CentralOffice.objects.filter(in_map=True)
-            point_total = len(co_list)
-            point_result = map(get_point_data, co_list)
-            #Заменяем ид в офисах продаж, потому что
-            #ид с 1 по 3 уже заняты другими ppoint
-            ppoint_count = models.PaymentPoint.objects.aggregate(
-                Max('id')).get('id__max')
-            for i in range(len(point_result)):
-                co = point_result[i]
-                co['id'] = co['id'] + ppoint_count
-                point_result[i] = co
-        data['points']['total'] = point_total
-        data['points']['result'] = point_result
+            points = models.CentralOffice.objects.filter(in_map=True)
+        data['points'] = dict(total=(points),
+                              result=map(get_point_data, points))
         return data
+
     objects = models.Payment.objects.filter(is_terminal=True)
     data = [get_data(obj) for obj in objects]
     return my_response(request, data, 'payment-terminal')
@@ -365,7 +362,7 @@ def paymentterminal(request):
 def about(request):
     """Контакты"""
     def get_data(obj):
-        data = serializers.PaymentPointSerializer(instance=obj).data
+        data = serializers.COSerializer(instance=obj).data
         data['ico'] = obj.marker and obj.marker.name
         return data
 

@@ -44,7 +44,7 @@ def make_get(url):
 
 
 def get_gis_answer(url, city, street, num, street_alt, num_alt):
-    clear_num = lambda n: n.replace(' ', '').replace(u'стр', '').lower()
+    clear_num = lambda n: str(n).replace(' ', '').replace(u'стр', '').lower()
     response = make_get(url)
     if response.get('total') != u'1':
         raise FieldError('Response is too long')
@@ -306,7 +306,7 @@ class Building(models.Model):
 
     def get_address(self):
         if self.street and self.num:
-            return self.street.name + ', ' + self.num
+            return '%s, %s' % (self.street.name, self.num)
         return ''
 
     def get_address_alt(self):
@@ -463,7 +463,7 @@ class Rates(models.Model):
         super(Rates, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return(self.name)
+        return '%s-%s' % (self.date_in, self.name)
 
 
 class PaymentPoint(models.Model):
@@ -698,11 +698,10 @@ class VacancyPage(TreePage):
         return list(childs.filter(show=True))
 
     def save(self, *args, **kwargs):
-        root = VacancyPage.objects.filter(name='vacancy') \
-            and VacancyPage.objects.get(name='vacancy')
+        root = VacancyPage.objects.filter(name='vacancy')
         if not self.__dict__.get('parent_id') and \
                 self.name != 'vacancy' and root:
-            self.parent = root
+            self.parent = root[0]
         super(VacancyPage, self).save(*args, **kwargs)
 
 

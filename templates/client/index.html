@@ -1,12 +1,6 @@
 {% extends "client/base.html" %}
 
-
-{% block style-block %}
-<style type="text/css">
-    .phones-block, #mainMenu{position: static;}
-    .items-area img{display: none}
-</style>
-{% endblock %}
+{% block bodyclass %}index-page{% endblock %}
 
 
 <!-- Center carusel -->
@@ -54,7 +48,7 @@
                     <a class="some-item-body-title" href="{% url 'client-newsdetail' note.id %}">
                         {{ note.header }}
                     </a>
-                    <div class="some-item-body-text" style="min-height:5.6em;">
+                    <div class="some-item-body-text">
                         {{ note.text|safe }}
                     </div>
 		            <a class="some-item-body-detail" href="{% url 'client-newsdetail' note.id %}" >Читать далее...</a>

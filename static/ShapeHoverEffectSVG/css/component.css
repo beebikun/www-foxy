@@ -1,0 +1,151 @@
+/*Based on http://tympanus.net/codrops/2014/01/07/shape-hover-effect-with-svg/*/
+
+/* Common style */
+figcaption{
+    display: block;
+}
+
+
+.shapehover-item {
+	float:left;
+}
+
+.shapehover-item figure{
+    width:135px;
+    margin: 0 4px;
+    height: 230px;
+    -webkit-transition: height 0.2s, -webkit-transform 0.3s;
+    transition: height 0.2s, transform 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.rates-shapeover .shapehover-item:last-child figure{
+    width: 132px;
+}
+
+.shapehover-item figure,
+.shapehover-item .shapehover-item-inner{
+    border-radius: 6px;
+}
+
+
+.shapehover-item figcaption .figcaption-detail {
+    -webkit-transition-delay: 0.05s;
+    transition-delay: 0.05s;
+}
+
+.shapehover-item figcaption h2,
+.shapehover-item figcaption .figcaption-detail{
+    -webkit-transition-timing-function: cubic-bezier(0.250, 0.250, 0.115, 1); /* older webkit */
+    -webkit-transition-timing-function: cubic-bezier(0.250, 0.250, 0.115, 1.445);
+    timing-function: cubic-bezier(0.250, 0.250, 0.115, 1.445);
+}
+
+.shapehover-item:hover figcaption .figcaption-detail{
+    -webkit-transition-delay: 0s;
+    transition-delay: 0s;
+    -webkit-transition-duration: 0.1s;
+    transition-duration: 0.1s;
+}
+
+.shapehover-item .figcaption-detail ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.shapehover-item .shapehover-item-inner{
+    height: 100%;
+    width: 100%;
+    border: 1px solid #DADADA;
+    opacity: 1;
+    -webkit-transition: opacity 0.2s, -webkit-transform 0.3s;
+    transition: opacity 0.2s, transform 0.3s;
+}
+
+.shapehover-item a:hover{
+    color: #444!important;
+}
+
+
+.shapehover-item figure {
+	position: relative;
+	background: transparent;
+}
+
+
+.shapehover-item figcaption {
+	position: absolute;
+	top: 0;
+	z-index: 11;
+	padding: 10px 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
+.shapehover-item figcaption h2 {
+	margin: 0 0 20px 0;
+	color: #3498db;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 300;
+	font-size: 1em;
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+}
+
+.shapehover-item figcaption .figcaption-detail {
+	padding: 0;
+	font-weight: 300;
+	-webkit-transition: opacity 0.2s 10ms, -webkit-transform 0.3s;
+	transition: opacity 0.2s 10ms, transform 0.3s;
+	opacity: 0;
+	margin: 0 5px;
+    visibility: hidden;
+}
+
+.shapehover-item figcaption h2,
+.shapehover-item figcaption .figcaption-detail {
+	-webkit-transform: translateY(0);
+	transform: translateY(0);
+	color: #fff;
+}
+
+.shapehover-item figcaption,
+.shapehover-item figcaption h2,
+.shapehover-item figcaption .figcaption-detail{
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+/* Style for SVG */
+.shapehover-item svg {
+	position: absolute;
+	top: -1px; /* fixes rendering issue in FF */
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	overflow: visible!important;
+}
+
+.shapehover-item svg path {
+	fill: #fe812f;
+}
+
+/* Hover effects */
+
+.shapehover-item.shapeHover-in figcaption h2,
+.shapehover-item.shapeHover-in figcaption .figcaption-detail {
+	-webkit-transform: translateY(20px);
+	transform: translateY(20px);
+	visibility: visible;
+	opacity: 1;
+}
+
+.shapehover-item.shapeHover-in .shapehover-item-inner{
+	opacity: 0;
+}
+

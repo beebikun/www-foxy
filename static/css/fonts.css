@@ -1,7 +1,7 @@
 @font-face{
 	font-family: newSans; /* Гарнитура шрифта */
     /*src: url(../fonts/NeoSansCyr-Regular.ttf);*/
-    src: url(../fonts/neosanscyr-regular.woff); 
+    src: url(../fonts/neosanscyr-regular.woff);
 }
 .mybtn{
 	font: normal normal 400 1.15em/20px newSans;
@@ -20,9 +20,9 @@ body{
 }
 
 #makeConReq, .phone-descr, #gisBan,
-.some-item-date, .some-item-body-text, .more-items-btn, .help-block, 
+.some-item-date, .some-item-body-text, .more-items-btn, .help-block,
 	.markerHeader, .markerCont, .markerFooter{
-		font-size: 0.9em; 
+		font-size: 0.9em;
 }
 
 #license-info{
@@ -39,12 +39,11 @@ body{
 }
 
 .some-item-body-text, .markerFooter{
-	line-height: 1.45; 
+	line-height: 1.45;
 }
 
 
 @media (min-width: 990px) {
 	.mybtn{font-size: 1.5em;}
-	
 }
 

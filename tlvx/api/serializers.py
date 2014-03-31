@@ -85,8 +85,8 @@ class PaymentSerializer(serializers.Serializer):
 class PaymentPointSerializer(serializers.Serializer):
     id = serializers.Field()
     name = serializers.CharField(required=False)
-    schedule = serializers.CharField(required=False)
-    contacts = serializers.CharField(required=False)
+    # schedule = serializers.CharField(required=False)
+    # contacts = serializers.CharField(required=False)
     lat = serializers.FloatField(required=False, source="lat")
     lng = serializers.FloatField(required=False, source="lng")
     address = serializers.CharField(required=False, source="get_address")
@@ -217,3 +217,8 @@ class DoitSerializer(serializers.Serializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Image
+
+
+class COSerializer(PaymentPointSerializer):
+    schedule = serializers.CharField(required=False)
+    contacts = serializers.CharField(required=False)
