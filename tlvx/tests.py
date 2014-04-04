@@ -215,6 +215,9 @@ class ViewsMainTest(TestCase):
         return models.StaticPage.objects.create(
             content=_stf(200), name=name or _stf(10))
 
+    page = lambda self, n: serializers.StaticPageSerializer(
+        instance=models.StaticPage.objects.get(name=n)).data
+
 
 class ViewsTest(ViewsMainTest):
     def _gnrt_rate(self, t, i=None):
@@ -229,6 +232,9 @@ class ViewsTest(ViewsMainTest):
         self.assertEqual(data, normal_data)
 
     def test_rates(self):
+        inet_header = self._gnrt_sp(name='rates-internet')
+        local_header = self._gnrt_sp(name='rates-local')
+        iptv_header = self._gnrt_sp(name='rates-iptv')
         for (t, name) in settings.RATES_TYPES:
             #создаем группу тарифов
             [self._gnrt_rate(t) for i in xrange(20)]
@@ -242,7 +248,17 @@ class ViewsTest(ViewsMainTest):
                 data = self._get('client-rates')
             else:
                 data = self._get('client-ratessimple', kwargs=dict(name=t))
-            self._test_some_result(data, rates, 'RatesSerializer')
+            self.assertIn('result', data)
+            self._test_some_result(data['result'], rates, 'RatesSerializer')
+            if t == 'p':
+                self.assertIn('header', data)
+
+                def _test_header(name, sp):
+                    self.assertEqual(self.page(sp), data['header'].get(name))
+
+                _test_header('first', inet_header)
+                _test_header('second', local_header)
+                _test_header('third', iptv_header)
 
 
 class ViewsNewsMainTest(ViewsMainTest):
@@ -380,9 +396,6 @@ class ViewsLetsfoxTest(ViewsCentrallOfficeMainTest):
 
 
 class ViewsPaymentTest(ViewsCentrallOfficeMainTest):
-    page = lambda self, n: serializers.StaticPageSerializer(
-        instance=models.StaticPage.objects.get(name=n)).data
-
     def _gnrt_marker(self, i=None):
         return models.MarkerIcon.objects.create(name=_stf())
 
