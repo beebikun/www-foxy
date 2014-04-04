@@ -162,9 +162,13 @@ function request(params){
     var path = params.path ? api[params.path] : '', success = params.success, error = params.error, method = params.post ? 'POST' : 'GET',
         data = params.post ? params.data ? params.data : {} : null,
         query = params.post ? null : serialize( params.query ? params.query : {} );
-    var xhr = new XMLHttpRequest();
+    if(error===undefined) var error = function(e){console.log(e)};
+    if(method == 'GET') $.getJSON(path, query, function(r){
+        success(r.data)
+    }, error)
+    else $.post(path, data, success, error)
+    /*var xhr = new XMLHttpRequest();
     if(query) var path = path + '?' + query;
-    if(error===undefined) var error = function(e){console.log(e.data)};
     xhr.open(method, path, true);
     if(data){
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -172,6 +176,7 @@ function request(params){
     }
     xhr.onerror = error;
     xhr.onload = function(e){
+        console.log(xhr.responseText)
         try{var r = eval("("+xhr.responseText+")");}
         catch(e){var r = {'exception': e}}
         finally{
@@ -180,7 +185,7 @@ function request(params){
             if(obj.fn) obj.fn(obj.r);
         }
     };
-    xhr.send(data);
+    xhr.send(data);*/
 }
 
 /*----------------------------------------------------------------------------*/
@@ -189,6 +194,7 @@ var M = function(id, numInput, streetInput, prnts){
 }
 
 M.prototype._init = function(id, numInput, streetInput, prnts) {
+    console.log('_init')
     this.option = this._options()
     this.numInput = numInput;
     this.streetInput = streetInput;

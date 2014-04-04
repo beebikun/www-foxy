@@ -33,6 +33,7 @@ figcaption{
 .shapehover-item figure,
 .shapehover-item .shapehover-item-inner{
     border-radius: 6px;
+    -webkit-border-radius: 6px;
 }
 
 
