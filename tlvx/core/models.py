@@ -446,24 +446,31 @@ class Rates(models.Model):
     normal_date = lambda self: formatted_date(self.date_in)
 
     def save(self, *args, **kwargs):
+        print '--------------'
         if kwargs:
-            if not self.rtype:
-                rtype = RatesType.objects.get_or_create(name='p')
-                self.rtype = rtype[0]
+            if not self.__dict__.get('rtype_id'):
+                rtype = RatesType.objects.get_or_create(name='p')[0]
+                self.rtype = rtype
             if self.active:
                 self.date_in = timezone.now()
         if self.pk:
             old = Rates.objects.get(pk=self.pk)
             if old.active and not self.active:
                 self.date_out = timezone.now()
-        if self.active and not self.date_in:
-            self.date_in = timezone.now()
+        if self.active:
+            if not self.date_in:
+                self.date_in = timezone.now()
+            pre_active = Rates.objects.filter(
+                rtype_id=self.__dict__.get('rtype_id'), active=True).exclude(
+                id=self.id or 0)
+            if pre_active.count():
+                pre_active.update(active=False)
         if self.date_out and self.active:
             self.date_out = timezone.now()
         super(Rates, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return '%s-%s' % (self.date_in, self.name)
+        return '%s-%s (%s)' % (self.date_in, self.name, self.active)
 
 
 class PaymentPoint(models.Model):

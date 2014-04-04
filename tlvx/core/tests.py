@@ -50,6 +50,13 @@ class BuildingTest(TestCase):
 
 
 class RatesTest(TestCase):
+    def _get_selfr(self):
+        return models.Rates.objects.get(id=self.rates.id)
+
+    def _activate_self(self, val=True):
+        self.rates.active = val
+        self.rates.save()
+
     def setUp(self):
         self.rates = models.Rates.objects.get_or_create(
             name='rates', tables='table', active=True)[0]
@@ -63,13 +70,28 @@ class RatesTest(TestCase):
         self.assertEqual(self.rates.rtype.name, 'p')
         self.assertTrue(self.rates.date_in)
 
+    def test_create_with_other_type(self):
+        other = models.Rates.objects.get_or_create(
+            name='other', tables='table', active=True,
+            rtype=models.RatesType.objects.get_or_create(name='jp')[0])[0]
+        self.assertTrue(other.active)
+        self.assertTrue(self._get_selfr().active)
+        self.assertEqual(other.rtype.name, 'jp')
+
     def test_active(self):
         """
         Меняем active на false.
         date_out должен быть текущее время
         """
         self.assertFalse(models.Rates.objects.get(id=self.rates.id).date_out)
-        self.rates.active = False
-        self.rates.save()
-        self.assertFalse(models.Rates.objects.get(id=self.rates.id).active)
-        self.assertTrue(models.Rates.objects.get(id=self.rates.id).date_out)
+        self._activate_self(False)
+        self.assertFalse(self._get_selfr().active)
+        self.assertTrue(self._get_selfr().date_out)
+
+    def test_second_active(self):
+        self._activate_self()
+        self.assertTrue(self._get_selfr().active)
+        second_active = models.Rates.objects.get_or_create(
+            name='rates2', tables='table', active=True)[0]
+        self.assertTrue(second_active.active)
+        self.assertFalse(self._get_selfr().active)
