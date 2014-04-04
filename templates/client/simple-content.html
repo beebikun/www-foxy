@@ -5,9 +5,17 @@
 {% endblock %}
 
 
+<!-- Если страница "Интернет" - делаем нужную секцию меню активной -->
 {% block internet-btn-active %}
-<!-- Display the button on the Internet section -->
     {% ifequal data.name "internet" %}
+        active
+    {% endifequal %}
+{% endblock %}
+
+
+<!-- Если страница "Телевидение" - делаем нужную секцию меню активной -->
+{% block iptv-btn-active %}
+    {% ifequal data.name "iptv" %}
         active
     {% endifequal %}
 {% endblock %}

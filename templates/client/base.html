@@ -137,7 +137,7 @@
                                     <nav id="mainMenu">
                                         <a href="{% url 'client-letsfox' %}" class="btn btn-default btn-orange mybtn mybtn-block">Подключить</a>
                                         <!-- <a href="http://www.tele-vox.ru/" class="btn btn-default btn-orange mybtn mybtn-block">Личный кабинет</a> -->
-                                        <a href="{% url 'client-news' %}" class="btn btn-default mybtn mybtn-block {% block new-btn-active %}{% endblock %}" id="news">Новости</a>
+                                        <a href="{% url 'client-simple_content' page='iptv' %}" class="btn btn-default mybtn mybtn-block {% block iptv-btn-active %}{% endblock %}" id="iptv">Телевидение</a>
                                         <a href="{% url 'client-simple_content' page='internet' %}" class="btn btn-default mybtn mybtn-block {% block internet-btn-active %}{% endblock %}" id="internet">Интернет</a>
                                         <a href="{% url 'client-rates' %}" class="btn btn-default mybtn mybtn-block {% block rates-btn-active %}{% endblock %}" id="rates">Тарифы</a>
                                         <a href="{% url 'client-payment' %}" class="btn btn-default mybtn mybtn-block {% block payment-btn-active %}{% endblock %}" id="payment">Оплата услуг</a>
