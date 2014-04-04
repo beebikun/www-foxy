@@ -446,7 +446,6 @@ class Rates(models.Model):
     normal_date = lambda self: formatted_date(self.date_in)
 
     def save(self, *args, **kwargs):
-        print '--------------'
         if kwargs:
             if not self.__dict__.get('rtype_id'):
                 rtype = RatesType.objects.get_or_create(name='p')[0]

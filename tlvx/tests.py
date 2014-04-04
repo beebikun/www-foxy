@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Max
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.utils import timezone
 from tlvx import helpers, settings, views as tlvx_views
 from tlvx.core import models
 from tlvx.api import serializers
@@ -277,7 +278,7 @@ class ViewsNewsMainTest(ViewsMainTest):
         self._test_some_result(result, notes, 'NoteSerializer')
 
     def setUp(self):
-        map(self._gnrt_note, xrange(50))
+        self.notes = map(self._gnrt_note, xrange(50))
         self.count = int(math.ceil(
             models.Note.objects.all().count()/float(settings.NOTE_COUNT)))
 
@@ -309,6 +310,13 @@ class ViewsNewsTest(ViewsNewsMainTest):
         data = self._get('client-newsdetail', kwargs=dict(pk=note.id))
         self.assertIn('result', data)
         self._test_result(data['result'], note)
+
+    def test_news_date_limit(self):
+        notes = models.Note.objects.all().order_by('date')
+        limit = notes[len(notes)/2].date
+        data = self._get('client-news')['result']
+        laters_notes = filter(lambda n: n.get('date') > limit, data)
+        self.assertFalse(len(laters_notes))
 
 
 class ViewsIndexTest(ViewsNewsMainTest):

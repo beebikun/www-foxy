@@ -5,6 +5,7 @@ from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
+from django.utils import timezone
 from tlvx import settings
 from tlvx.api import serializers
 from tlvx.core import models
@@ -226,11 +227,11 @@ def news(request, pk=None, template='news', additional_data=None):
         params = dict(count=settings.NOTE_COUNT, page=page)
         first = params['count']*(params['page']-1)
         end = params['count']*params['page']
-        objects = models.Note.objects.all().order_by('num', '-date')[first:end]
+        notes = models.Note.objects.filter(date__lte=timezone.now())
+        splice = notes.order_by('num', '-date')[first:end]
         data.update(
             page=params['page'],
-            page_count=int(math.ceil(
-                models.Note.objects.all().count()/float(params['count'])))
+            page_count=int(math.ceil(notes.count()/float(params['count'])))
         )
         #Следующие 3 поля - для пэйджинатора, чтобы не делать этого в клиенте
         data['display_page'] = paginator(data['page_count'], data['page'])
@@ -238,8 +239,8 @@ def news(request, pk=None, template='news', additional_data=None):
         data['next_page'] = min(data['page']+1, data['page_count'])
     else:
         #Возвращаем требуемую нововсть
-        objects = [get_object_or_404(models.Note, pk=pk)]
-    data['result'] = map(get_data, objects)
+        splice = [get_object_or_404(models.Note, pk=pk)]
+    data['result'] = map(get_data, splice)
     if additional_data:
         #Т.к эту же функцию использует еще и index, то есть возможность
         #запихать в контекст что-нибудь еще
