@@ -184,6 +184,7 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 #mainMenu .mybtn, #mainMenu .btn-orange{
     border:none;
     border-radius: 0;
+    -webkit-border-radius: 0;
     display: block;
     margin-bottom: 0;
     margin-left: 0;

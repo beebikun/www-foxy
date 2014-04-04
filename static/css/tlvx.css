@@ -287,6 +287,7 @@ header section:last-child{
 	text-align: center;
 	border:1px solid;
 	border-radius: 4px;
+	-webkit-border-radius:4px;
 	border-color: #DADADA;
 	background: white;
 	max-height:4.4em;
@@ -312,6 +313,7 @@ header section:last-child{
 #makeConReq{
 	border:1px solid;
 	border-radius: 4px;
+	-webkit-border-radius: 4px;
 	border-color: #DADADA;
 }
 
@@ -491,6 +493,7 @@ header section:last-child{
 	width:100%;
 	border:1px solid;
 	border-radius: 4px;
+	-webkit-border-radius: 4px;
 	border-color: #DADADA;
 }
 /*Style for marker's balloon*/
@@ -816,6 +819,7 @@ header section:last-child{
 	left:15%;
 	border:1px solid;
 	border-radius: 100%;
+	-webkit-border-radius:100%;
 	padding-top: 0.3em;
 }
 
