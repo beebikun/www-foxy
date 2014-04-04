@@ -41,24 +41,24 @@
         <a href="{% url 'client-ratessimple' name='other' %}">Доп услуги</a>
     </div>
 
-    {% block rates %}
     <div>
-        {% for rates in data %}
+        {% for rates in data.result %}
             {% if rates.active%}
             <div class="table-box some-item">
                 <div class="some-item-body">
                     <div class="some-item-body-title">
                         Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
                     </div>
+                    {% block rates-active %}
                     <div class="some-item-body-text margin-top">
                         {{ rates.tables|safe }}
                     </div>
+                    {% endblock %}
                 </div>
             </div>
              {% endif %}
          {% endfor %}
         </div>
-    {% endblock %}
 </div>
 
 {% block helptext %}<!-- Место для подкаруселького текста в разделе "Физ лица" -->{% endblock %}
@@ -70,7 +70,7 @@
     <div id="simmularItems">
 <!-- Rates archive -->
         <div class="rates-archive">
-            {% for rates in data %}{% if not rates.active %}
+            {% for rates in data.result %}{% if not rates.active %}
                 <div class="table-box some-item">
                     <div class="some-item-body">
                         <a class="some-item-body-title" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>

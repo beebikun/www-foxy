@@ -127,6 +127,10 @@ class StaticPage:
     def get_obj(self):
         return get_object_or_404(getattr(models, self.model), name=self.name)
 
+#Простой сериалайзер статических страниц по имени
+page = lambda n: serializers.StaticPageSerializer(
+    instance=models.StaticPage.objects.get(name=n)).data
+
 
 ###############################################################################
 
@@ -261,14 +265,23 @@ class Rates:
     get_obj = lambda self, name: models.Rates.objects.filter(
         rtype__name=name).order_by('-date_in')
 
-    def __init__(self, request, name, template='rates-simple'):
-        data = map(self.get_data, self.get_obj(name))
+    def __init__(self, request, name,
+                 template='rates-simple', additional_data=None):
+        data = dict(result=map(self.get_data, self.get_obj(name)))
+        if additional_data:
+            data.update(additional_data)
         self.response = my_response(request, context=data, name=template)
 
 
 def rates(request):
     """Тарифы для физ лиц"""
-    return Rates(request, name='p', template='rates').response
+    additional_data = dict(header=dict(
+        first=page('rates-internet'),
+        second=page('rates-local'),
+        third=page('rates-iptv'),
+        ))
+    return Rates(request, name='p',
+                 template='rates', additional_data=additional_data).response
 
 
 def rates_tests(request):
@@ -298,8 +311,6 @@ def paymentcard(request):
 
 def paymentelmoney(request):
     """Эл деньги (Асист)"""
-    page = lambda n: serializers.StaticPageSerializer(
-        instance=models.StaticPage.objects.get(name=n)).data
     data = dict(instruction=page('asist-instruction'),
                 returns=page('asist-returns'), inn=page('payment-elmoney-inn'))
     return my_response(request, data, name='payment-elmoney')

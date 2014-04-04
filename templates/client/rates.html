@@ -1,12 +1,12 @@
 {% extends "client/rates-simple.html" %}
 
-{% block rates %}
+{% block rates-active %}
 <div class="rates-shapeover">
     <section class="shapehover-section">
         <div class="shapehover-item">
             <figure>
                 <figcaption>
-                    <h2 style="color:#444;">Тарифы</h2>
+                    <h2>Тарифы</h2>
                 </figcaption>
             </figure>
         </div>
@@ -17,10 +17,12 @@
                 <svg viewBox="0 0 180 320" preserveAspectRatio="none">
                     <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
                 <figcaption>
-                    <h2>Интернет</h2>
+                    {% with data.header.first as header %}
+                    <h2>{{header.display_name}}</h2>
                     <div class="figcaption-detail">
-                        <small>В период с 02-00 до 18-00 в рабочие дни и в период с 02-00 до 10-00 в выходные и праздничные дни скорость достигает <strong>100 Мбит/сек</strong></small>
+                        {{header.content|safe}}
                     </div>
+                    {% endwith %}
                 </figcaption>
             </figure>
         </div>
@@ -31,14 +33,12 @@
                 <svg viewBox="0 0 180 320" preserveAspectRatio="none">
                     <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
                 <figcaption>
-                    <h2>Локальная сеть</h2>
+                    {% with data.header.second as header %}
+                    <h2>{{header.display_name}}</h2>
                     <div class="figcaption-detail">
-                        <ul>
-                            <li><a href="">Турбина</a></li>
-                            <li><a href="">Хаб</a></li>
-                            <li><a href="">ДЦ</a></li>
-                        </ul>
+                        {{header.content|safe}}
                     </div>
+                    {% endwith %}
                 </figcaption>
             </figure>
         </div>
@@ -49,10 +49,12 @@
                 <svg viewBox="0 0 180 320" preserveAspectRatio="none">
                     <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
                 <figcaption>
-                    <h2>Цифровое телевидение</h2>
+                    {% with data.header.third as header %}
+                    <h2>{{header.display_name}}</h2>
                     <div class="figcaption-detail">
-                       Бла бла бла
+                        {{header.content|safe}}
                     </div>
+                    {% endwith %}
                 </figcaption>
             </figure>
         </div>
@@ -60,38 +62,18 @@
         <div class="shapehover-item" >
             <figure>
                 <figcaption>
-                    <h2 style="color:#444;">Абонентская плата</h2>
+                    <h2>Абонентская плата</h2>
                 </figcaption>
             </figure>
         </div>
     </section>
 
     <section>
-        <table>
-            <tbody>
-                <tr>
-                    <td style="text-align: center;"><strong>Топ 700</strong></td>
-                    <td style="text-align: center;">До 4 Мб/с</td>
-                    <td style="text-align: center;" rowspan="3">100 Мб/с</td>
-                    <td style="text-align: center;" rowspan="3">70 каналов</td>
-                    <td style="text-align: center;">700 руб</td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;"><strong>Топ 1000</strong></td>
-                    <td style="text-align: center;">До 8 Мб/с</td>
-                    <td style="text-align: center;">1000 руб</td>
-                </tr>
-                <tr>
-                    <td style="text-align: center;"><strong>Топ 1500</strong></td>
-                    <td style="text-align: center;">До 15 Мб/с</td>
-                    <td style="text-align: center;">1500 руб</td>
-                </tr>
-            </tbody>
-        </table>
+        {{ rates.tables|safe }}
     </section>
 </div>
-
-
+{% endblock %}
+{% block helptext %}
 <!-- Подкарусельковый текст -->
 <br>
 <br>

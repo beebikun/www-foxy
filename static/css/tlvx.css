@@ -629,7 +629,7 @@ header section:last-child{
 }
 
 .rates-shapeover table{
-    margin-top:90px;
+    margin-top: 60px;
     border: none!important;
 }
 
@@ -662,101 +662,6 @@ header section:last-child{
 	display: none;
 }
 
-/*.ratesGraph{
-	position: relative;
-	height: 240px;
-	margin-bottom:60px;
-	margin-top:40px;
-}
-.ratesGraph i{
-	font-style: normal;
-	font-weight: normal;
-}
-.graphLine{
-	position: absolute;
-	text-align: right;
-	background: #333;
-	color:#333;
-	max-width:100%;
-	width: 100%;
-	height: 1px;
-	left:0;
-	bottom: 0;
-}
-.graphLine>i{
-	display: block;
-	margin-top:-4px;
-}
-.ratesGraph>ul{
-	list-style: none
-}
-.ratesGraph>ul>li{
-	display: inline-block;
-	cursor:default;
-	position: absolute;
-	text-align: center;
-	bottom: 0;
-	width:24%;
-	left: 38%;
-	height: 75%;
-	border-radius: 4px 4px 0 0;
-	border:1px solid;
-	border-color:#ff6600;
-	background: #ff6600;
-}
-.ratesGraph>ul>li:hover{
-	box-shadow: 0 0 5px #ff6600;
-	text-shadow: 0 0 1px;
-}
-.ratesGraph>ul>li:first-child{
-	left:7%;
-	height: 50%
-}
-.ratesGraph>ul>li:last-child{
-	left:69%;
-	height: 100%
-}
-.ratesGraph>ul>li>.speed{
-	font-weight: bold;
-	color:white;
-	top:24%;
-}
-.ratesGraph>ul>li:last-child>.speed{
-	top:29%;
-}
-.ratesGraph>ul>li>div{
-	position: absolute;
-	background-color: white;
-	bottom: 0;
-	left:0;
-	height: 55px;
-	width: 100%;
-}
-.ratesGraph>ul>li>div>span{
-	display: inline-block;
-	position: absolute;
-	font-weight: bold;
-	width: 100%;
-	left:0;
-}
-.ratesGraph>ul>li>span{
-	display: inline-block;
-	position: absolute;
-	width:100%;
-	left:0;
-}
-.ratesGraph>ul>li>.name{
-	top:-2em;
-}
-#ratesHit{}
-#ratesHit .traffic span{top: 25% }
-#ratesHit>ul>li:first-child .traffic span{ }
-#ratesHit>ul>li:last-child .traffic span{top:30%; }
-
-#ratesHit .speed{top: 13% }
-#ratesHit>ul>li:last-child .speed{top:14%; }
-#ratesHit .traffic{height:50%; }
-@media (max-width: 270px) {.ratesGraph>ul>li>.name{top:-2.3em;} }*/
 /*--------Payment--------*/
 .pager li > a{
 	color:#909090;
