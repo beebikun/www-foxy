@@ -26,8 +26,10 @@ def _rnd_bool():
     return bool(getrandbits(1))
 
 
-def _random_date():
-    return datetime(2014, randint(1, 12), randint(1, 27), tzinfo=pytz.UTC)
+def _random_date(year=None):
+    now = timezone.now()
+    return datetime(year or randint(2010, now.year), randint(1, now.month),
+                    randint(1, now.day), tzinfo=pytz.UTC)
 
 
 def _rnd_obj(modelname, params={}):
@@ -263,9 +265,9 @@ class ViewsTest(ViewsMainTest):
 
 
 class ViewsNewsMainTest(ViewsMainTest):
-    def _gnrt_note(self, i=None):
+    def _gnrt_note(self, i=None, year=None):
         return models.Note.objects.create(
-            header=_stf(20), text=_stf(200), date=_random_date())
+            header=_stf(20), text=_stf(200), date=_random_date(year))
 
     def _test_result(self, result, note=None):
         first = 0
@@ -278,7 +280,7 @@ class ViewsNewsMainTest(ViewsMainTest):
         self._test_some_result(result, notes, 'NoteSerializer')
 
     def setUp(self):
-        self.notes = map(self._gnrt_note, xrange(50))
+        map(self._gnrt_note, xrange(50))
         self.count = int(math.ceil(
             models.Note.objects.all().count()/float(settings.NOTE_COUNT)))
 
@@ -312,8 +314,9 @@ class ViewsNewsTest(ViewsNewsMainTest):
         self._test_result(data['result'], note)
 
     def test_news_date_limit(self):
-        notes = models.Note.objects.all().order_by('date')
-        limit = notes[len(notes)/2].date
+        _gnrt_note_future = lambda i: self._gnrt_note(i, year=limit.year+10)
+        limit = timezone.now()
+        map(_gnrt_note_future, xrange(10))
         data = self._get('client-news')['result']
         laters_notes = filter(lambda n: n.get('date') > limit, data)
         self.assertFalse(len(laters_notes))
