@@ -151,26 +151,22 @@ class StaticPageSerializer(serializers.Serializer):
 
 
 class DoitSerializer(serializers.Serializer):
-    fio = serializers.CharField(required=False, max_length=128)
-    phone = serializers.CharField(required=False, max_length=128)
-    email = serializers.EmailField(required=False, max_length=128)
+    fio = serializers.CharField(
+        required=True, max_length=128,
+        error_messages=dict(required=u"Пожалуйста, укажите своё имя"))
+    phone = serializers.CharField(
+        required=True, max_length=128,
+        error_messages=dict(required=u"Пожалуйста, укажите номер квартиры"))
+    email = serializers.EmailField(
+        required=False, max_length=128,
+        error_messages={'invalid': u'Извините, но это не похоже на e-mail'})
     flat = serializers.CharField(required=False, max_length=128)
     address = serializers.CharField(required=True)
+    status = serializers.CharField(required=True)
     source = serializers.CharField(required=False, max_length=512)
     comment = serializers.CharField(required=False, max_length=512)
     captcha_key = serializers.CharField(required=True, max_length=64)
     captcha = serializers.CharField(required=False, max_length=64)
-
-    def validate_fio(self, attrs, source):
-        if not attrs.get(source):
-            raise serializers.ValidationError(u"Пожалуйста, укажите своё имя")
-        return attrs
-
-    def validate_flat(self, attrs, source):
-        if not attrs.get(source):
-            raise serializers.ValidationError(
-                u"Пожалуйста, укажите номер квартиры")
-        return attrs
 
     def _validate_email_and_phone(self, attrs, source):
         if not attrs.get('email') and not attrs.get('phone'):
@@ -208,10 +204,7 @@ class DoitSerializer(serializers.Serializer):
         an existing model instance, or create a new model instance.
         """
         del attrs['captcha_key']
-        if instance is not None:
-            return instance
-        r = models.ConnRequest.objects.create(**attrs)
-        return r
+        return models.ConnRequest.objects.create(**attrs)
 
 
 class ImageSerializer(serializers.ModelSerializer):

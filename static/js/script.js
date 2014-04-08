@@ -242,24 +242,23 @@ function doitOkBtnClick(e){
         var t = input.getAttribute('type');
         if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ) data[input.getAttribute('name')] = input.value
     });
-    if(data.address) {
-        var items = filterNodes(document.getElementsByClassName('some-item'),
-                               function(item){return item.getElementsByClassName('some-item-body-title')[0].innerText == data.address});
-        if(items.length>=1) data.address = data.address + '|' + items[0].getElementsByClassName('some-item-date').innerText;
-    }
+    node2array( document.querySelectorAll('.btn') ).forEach(function(el){el.setAttribute('disabled', true) });
     request({
         post: true,
         path: 'doit',
         data: data,
         success: function(data){
-            node2array( document.getElementsByClassName('has-error') ).forEach(function(el){
+            node2array( document.querySelectorAll('.btn') ).forEach(function(el){
+                el.removeAttribute('disabled')
+            });
+            node2array( document.querySelectorAll('.has-error') ).forEach(function(el){
                 removeClass( el, 'has-error');
             });
-            node2array( document.getElementsByClassName('help-error') ).forEach(function(el){showHideElBlock(el);});
+            node2array( document.querySelectorAll('.help-error') ).forEach(function(el){showHideElBlock(el);});
             if(data.doit === undefined){
                 for(var field in data){
                     var err = data[field];
-                    var errInput = document.querySelectorAll('[name=' + field + ']')[0];
+                    var errInput = document.querySelector('[name=' + field + ']');
                     var formGroup =  findParent('.form-group', errInput);
                     addClass( formGroup, 'has-error');
                     var errText = formGroup.getElementsByClassName( 'help-error' )[0];
@@ -345,7 +344,7 @@ function searchPaymentTermonal(e){
     };
 }
 
-/*------------------------------------------------------------------*/
+/*---------------------------------//rates.html//-----------------------------*/
 
 
 function initShapeHover() {

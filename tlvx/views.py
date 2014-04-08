@@ -174,6 +174,11 @@ def letsfox(request):
     """В request.POST должны быть
         'street' - название улицы, регистр и раскладка не важены,
         'num' - номер дома
+
+    Это немного странно сделано, но в данном случае пост возвращает адреса,
+    с указанием их статуса (подключен, сбор заявок, не подключен),
+    чтобы можно было выбрать один из них в клиенте и оставить заявку.
+    А вот сама заявка делается через апи.
     """
     strt = request.POST.get('street', '')
     params = dict(
@@ -187,6 +192,8 @@ def letsfox(request):
         data[u'co'] = obj.co and '%s, %s' % (
             obj.co.contacts or '', obj.co.schedule or '')
         data['result'] = result
+        data['status'] = u'Подключен' if obj.active else (
+            u'Сбор заявок' if obj.plan else u'Не подключен')
         return data
 
     def get(params):

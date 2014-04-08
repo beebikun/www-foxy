@@ -1,90 +1,21 @@
 # -*- coding: utf-8 -*-
+import json
+import os
+import re
+import uuid
 from django.core.exceptions import FieldError
 from django.db import models
-# Create your models here.
-# from django.contrib.gis.db import models
+from django.utils import dateformat
 from django.utils import timezone
-from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
-    GIS_CONFIG, DATE_FORMAT, CONN_SPAM, DEFAULT_IMAGE_HOST_URL
-import urllib2
-import json
-import re
-import time
-import os
 from imagekit import models as imagekit_models
 from imagekit import processors
-from django.utils import dateformat
-import uuid
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.header import Header
+from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
+    DATE_FORMAT, DEFAULT_IMAGE_HOST_URL, CONN_SPAM
+from tlvx.helpers import sendEmail
+from tlvx.core.gis import get_gis_url, make_get, get_gis_answer
 
 
 formatted_date = lambda date: dateformat.format(date, DATE_FORMAT)
-
-
-def get_gis_url(suf=''):
-    return '%s%s?key=%s&version=%s&' % (
-        GIS_CONFIG['url'], GIS_CONFIG[suf],
-        GIS_CONFIG['key'], GIS_CONFIG['version'])
-
-
-def make_get(url):
-    #спим 1 секунду, чтобы 2гис не считал что мы его ддосим
-    time.sleep(0.1)
-    req = urllib2.Request(url.encode('utf-8'))
-    req.add_header('Content-Type', 'application/json')
-    # Делаем запрос в 2гис
-    response = json.loads(urllib2.urlopen(req).read())
-    if response.get('response_code') != u'200':
-        raise FieldError(u'Bad 2gis answer %s (%s) for url:\n%s' % (
-            response.get('response_code'), response.get('error_message'), url))
-    return response
-
-
-def get_gis_answer(url, city, street, num, street_alt, num_alt):
-    clear_num = lambda n: str(n).replace(' ', '').replace(u'стр', '').lower()
-    response = make_get(url)
-    if response.get('total') != u'1':
-        raise FieldError('Response is too long')
-    #Если объектов в ответе один
-    result = response.get('result', {})[0]
-    if result.get("type") != 'house':
-        raise FieldError('Bad geoobject type: %s' % result.get("type"))
-    # Проверяем, что в ответе город, улица и дом
-    # совпадают с городом, улицей и домом в self
-    attr = result.get('attributes', {})
-    result_num = clear_num(attr.get('number', ''))
-    result_num_alt = clear_num(attr.get('number2', ''))
-    num_match = \
-        result_num == clear_num(num) \
-        or num_alt and result_num == clear_num(num_alt) \
-        or num_alt and result_num_alt == clear_num(num_alt) \
-        or result_num_alt == clear_num(num) \
-        or False
-    street_match = \
-        attr.get('street') == street \
-        or street_alt and attr.get('street') == street_alt \
-        or attr.get('street2') == street \
-        or street_alt and attr.get('street2') == street_alt \
-        or False
-    if attr.get('street') == u'Рёлочный пер' \
-            and (street == u'пер. Рёлочный' or street_alt == u'пер. Рёлочный'):
-        street_match = True   # ^ - X_X
-    if attr.get('city') == city and street_match and num_match:
-        return result
-    else:
-        # Если не совпадает - так и пишем
-        raise FieldError(u'Params not match! \
-            Params in response: (%s, %s, %s); \
-            params in query: (%s, %s, %s) \
-            alt params in response: (%s, %s)\
-            alt params in query: (%s, %s)' % (
-            attr.get('city'), attr.get('street'), result_num,
-            city, street, num,
-            attr.get('street2'), result_num_alt,
-            street_alt, num_alt))
 
 
 class City(models.Model):
@@ -749,6 +680,9 @@ class CaptchaImageClone(Captcha):
 
 
 # ConnRequest
+class ConnRequestManager(models.Manager):
+    def sendAll(self):
+        map(lambda c: c.send(), self.filter(is_send=False))
 
 
 class ConnRequest(models.Model):
@@ -757,73 +691,66 @@ class ConnRequest(models.Model):
     email = models.EmailField(max_length=128, blank=True)
     flat = models.CharField(max_length=128)
     address = models.CharField(max_length=128)
+    status = models.CharField(max_length=128)
     source = models.CharField(max_length=512, blank=True)
     comment = models.CharField(max_length=512, blank=True)
     is_send = models.BooleanField(default=False)
     date = models.DateTimeField(default=timezone.now(), blank=True)
     date_send = models.DateTimeField(default=None, blank=True)
 
+    objects = ConnRequestManager()
+
+    def send(self):
+        subject = u'%s (статус дома - %s)' % (
+            CONN_SPAM['subject'], self.status)
+        html = u"""\
+                <html>
+                  <head>
+                  </head>
+                  <body>
+                    <style type="text/css"> table{color:#FF0}</style>
+                    <table>
+                    <tbody align="left">
+                    <tr>
+                        <th width="100" align="left"> Ф.И.О.: </th>
+                        <th align="left">%(fio)s</th>
+                    </tr>
+                    <tr>
+                        <th width="100" align="left"> Адрес: </th>
+                        <th align="left">%(address)s - %(flat)s</th>
+                    </tr>
+                    <tr>
+                        <th width="100" align="left"> Телефон: </th>
+                        <th align="left">%(phone)s</th>
+                    </tr>
+                    <tr>
+                        <th width="100" align="left"> Email: </th>
+                        <th align="left">%(email)s</th>
+                    </tr>
+                    <tr>
+                        <th width="100" align="left"> Источник: </th>
+                        <th align="left">%(source)s</th>
+                    </tr>
+                    <tr>
+                        <th width="100" align="left"> Комментарий: </th>
+                        <th align="left">%(comment)s</th>
+                    </tr>
+                    </tbody>
+                    </table>
+                  </body>
+                </html>
+                """ % {
+            'fio': self.fio, 'address': self.address, 'flat': self.flat,
+            'phone': self.phone, 'email': self.email,
+            'source': self.source, 'comment': self.comment}
+        sendEmail(subject, html)
+        self.is_send = True
+        self.date_send = timezone.now()
+        self.save()
+
     def save(self, *args, **kwargs):
         super(ConnRequest, self).save(*args, **kwargs)
-        if not self.is_send:
-            address, status = self.address.split('|')
-            mail = MIMEMultipart('alternative')
-            mail['From'] = CONN_SPAM['from']
-            mail['To'] = CONN_SPAM['to']
-            subject = u'%s (статус дома - %s)' % (CONN_SPAM['subject'], status)
-            mail['Subject'] = Header(subject, 'utf-8')
-            html = u"""\
-                    <html>
-                      <head>
-                      </head>
-                      <body>
-                        <style type="text/css"> table{color:#FF0}</style>
-                        <table>
-                        <tbody align="left">
-                        <tr>
-                            <th width="100" align="left"> Ф.И.О.: </th>
-                            <th align="left">%(fio)s</th>
-                        </tr>
-                        <tr>
-                            <th width="100" align="left"> Адрес: </th>
-                            <th align="left">%(address)s - %(flat)s</th>
-                        </tr>
-                        <tr>
-                            <th width="100" align="left"> Телефон: </th>
-                            <th align="left">%(phone)s</th>
-                        </tr>
-                        <tr>
-                            <th width="100" align="left"> Email: </th>
-                            <th align="left">%(email)s</th>
-                        </tr>
-                        <tr>
-                            <th width="100" align="left"> Источник: </th>
-                            <th align="left">%(source)s</th>
-                        </tr>
-                        <tr>
-                            <th width="100" align="left"> Комментарий: </th>
-                            <th align="left">%(comment)s</th>
-                        </tr>
-                        </tbody>
-                        </table>
-                      </body>
-                    </html>
-                    """ % {
-                'fio': self.fio, 'address': address, 'flat': self.flat,
-                'phone': self.phone, 'email': self.email,
-                'source': self.source, 'comment': self.comment}
-            body = MIMEText(html.encode('utf-8'), 'html')
-            mail.attach(body)
-            server = smtplib.SMTP(
-                "%s:%s" % (CONN_SPAM['server'], CONN_SPAM['port']))
-            server.starttls()
-            server.login(CONN_SPAM['from'], CONN_SPAM['pswd'])
-            server.sendmail(
-                CONN_SPAM['from'], CONN_SPAM['to'], mail.as_string())
-            server.quit()
-            self.is_send = True
-            self.date_send = timezone.now()
-            self.save()
+        ConnRequest.objects.sendAll()
 
 
 # Image

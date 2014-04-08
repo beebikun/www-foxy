@@ -11,17 +11,19 @@
     var preModalFn = function(point){
         var contacts = document.getElementById('doit_contacts');
         var params = {
-            address:point.getAttribute('address'),
-            co:point.getAttribute('co')
+            address: point.getAttribute('address'),
+            co: point.getAttribute('co'),
+            status: point.getAttribute('status'),
         };
+
         if(params.co && params.co!='None') {
             showHideElBlock(contacts, true);
-            contacts.getElementsByTagName('span')[0].getElementsByTagName('span')[0].innerText = params.co;
+            contacts.querySelector('span>span').innerText = params.co;
         } else showHideElBlock(contacts);
 
         for(var p in params){
-            var el = document.querySelectorAll("[name=" + p + "]");
-            if(el.length) el[0].value = params[p]
+            var el = document.querySelector("[name=" + p + "]");
+            if(el) el.value = params[p]
         }
     }
 
@@ -98,6 +100,7 @@
                     </div><!-- /.modal-header -->
 
                     <div class="modal-body">
+                        <input type="hidden" name="status" value="" autocomplete="off">
                         <label for="requestContacts">Контактная информация</label>
                         <section id="requestContacts">
                             <div class="form-group">
@@ -208,17 +211,13 @@
             <div class="some-item" data-lat="{{point.lat}}" data-lng="{{point.lng}}" co="{{point.co}}"
                     data-ico="{% if point.active %}active{% else %}{% if point.plan %}plan{% else %}not_in_list{% endif %}{% endif %}"
                     {% if point.result %} id="result-item"  style="display:none" {% else %}  id="simmularItemsID_{{point.id}}"  {% endif %} >
-                <p class="some-item-date">
-                    {% if point.active %} Подключен
-                    {% else %}{% if point.plan %} Сбор заявок
-                    {% else %} Не подключен {% endif %}{% endif %}
-                </p> <!-- /.some-item-date -->
+                <p class="some-item-date">{{point.status}}</p> <!-- /.some-item-date -->
 
                 <div class="some-item-body">
                     <span class="some-item-body-title">{{ point.address }}</span>
                     <div class="some-item-body-text" >
                         <a class="btn btn-link mybtn-link no-margin no-padding open-doit" data-toggle="modal"
-                            href="#doit" co="{{point.co}}" address="{{point.address}}">Оставить заявку</a>
+                            href="#doit" co="{{point.co}}" address="{{point.address}}" status="{{point.status}}">Оставить заявку</a>
                     </div><!-- /.some-item-body-text -->
                 </div><!-- /.some-item-body -->
             </div><!-- /.some-item -->

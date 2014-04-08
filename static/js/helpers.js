@@ -193,7 +193,6 @@ var M = function(id, numInput, streetInput, prnts){
 }
 
 M.prototype._init = function(id, numInput, streetInput, prnts) {
-    console.log('_init')
     this.option = this._options()
     this.numInput = numInput;
     this.streetInput = streetInput;
