@@ -742,6 +742,7 @@ header section:last-child{
 .link-list>.shortLink>li>ul>li>span{text-decoration: underline;}
 .link-list>ul>li>a, .link-descr-list>ul>li>a, .link-descr-list>ul>li>ul>li>a{font-weight: bold;}
 .link-list>ul>li>ul>li>a{font-weight: normal;}
+.link-list>div>ul{margin-bottom: 50px;}
 
 .link-descr-list a{text-decoration: underline;}
 .link-descr-list>ul>li{margin-top:30px;}
