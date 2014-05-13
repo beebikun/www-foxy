@@ -47,6 +47,8 @@ function showHideModal(el, show){
     el.setAttribute('aria-hidden', show ? false : true)
 }
 
+
+
 function clickModalA(a){
 	//функция для onlick
     if(preModalFn) preModalFn(a);
@@ -69,8 +71,14 @@ function initModal(){
     //find and set all modal open elements (<a>)
     node2array(document.querySelectorAll('[data-toggle=modal]')).forEach(
         function(a){
-            if( findParent('#myMapId', a) ) console.log(a)
             a.onclick = function(){clickModalA(this);}
+        }
+    );
+
+    //find and set all modal elements (<div class="modal">)
+    node2array(document.querySelectorAll('.modal')).forEach(
+        function(modal){
+            modal.onclick = function(){showHideModal(this)}
         }
     );
 }
