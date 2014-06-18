@@ -58,11 +58,13 @@ function clickModalA(a){
 }
 
 function initModal(){
+    var modalClass = '.modal';
+
     //find and set all modal dismiss buttons
     node2array(document.querySelectorAll('[data-dismiss=modal]')).forEach(
         function(btn){
             btn.onclick = function(e){
-                var modal = findParent('.modal', this);
+                var modal = findParent(modalClass, this);
                 if(modal) showHideModal(modal);
             }
          }
@@ -76,9 +78,10 @@ function initModal(){
     );
 
     //find and set all modal elements (<div class="modal">)
-    node2array(document.querySelectorAll('.modal')).forEach(
+    node2array(document.querySelectorAll(modalClass)).forEach(
         function(modal){
-            modal.onclick = function(){showHideModal(this)}
+            modal.onclick = function(e){
+                if( ~e.target.className.split(' ').indexOf('modal') ) showHideModal(this)}
         }
     );
 }
@@ -178,7 +181,7 @@ window.onload = function(){
             }
             if(code==13){//enter
                 var liActive = node2array(ul.getElementsByClassName('active'));
-                if(liActive.length) streetInput.value = liActive[0].innerText;
+                if(liActive.length) streetInput.value = liActive[0].innerText || liActive[0].innerHTML;
                 return
             }
             if(code == 40 || code == 38){//40 - arrow down; 38 - arrow up
