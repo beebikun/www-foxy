@@ -249,6 +249,7 @@ function doitOkBtnClick(e){
     var data = new Object;
     var inputs = filterNodes(form.getElementsByTagName('input'),
                              function(input){return input.getAttribute('name')});
+
     inputs.forEach(function(input){
         var t = input.getAttribute('type');
         if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ) data[input.getAttribute('name')] = input.value
@@ -267,6 +268,7 @@ function doitOkBtnClick(e){
             });
             node2array( document.querySelectorAll('.help-error') ).forEach(function(el){showHideElBlock(el);});
             if(data.doit === undefined){
+                console.log(data)
                 for(var field in data){
                     var err = data[field];
                     var errInput = document.querySelector('[name=' + field + ']');
