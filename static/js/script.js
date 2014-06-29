@@ -130,7 +130,7 @@ window.onload = function(){
         //Open/close menu for mobile divices
         var body = document.getElementsByTagName('body')[0];
         document.getElementById('collapseMenuBtn').onclick = function(e){
-            window.scrollTo(0,0);
+            //window.scrollTo(0,0);
             toggleClass( body, 'unwrap' );
         }
     })();

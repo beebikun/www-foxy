@@ -233,28 +233,33 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 
 /*--------Map--------*/
 
-.map{
-    height:100px;
+.map, .map-full-size, .map-on-page-with-tp{
+    height:150px;
 }
 
-.map-full-size{
-    height:100px;
-}
-
-.map-on-page-with-tp{
-    height:100px;
-}
 
 
 /*=========================================================*/
 /*===================Pages*/
 /*=========================================================*/
 /*--------Letsfox--------*/
+#letsfoxCont{
+    width: 100%;
+}
 
 #LetsfoxMakeReq{
     display: block;
     float:none;
     width: 100%;
+    height: 50px;
+}
+
+
+#LetsfoxMakeReq .form-group .col-lg-4{
+    width: 33%;
+    padding: 0 5px;
+    float: left;
+    height: 50px;
 }
 
 #doit .form-group .col-lg-6{
@@ -321,9 +326,10 @@ header .content-inner-right section:last-child .phones-block .phone-num{
 
 body.unwrap #mainMenu{
     height: 253px!important;
-    position: absolute!important;
+    position: fixed!important;
 }
 body.unwrap #collapseMenuBtn{
     color:#ff6600!important;
 }
+
 

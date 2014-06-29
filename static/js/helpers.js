@@ -162,8 +162,8 @@ function request(params){
     var path = params.path ? api[params.path] : '', success = params.success, error = params.error, method = params.post ? 'POST' : 'GET',
         data = params.post ? params.data ? params.data : {} : null,
         query = params.post ? null : serialize( params.query ? params.query : {} );
-    if(error===undefined) function error(e){console.log(e)};
-    function _success(r){success(r.data)}
+    var _success = function(r){success(r.data)};
+    function error(e){console.log(e)};
     if(method == 'GET') $.getJSON(path, query, _success, error)
     else $.post(path, data, _success, error)
     /*var xhr = new XMLHttpRequest();
