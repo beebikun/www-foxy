@@ -11,11 +11,10 @@
 
 
 {% block payment %}
+{% comment %}
 <ul>
     {% if not data.gray_ip %}
-	{% comment %}
 	<!-- Секция будет отображаться, только если пользователь зашел не с серого ип. -->
-	{% endcomment %}
 	<!-- way1 - with form -->
     <li>
         <strong>На сайте</strong><br />
@@ -55,4 +54,7 @@
 </ul>
 
 <p>Услуга предоставлена компанией-партнером <a style="text-decoration: underline;" href="http://arsenalpay.ru/">&laquo;Арсенал Медиа&raquo;</a></p>
+{% endcomment %}
+
+<p>Сервис временно недоступен. Приносим свои извинения.</p>
 {% endblock %}
