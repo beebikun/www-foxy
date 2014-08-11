@@ -2,6 +2,9 @@
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
+from email.MIMEBase import MIMEBase
+from email import Encoders
+import os
 import smtplib
 from tlvx.settings import CONN_SPAM
 
@@ -26,16 +29,26 @@ def change_keyboard(s):
     return u''.join(s)
 
 
-def sendEmail(subject, html):
+def sendEmail(subject='', html='', to=None, attach=None):
     mail = MIMEMultipart('alternative')
     mail['From'] = CONN_SPAM['from']
-    mail['To'] = CONN_SPAM['to']
+    pswd = CONN_SPAM['pswd']
+    srv = (CONN_SPAM['server'], CONN_SPAM['port'])
+    mail['To'] = to or CONN_SPAM['to']
     mail['Subject'] = Header(subject, 'utf-8')
     body = MIMEText(html.encode('utf-8'), 'html')
     mail.attach(body)
-    server = smtplib.SMTP("%s:%s" % (CONN_SPAM['server'], CONN_SPAM['port']))
+    if attach:
+        f = MIMEBase('application', "octet-stream")
+        f.set_payload(open(attach, "rb").read())
+        Encoders.encode_base64(f)
+        f.add_header(
+            'Content-Disposition', 'attachment; filename="%s"' %
+            os.path.basename(attach))
+        mail.attach(f)
+    server = smtplib.SMTP("%s:%s" % srv)
     server.starttls()
-    server.login(CONN_SPAM['from'], CONN_SPAM['pswd'])
+    server.login(mail['From'], pswd)
     server.sendmail(
-        CONN_SPAM['from'], CONN_SPAM['to'], mail.as_string())
+        mail['From'], mail['To'], mail.as_string())
     server.quit()

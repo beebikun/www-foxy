@@ -109,6 +109,12 @@ class BuildingManager(models.Manager):
         return fltr(num__icontains=num, street__name__icontains=street) | \
             fltr(num_alt__icontains=num, street_alt__name__icontains=street)
 
+    def get_is_active_iterator(self):
+        return Building.objects.filter(active=True).iterator()
+
+    def get_in_plan_iterator(self):
+        return Building.objects.filter(plan=True).iterator()
+
 
 class Building(models.Model):
     objects = BuildingManager()
@@ -695,7 +701,7 @@ class ConnRequest(models.Model):
     source = models.CharField(max_length=512, blank=True)
     comment = models.CharField(max_length=512, blank=True)
     is_send = models.BooleanField(default=False)
-    date = models.DateTimeField(default=timezone.now(), blank=True)
+    date = models.DateTimeField(auto_now=True, blank=True)
     date_send = models.DateTimeField(default=None, blank=True)
 
     objects = ConnRequestManager()
@@ -748,9 +754,9 @@ class ConnRequest(models.Model):
         self.date_send = timezone.now()
         self.save()
 
-    def save(self, *args, **kwargs):
-        super(ConnRequest, self).save(*args, **kwargs)
-        ConnRequest.objects.sendAll()
+    # def save(self, *args, **kwargs):
+    #     super(ConnRequest, self).save(*args, **kwargs)
+        # ConnRequest.objects.sendAll()
 
 
 # Image

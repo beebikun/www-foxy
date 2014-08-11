@@ -204,7 +204,9 @@ class DoitSerializer(serializers.Serializer):
         an existing model instance, or create a new model instance.
         """
         del attrs['captcha_key']
-        return models.ConnRequest.objects.create(**attrs)
+        request = models.ConnRequest.objects.create(**attrs)
+        models.ConnRequest.objects.sendAll()
+        return request
 
 
 class ImageSerializer(serializers.ModelSerializer):
