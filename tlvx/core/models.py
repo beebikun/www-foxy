@@ -124,7 +124,7 @@ class Building(models.Model):
     num_alt = models.CharField(max_length=256, blank=True, null=True,)
     street_alt = models.ForeignKey(
         "Street", related_name="buildings_alt", blank=True, null=True,)
-    city = models.ForeignKey("City", related_name="buildings")
+    city = models.ForeignKey("City", related_name="buildings", blank=True, null=True)
     square = models.ForeignKey(
         "Square", blank=True, null=True, related_name="buildings")
     co = models.ForeignKey(
@@ -133,7 +133,7 @@ class Building(models.Model):
     #     related_name="buildings")
 
     date = models.DateTimeField(
-        default=timezone.now, verbose_name=u"дата заведения")
+        auto_now_add=True, verbose_name=u"дата заведения")
     active = models.BooleanField(
         default=False, verbose_name=u"введен в эксплуатацию или нет")
     plan = models.BooleanField(
@@ -701,7 +701,7 @@ class ConnRequest(models.Model):
     source = models.CharField(max_length=512, blank=True)
     comment = models.CharField(max_length=512, blank=True)
     is_send = models.BooleanField(default=False)
-    date = models.DateTimeField(auto_now=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
     date_send = models.DateTimeField(default=None, blank=True)
 
     objects = ConnRequestManager()

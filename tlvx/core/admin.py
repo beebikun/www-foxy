@@ -20,17 +20,17 @@ class BuildingAdmin(admin.ModelAdmin):
     list_per_page = 15
     fieldsets = [
         (None,
-            {'fields': ['street', 'num', 'active', 'plan', 'name', 'co']}),
+            {'fields': ['street', 'num', 'active', 'plan', 'name', 'co', 'square']}),
         (u'Альтернативный адрес',
             {'fields': ['street_alt', 'num_alt'], 'classes': ['collapse']}),
         (u'2gis',
             {'fields': ['lat', 'lng'], 'classes': ['collapse']}),
         (u'Дополнительно',
-            {'fields': ['city', 'square', 'date', 'date_in'],
+            {'fields': ['date_in', 'city'],
                 'classes': ['collapse']}),
     ]
     list_display = ('get_address', 'get_address_alt', 'get_pp', 'square',
-                    'co', 'active', 'plan')
+                    'co', 'active', 'plan', 'date')
     list_editable = ('co', 'square', 'active', 'plan')
     list_filter = ['active', 'plan', 'co', 'date', 'street']
     search_fields = ['street__name', 'num', 'street_alt__name', 'num_alt']
