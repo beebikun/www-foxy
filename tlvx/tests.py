@@ -107,6 +107,7 @@ class ChangeKeyboardTest(SimpleTest):
             (u'.zка', u'юяка'),
             (u'111', u'111'),
             (u'f61c04be', u'а61с04иу'),
+            (u'23/3', u'23/3'),
         ]
         self.fn = helpers.change_keyboard
 

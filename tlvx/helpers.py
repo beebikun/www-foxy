@@ -8,8 +8,8 @@ import os
 import smtplib
 from tlvx.settings import CONN_SPAM
 
-_eng_chars = u'~!@#$%^&qwertyuiop[]asdfghjkl;\'zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?'
-_rus_chars = u'ё!\"№;%:?йцукенгшщзхъфывапролджэячсмитьбю.ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,'
+_eng_chars = u'~!@#$%^&qwertyuiop[]asdfghjkl;\'zxcvbnm,.QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?'
+_rus_chars = u'ё!\"№;%:?йцукенгшщзхъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,'
 _both_chars = u'.,'
 _trans_table = dict(zip(_eng_chars, _rus_chars))
 
