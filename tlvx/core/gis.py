@@ -26,7 +26,12 @@ def make_get(url):
 
 
 def get_gis_answer(url, city, street, num, street_alt, num_alt):
-    clear_num = lambda n: str(n).replace(' ', '').replace(u'стр', '').lower()
+    def clear(n):
+        if isinstance(n, basestring):
+            n = n.encode('utf-8', 'ignore').decode('ascii', 'ignore')
+        else:
+            n = str(n)
+        return n.lower().replace(' ', '').replace(u'стр', '')
     response = make_get(url)
     if response.get('total') != u'1':
         raise FieldError('Response is too long')
@@ -37,13 +42,15 @@ def get_gis_answer(url, city, street, num, street_alt, num_alt):
     # Проверяем, что в ответе город, улица и дом
     # совпадают с городом, улицей и домом в self
     attr = result.get('attributes', {})
-    result_num = clear_num(attr.get('number', ''))
-    result_num_alt = clear_num(attr.get('number2', ''))
+    clear_num = clear(num)
+    clear_num_alt = clear(num_alt)
+    result_num = clear(attr.get('number', ''))
+    result_num_alt = clear(attr.get('number2', ''))
     num_match = \
-        result_num == clear_num(num) \
-        or num_alt and result_num == clear_num(num_alt) \
-        or num_alt and result_num_alt == clear_num(num_alt) \
-        or result_num_alt == clear_num(num) \
+        result_num == clear_num \
+        or num_alt and result_num == clear_num_alt \
+        or num_alt and result_num_alt == clear_num_alt \
+        or result_num_alt == clear_num \
         or False
     street_match = \
         attr.get('street') == street \
