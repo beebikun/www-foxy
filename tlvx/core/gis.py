@@ -32,6 +32,10 @@ def get_gis_answer(url, city, street, num, street_alt, num_alt):
         else:
             n = str(n)
         return n.lower().replace(' ', '').replace(u'стр', '')
+
+    def clear_s(name=''):
+        return name.lower().replace(u'ё', u'е').replace(u'пер', '').strip()
+
     response = make_get(url)
     if response.get('total') != u'1':
         raise FieldError('Response is too long')
@@ -52,11 +56,15 @@ def get_gis_answer(url, city, street, num, street_alt, num_alt):
         or num_alt and result_num_alt == clear_num_alt \
         or result_num_alt == clear_num \
         or False
+    clear_street = clear_s(street)
+    clear_street_alt = clear_s(street_alt or '')
+    result_street = clear_s(attr.get('street', ''))
+    result_street_alt = clear_s(attr.get('street2', ''))
     street_match = \
-        attr.get('street') == street \
-        or street_alt and attr.get('street') == street_alt \
-        or attr.get('street2') == street \
-        or street_alt and attr.get('street2') == street_alt \
+        result_street == clear_street \
+        or clear_street_alt and result_street == clear_street_alt \
+        or result_street_alt == clear_street \
+        or clear_street_alt and result_street_alt == clear_street_alt \
         or False
     if attr.get('street') == u'Рёлочный пер' \
             and (street == u'пер. Рёлочный' or street_alt == u'пер. Рёлочный'):
