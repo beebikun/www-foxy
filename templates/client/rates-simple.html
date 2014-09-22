@@ -46,7 +46,7 @@
             {% if rates.active%}
             <div class="table-box some-item">
                 <div class="some-item-body">
-                    <div class="some-item-body-title">
+                    <div class="some-item-body-title rate-date">
                         Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
                     </div>
                     {% block rates-active %}
@@ -73,7 +73,7 @@
             {% for rates in data.result %}{% if not rates.active %}
                 <div class="table-box some-item">
                     <div class="some-item-body">
-                        <a class="some-item-body-title" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>
+                        <a class="some-item-body-title rate-date" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>
                             Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
                         </a>
                         <div class="some-item-body-text margin-top">

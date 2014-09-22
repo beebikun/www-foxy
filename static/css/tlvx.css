@@ -620,6 +620,10 @@ header section:last-child{
 /*--------News--------*/
 /*--------Internet (simple-pages)--------*/
 /*--------Rates--------*/
+.rate-date{
+	font-weight: normal;
+	font-size: .9em;
+}
 /* Tables */
 .rates-shapeover{
     position: relative;
