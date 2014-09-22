@@ -28,6 +28,7 @@ figcaption{
 .rates-shapeover .shapehover-item:last-child figcaption{
     background-color: #fe812f;
     height: 50px;
+    border-radius: 6px 6px 0 0;
 }
 
 .shapehover-item figure,
