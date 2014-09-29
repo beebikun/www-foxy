@@ -533,6 +533,12 @@ class Payment(models.Model):
     def __unicode__(self):
         return self.name
 
+    def points_addresses_iterator(self):
+        def addresses(points):
+            for p in points:
+                yield p.address
+        return addresses(self.points.iterator())
+
 
 class MarkerIcon(models.Model):
     name = models.CharField(max_length=256, unique=True)
