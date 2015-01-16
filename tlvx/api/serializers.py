@@ -163,6 +163,7 @@ class DoitSerializer(serializers.Serializer):
     flat = serializers.CharField(required=False, max_length=128)
     address = serializers.CharField(required=True)
     status = serializers.CharField(required=True)
+    is_action = serializers.BooleanField(required=False)
     source = serializers.CharField(required=False, max_length=512)
     comment = serializers.CharField(required=False, max_length=512)
     captcha_key = serializers.CharField(required=True, max_length=64)

@@ -115,6 +115,9 @@ input, select, input:active, select:active, input:focus, select:focus, input:hov
     border:1px solid ;
     box-shadow:none;
 }
+input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="checkbox"]:active{
+	margin-top: 4px;
+}
 input[type='text']:focus, input[type='email']:focus {
 	box-shadow: 0 0 2px #fe812f;
 	border-color:#fe812f;

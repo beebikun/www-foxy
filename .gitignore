@@ -17,3 +17,6 @@ static/css/bootstrap*
 static/fonts/
 olddb
 old-db
+templates/old_banner*
+*.backup
+*.dump

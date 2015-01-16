@@ -252,7 +252,9 @@ function doitOkBtnClick(e){
 
     inputs.forEach(function(input){
         var t = input.getAttribute('type');
-        if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ) data[input.getAttribute('name')] = input.value
+        if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ){
+            data[input.getAttribute('name')] = t == 'checkbox' ? input.checked : input.value
+        }
     });
     node2array( document.querySelectorAll('.btn') ).forEach(function(el){el.setAttribute('disabled', true) });
     request({
@@ -268,7 +270,6 @@ function doitOkBtnClick(e){
             });
             node2array( document.querySelectorAll('.help-error') ).forEach(function(el){showHideElBlock(el);});
             if(data.doit === undefined){
-                console.log(data)
                 for(var field in data){
                     var err = data[field];
                     var errInput = document.querySelector('[name=' + field + ']');

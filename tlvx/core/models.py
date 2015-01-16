@@ -701,14 +701,15 @@ class ConnRequest(models.Model):
     source = models.CharField(max_length=512, blank=True)
     comment = models.CharField(max_length=512, blank=True)
     is_send = models.BooleanField(default=False)
+    is_action = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True, blank=True)
     date_send = models.DateTimeField(default=None, blank=True)
 
     objects = ConnRequestManager()
 
     def send(self):
-        subject = u'%s (статус дома - %s)' % (
-            CONN_SPAM['subject'], self.status)
+        subject = u'%s (статус дома - %s) %s' % (
+            CONN_SPAM['subject'], self.status, u'АКЦИЯ' if self.is_action else u'')
         html = u"""\
                 <html>
                   <head>
