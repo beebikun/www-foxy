@@ -100,7 +100,6 @@ if __name__ == "__main__":
 
     from tlvx.helpers import sendEmail
     from tlvx.settings import CONN_SPAM
-
     from tlvx.core.models import Building, Payment
 
     argv = sys.argv
