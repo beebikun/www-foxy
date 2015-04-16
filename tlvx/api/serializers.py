@@ -155,8 +155,7 @@ class DoitSerializer(serializers.Serializer):
         required=True, max_length=128,
         error_messages=dict(required=u"Пожалуйста, укажите своё имя"))
     phone = serializers.CharField(
-        required=True, max_length=128,
-        error_messages=dict(required=u"Пожалуйста, укажите номер квартиры"))
+        required=False, max_length=128,)
     email = serializers.EmailField(
         required=False, max_length=128,
         error_messages={'invalid': u'Извините, но это не похоже на e-mail'})
