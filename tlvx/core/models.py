@@ -77,7 +77,7 @@ class BuildType(models.Model):
 
 class Square(models.Model):
     """
-    Номер квартала
+    Номер квартала.
     """
     num = models.IntegerField(unique=True)
 
