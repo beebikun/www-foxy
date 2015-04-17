@@ -1,0 +1,54 @@
+<div class="item" >
+    <ul class="list-group rate-item">
+        <li class="list-group-item rate-name" ><h3>{{name}}</h3></li>
+        <li class="list-group-item rate-main">
+            <div>
+                <div class="rate-price"><strong>{{payment}}</strong>руб/мес</div>
+                <div class="rate-speed"><strong>100</strong>Мб/с</div>
+            </div>
+            <a class="rate-comment help-block {% if bold %}selectedhref{% endif %}" href="{{href}}"  style="font-size:{{fz}};font-weight:{{bold}};">{{comment}}</a>
+        </li>
+        <li class="list-group-item feature">
+            <i class="fa fa-2x fa-tachometer fa-fw"></i>
+            <span class="feature-des normal-speed">
+                <span>с 18-00 до 00-00*<br> <strong>{{speed}} Мб/с</strong></span>
+            </span>
+        </li>
+
+        <li class="list-group-item feature">
+            <a href="{% url 'client-simple_content' page='iptv' %}">
+                <i class="fa fa-2x fa-desktop fa-fw"></i>
+                <span class="feature-des">
+                    <span><strong>99 каналов </strong> бесплатно</span>
+                </span>
+            </a>
+        </li>
+
+        <li class="list-group-item feature">
+            <a href="{% url 'client-simple_content' page='free-support' %}">
+                <i class="fa fa-2x fa-heart fa-fw"></i>
+                <span class="feature-des">
+                    <span><strong>Круглосуточная техподдержка </strong> бесплатно</span>
+                </span>
+            </a> 
+        </li>
+
+        <li class="list-group-item feature">
+            <a href="{% url 'client-faq' %}#sms_notification"> 
+                <i class="fa fa-2x fa-envelope fa-fw"></i>
+                <span class="feature-des">
+                    <span><strong>SMS-оповещение </strong>бесплатно</span>
+                </span>
+            </a>
+        </li>
+
+        <li class="list-group-item feature">
+            <a href="{% url 'client-payment' name='limit' %}">
+                <i class="fa fa-2x fa-smile-o fa-fw"></i>
+                <span class="feature-des">
+                    <span><strong> Обещанный платеж</a></strong></span>
+                </span>
+            </a>
+        </li>
+    </ul>
+</div>

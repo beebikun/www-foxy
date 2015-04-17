@@ -1,144 +1,64 @@
 {% extends "client/rates-simple.html" %}
 
 {% block rates-active %}
-<!-- <div style="margin-top:10px; font-weight: bold">100 Мбит/сек без ограничений в рабочие дни с 02-00 до 18-00*</div> -->
-<h3 style="font-weight: bold; font-size: 22px;">100 Мбит/сек без ограничений в рабочие дни с 02-00 до 18-00*</h3>
-<div class="rates-shapeover">
-    <section class="shapehover-section">
-        <div class="shapehover-item">
-            <figure>
-                <div class="shapehover-item-inner"></div>
-                <figcaption>
-                    <h2>Тарифы</h2>
-                </figcaption>
-            </figure>
-        </div>
+<!-- <div style="margin-top:10px; font-weight: bold">100 Мб/с без ограничений в рабочие дни с 02-00 до 18-00*</div> -->
+<!-- id="carousel-example-generic" class="carousel slide" data-ride="carousel" -->
+<div class="rates-100m">  
+    
+{% include "client/rates100m.html" with name="Люкс" speed="30" comment="Подробнее.." payment="500" href="http://www.tlvx.ru/!/internet-na-vse-100" bold="bold"%}
+{% include "client/rates100m.html" with name="Стандарт" speed="10" comment="Тариф доступен только для перехода" payment="690" href="http://tlvx.ru/!/how#change-rate"%}
+{% include "client/rates100m.html" with name="Комфорт" speed="18" comment="Тариф доступен только для перехода" payment="990" href="http://tlvx.ru/!/how#change-rate"%}
+{% include "client/rates100m.html" with name="Престиж" speed="28" comment="Тариф доступен только для перехода" payment="1490" href="http://tlvx.ru/!/how#change-rate"%}
 
-        <div class="shapehover-item" data-path-hover="m 0,0 0,275 c 24.580441,15.47138 55.897012,24.75772 90,24.75772 34.10299,0 65.41956,-9.28634 90,-24.75772 L 180,0 0,0 z">
-            <figure>
-                <div class="shapehover-item-inner"></div>
-                <svg viewBox="0 0 180 320" preserveAspectRatio="none">
-                    <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
-                <figcaption>
-                    {% with data.header.first as header %}
-                    <h2>{{header.display_name}}</h2>
-                    <div class="figcaption-detail">
-                        {{header.content|safe}}
-                    </div>
-                    {% endwith %}
-                </figcaption>
-            </figure>
-        </div>
+    <div class="feature-des-sum">
+        <ul class="list-group rate-item">       
+            <li class="list-group-item feature">
+                <a href="{% url 'client-simple_content' page='iptv' %}">
+                    <i class="fa fa-2x fa-desktop fa-fw"></i>
+                    <span class="feature-des">
+                        <span><strong>99 каналов </strong> бесплатно</span>
+                    </span>
+                </a>
+            </li>
 
-        <div class="shapehover-item" data-path-hover="m 0,0 0,275 c 24.580441,15.47138 55.897012,24.75772 90,24.75772 34.10299,0 65.41956,-9.28634 90,-24.75772 L 180,0 0,0 z">
-            <figure>
-                <div class="shapehover-item-inner"></div>
-                <svg viewBox="0 0 180 320" preserveAspectRatio="none">
-                    <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
-                <figcaption>
-                    {% with data.header.second as header %}
-                    <h2>{{header.display_name}}</h2>
-                    <div class="figcaption-detail">
-                        {{header.content|safe}}
-                    </div>
-                    {% endwith %}
-                </figcaption>
-            </figure>
-        </div>
+            <li class="list-group-item feature">
+                <a href="{% url 'client-simple_content' page='free-support' %}">
+                    <i class="fa fa-2x fa-heart fa-fw"></i>
+                    <span class="feature-des">
+                        <span><strong>Круглосуточная техподдержка </strong> бесплатно</span>
+                    </span>
+                </a> 
+            </li>
 
-        <div class="shapehover-item" data-path-hover="m 0,0 0,275 c 24.580441,15.47138 55.897012,24.75772 90,24.75772 34.10299,0 65.41956,-9.28634 90,-24.75772 L 180,0 0,0 z">
-            <figure>
-                <div class="shapehover-item-inner"></div>
-                <svg viewBox="0 0 180 320" preserveAspectRatio="none">
-                    <path d="m 0,0 0,70 c 24.580441,0 55.897012,0 90,0 34.10299,0 65.41956,0 90,0 L 180,0, 0,0 z"/></svg>
-                <figcaption>
-                    {% with data.header.third as header %}
-                    <h2>{{header.display_name}}</h2>
-                    <div class="figcaption-detail">
-                        {{header.content|safe}}
-                    </div>
-                    {% endwith %}
-                </figcaption>
-            </figure>
-        </div>
+            <li class="list-group-item feature">
+                <a href="{% url 'client-faq' %}#sms_notification"> 
+                    <i class="fa fa-2x fa-envelope fa-fw"></i>
+                    <span class="feature-des">
+                        <span><strong>SMS-оповещение </strong>бесплатно</span>
+                    </span>
+                </a>
+            </li>
 
-        <div class="shapehover-item" >
-            <figure>
-                <figcaption>
-                    <h2>Абонентская плата</h2>
-                </figcaption>
-            </figure>
-        </div>
-    </section>
+            <li class="list-group-item feature">
+                <a href="{% url 'client-payment' name='limit' %}">
+                    <i class="fa fa-2x fa-smile-o fa-fw"></i>
+                    <span class="feature-des">
+                        <span><strong> Обещанный платеж</a></strong></span>
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
-    <section>
-        {{ rates.tables|safe }}
-    </section>
 </div>
+<div>
+    <p class="help-block">*с 18-00 до 00-00 в рабочие дни и с 12-00 до 00-00 в выходные и праздничные дни</p>
+    <p class="help-block">Скорость доступа к сети может отличаться от заявленной на 15% и только на сети Оператора, за ее пределами отклонение может быть значительно большим.</p>
+    <p class="help-block">При недостатке денежных средств на лицевом счете происходит блокировка, для разблокировки счета необходимо внести полную сумму ежемесячной абонентской платы.</p>
+    <p class="help-block">Все цены указаны в рублях с учетом всех налогов.</p>
+</div>
+
+
 {% endblock %}
 {% block helptext %}
-<!-- Подкарусельковый текст -->
-<br>
-<br>
-<div class="paymentWays">
-    <strong class="orange">Бесплатно на каждом тарифе:</strong>
-    <br>
-    <br>
-
-    <a class="text-left payment-items" href="{% url 'client-faq' %}#sms_notification">
-        <div class="icon-box">
-            <i class="fa fa-3x fa-envelope" ></i>
-        </div><!-- /.icon-box -->
-        <div class="payment-items-right">
-            <div class="payment-items-name"> SMS-оповещение </div>
-            <span class="payment-items-description">
-                Узнавайте вовремя о необходимости пополнения счета</span>
-        </div><!-- /.payment-items-right -->
-    </a><!-- /.text-left.payment-items -->
-
-    <a class="text-left payment-items" href="{% url 'client-payment' name='limit' %}">
-        <div class="icon-box">
-            <i class="fa fa-3x fa-smile-o" ></i>
-        </div><!-- /.icon-box -->
-        <div class="payment-items-right">
-            <div class="payment-items-name"> Обещанный платеж </div>
-            <span class="payment-items-description">
-                Кредит, который вы можете взять для пополнения своего счета</span>
-        </div><!-- /.payment-items-right -->
-    </a><!-- /.text-left.payment-items -->
-
-    <a class="text-left payment-items" href="{% url 'client-simple_content' page='free-support' %}">
-        <div class="icon-box">
-            <i class="fa fa-3x fa-heart" ></i>
-        </div><!-- /.icon-box -->
-        <div class="payment-items-right">
-            <div class="payment-items-name"> Круглосуточная поддержка </div>
-            <span class="payment-items-description">
-                Круглосуточная техподдержка по телефону</span>
-        </div><!-- /.payment-items-right -->
-    </a><!-- /.text-left.payment-items -->
-
-    <a class="text-left payment-items" href="{% url 'client-simple_content' page='free-support' %}">
-        <div class="icon-box">
-            <i class="fa fa-3x fa-sitemap" ></i>
-        </div><!-- /.icon-box -->
-        <div class="payment-items-right">
-            <div class="payment-items-name"> Файлообменная сеть DC++ </div>
-            <span class="payment-items-description">
-                Скачивайте фильмы, музыку и игры на скорости 100 Мбит/с</span>
-        </div><!-- /.payment-items-right -->
-    </a><!-- /.text-left.payment-items -->
-
-    <a class="text-left payment-items" href="{% url 'client-simple_content' page='free-support' %}">
-        <div class="icon-box">
-            <i class="fa fa-3x fa-film" ></i>
-        </div><!-- /.icon-box -->
-        <div class="payment-items-right">
-            <div class="payment-items-name"> Хаб телевокс онлайн </div>
-            <span class="payment-items-description">
-                Смотри фильмы на скорости 100 Мбит/с</span>
-        </div><!-- /.payment-items-right -->
-    </a><!-- /.text-left.payment-items -->
-
-</div> <!-- .ratesAdv -->
 {% endblock %}
