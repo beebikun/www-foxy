@@ -293,12 +293,15 @@ def rates(request):
                  template='rates', additional_data=additional_data).response
 
 
-def rates_tests(request):
-    return Rates(request, name='p', template='__ratestests').response
+def rates_jp(request):
+    """Rates for jp"""
+    additional_data = dict(docs=models.StaticPage.objects.get(name="jp-docs"))
+    return Rates(request, name='jp',
+                 template='rates-jp', additional_data=additional_data).response
 
 
 def rates_simple(request, name):
-    """Тарифы для юр лиц и прочее"""
+    """прочее"""
     return Rates(request, name).response
 
 
