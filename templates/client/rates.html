@@ -1,17 +1,61 @@
 {% extends "client/rates-simple.html" %}
-
 {% block rates-active %}
+<style type="text/css">
+    .rates-100m .rate-item{
+        width: 161px;
+    }
+    @media (min-width: 711px){
+        .rates-100m .rate-item{
+            width: 229px!important;
+        }
+    }
+    @media (max-width: 720px){
+        .rates-100m .rate-item {
+          height: 196px;
+        }
+    }
+    @media (min-width: 550px) and (max-width: 710px){
+        .rates-100m .item{
+            width: 30%;
+        }
+        .rates-100m .rate-item{
+            width: 100%;
+        }
+        .rates-100m{
+            max-width: none;
+        }
+    }
+    @media (max-width: 549px){
+        .rates-100m .rate-item{
+            width: 100%;
+        }
+        .rates-100m .item{
+            float: none;
+            display: inline-block;
+        }
+        .rates-100m{
+            text-align: center;
+        }
+    }
+    @media (max-width: 500px){
+        .rates-100m .item {
+          float: none;
+        }
+    }
+</style>
 <!-- <div style="margin-top:10px; font-weight: bold">100 Мб/с без ограничений в рабочие дни с 02-00 до 18-00*</div> -->
 <!-- id="carousel-example-generic" class="carousel slide" data-ride="carousel" -->
-<div class="rates-100m">  
-    
+<div class="rates-100m">
+
+{%comment%}
 {% include "client/rates100m.html" with name="Люкс" speed="30" comment="Подробнее.." payment="500" href="http://www.tlvx.ru/!/internet-na-vse-100" bold="bold"%}
+{%endcomment%}
 {% include "client/rates100m.html" with name="Стандарт" speed="10" comment="Тариф доступен только для перехода" payment="690" href="http://tlvx.ru/!/how#change-rate"%}
 {% include "client/rates100m.html" with name="Комфорт" speed="18" comment="Тариф доступен только для перехода" payment="990" href="http://tlvx.ru/!/how#change-rate"%}
 {% include "client/rates100m.html" with name="Престиж" speed="28" comment="Тариф доступен только для перехода" payment="1490" href="http://tlvx.ru/!/how#change-rate"%}
 
     <div class="feature-des-sum">
-        <ul class="list-group rate-item">       
+        <ul class="list-group rate-item">
             <li class="list-group-item feature">
                 <a href="{% url 'client-simple_content' page='iptv' %}">
                     <i class="fa fa-2x fa-desktop fa-fw"></i>
@@ -27,11 +71,11 @@
                     <span class="feature-des">
                         <span><strong>Круглосуточная техподдержка </strong> бесплатно</span>
                     </span>
-                </a> 
+                </a>
             </li>
 
             <li class="list-group-item feature">
-                <a href="{% url 'client-faq' %}#sms_notification"> 
+                <a href="{% url 'client-faq' %}#sms_notification">
                     <i class="fa fa-2x fa-envelope fa-fw"></i>
                     <span class="feature-des">
                         <span><strong>SMS-оповещение </strong>бесплатно</span>
