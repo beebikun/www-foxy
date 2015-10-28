@@ -9,7 +9,7 @@ class BuildingsDetailRequestForm(forms.Form):
 
 
 class StreetRequestForm(forms.Form):
-    name = forms.CharField(required=False, label=u'')
+    name = forms.CharField(required=True, label=u'')
 
 
 class NoteRequestForm(forms.Form):
@@ -21,3 +21,8 @@ class NoteRequestForm(forms.Form):
 class BGLimitForm(forms.Form):
     pswd = forms.CharField(required=False, label=u'Номер договора')
     user = forms.CharField(required=False, label=u'Пароль')
+
+
+class NewsRequestForm(forms.Form):
+    page = forms.IntegerField(required=False, label=u'')
+    pk = forms.IntegerField(required=False, label=u'')

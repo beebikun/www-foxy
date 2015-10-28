@@ -7,12 +7,11 @@ from rest_framework import permissions
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
+from tlvx import helpers, settings
 from tlvx.api import bg
 from tlvx.api import response as project_api_response
 from tlvx.api import serializers, forms
 from tlvx.core import models
-from tlvx.helpers import change_keyboard
-from tlvx.settings import MEDIA_ROOT
 
 
 class InvalidRequestException(Exception):
@@ -64,7 +63,7 @@ class StreetRoot(ApiRoot):
         params = self.validate_and_get_params(
             forms.StreetRequestForm, request.QUERY_PARAMS)
         objects = set(self.get_object(params['name']) +
-                      self.get_object(change_keyboard(params['name'])))
+                      self.get_object(helpers.change_keyboard(params['name'])))
         data = [self.get_data(obj) for obj in objects]
         return project_api_response.Response(data)
 
@@ -167,7 +166,7 @@ class CaptchaRoot(ApiRoot):
 
     def get_data(self, orig_obj, key, request):
         new_obj = self.clone_model.create(
-            key=key, img=File(open(MEDIA_ROOT+'/'+orig_obj.img.name)),
+            key=key, img=File(open(settings.MEDIA_ROOT+'/'+orig_obj.img.name)),
             right=orig_obj.right)
         root_url = reverse('client-index', request=request)
         return dict(
@@ -181,4 +180,18 @@ class CaptchaRoot(ApiRoot):
         data = dict(
             key=key,
             images=[self.get_data(obj, key, request) for obj in objects])
+        return project_api_response.Response(data)
+
+
+class NewsRoot(ApiRoot):
+    def get_data(self, obj):
+        return serializers.StreetSerializer(instance=obj).data
+
+    def get(self, request, format=None,):
+        params = self.validate_and_get_params(
+            forms.NewsRequestForm, request.QUERY_PARAMS)
+        data = helpers.get_news(
+            srlz=serializers.NoteSerializer, model=models.Note,
+            **params
+        )
         return project_api_response.Response(data)

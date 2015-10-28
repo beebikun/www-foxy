@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-import math
 import re
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
-from django.utils import timezone
-from tlvx import settings
+from tlvx import helpers
 from tlvx.api import serializers
 from tlvx.core import models
-from tlvx.helpers import change_keyboard
 
 
 def is_gray_ip(ip):
@@ -31,49 +28,6 @@ def is_gray_ip(ip):
     if A == 192 and B == 168:
         return True
     return False
-
-
-def paginator(count, cur):
-    """Утилита для паджинатора(страница новости).
-    Паджинатор представляет собой уи, в котором можно перейти на
-    страницу вперед, на страницу назад, в нем отображается текущая страница,
-    а также некоторое количество(settings.PAGINATOR_PAGE) страниц, соседних
-    с текущей. Остальные страницы заменены на (..).
-    Т.е, паджинатор имеет вид
-    <-(1)(...)(10)(11)(12)(...)(LAST)->
-    Так вот, данная функция считает и возвращает список номеров страниц,
-    которые будут отображаться вместо (10)(11)(12).
-    Args:
-        - count - int, количество страниц всего
-        - cur - int, номер текущей страницы
-    Returns:
-        Список из int
-    """
-    #Проверяем, что settings.PAGINATOR_PAGE - нечетное. иначе - отнимаем 1
-    paginator_page = settings.PAGINATOR_PAGE if (
-        settings.PAGINATOR_PAGE % 2) else settings.PAGINATOR_PAGE - 1
-    #Определяем действительное количество отображаемых страниц
-    #Для этого отнимает 4 страницы(вперед, назад, (...), (...))
-    displayP = paginator_page - 4
-    empty = ['...']
-    #Определяем, какое количество страниц будет отображаться справа
-    #и слева от текущей
-    half = (displayP-1)/2
-    left = cur - half  # левый край
-    right = cur + half + 1  # правый край
-    left_end = count - displayP + 1  # от конца и назад
-    right_start = displayP + 1  # от начала и вперед
-    if left_end <= 2 and right_start >= count:
-        pages = range(2, count)
-    elif left <= 2:  # для случаев <-(1)(2)(3)(...)(LAST)->
-        pages = range(2, right_start) + empty
-    elif right >= count:  # для случаев <-(1)(...)(51)(52)(53)->
-        pages = empty + range(left_end, count)
-    else:  # для случаев <-(1)(...)(10)(11)(12)(...)(53)->
-        pages = empty + range(left, right) + empty
-    if count > 1:
-        pages.append(count)
-    return [1] + pages
 
 
 def my_response(request, context={}, name=''):
@@ -182,7 +136,7 @@ def letsfox(request):
     """
     strt = request.POST.get('street', '')
     params = dict(
-        street=change_keyboard(strt) if strt else strt,
+        street=helpers.change_keyboard(strt) if strt else strt,
         num=request.POST.get('num', ''))
 
     def get_data(obj, result=False):
@@ -221,34 +175,9 @@ def letsfox(request):
 
 def news(request, pk=None, template='news', additional_data=None):
     """Возвращаеи страницу со списком новостей. Также используется в index"""
-    get_data = lambda obj: serializers.NoteSerializer(instance=obj).data
-    data = dict()
-    if not pk:
-        #Возвращаем требуемое settings.NOTE_COUNT
-        #новостей на требуемой странице
-        try:
-            #Вместо page может быть прислана фигня, поэтому лучше проверить
-            page = int(request.GET.get('page', 1))
-        except ValueError:
-            page = 1
-        params = dict(count=settings.NOTE_COUNT, page=page)
-        first = params['count']*(params['page']-1)
-        end = params['count']*params['page']
-        notes = models.Note.objects.filter(date__lte=timezone.now()
-            ).order_by('num', '-date')
-        objects = notes[first:end]
-        data.update(
-            page=params['page'],
-            page_count=int(math.ceil(notes.count()/float(params['count'])))
-        )
-        #Следующие 3 поля - для пэйджинатора, чтобы не делать этого в клиенте
-        data['display_page'] = paginator(data['page_count'], data['page'])
-        data['prev_page'] = max(1, data['page']-1)
-        data['next_page'] = min(data['page']+1, data['page_count'])
-    else:
-        #Возвращаем требуемую нововсть
-        objects = [get_object_or_404(models.Note, pk=pk)]
-    data['result'] = map(get_data, objects)
+    data = helpers.get_news(
+        srlz=serializers.NoteSerializer, model=models.Note,
+        page=request.GET.get('page', 1), pk=pk)
     if additional_data:
         #Т.к эту же функцию использует еще и index, то есть возможность
         #запихать в контекст что-нибудь еще
