@@ -105,9 +105,11 @@ def get_news(srlz, model, page=1, pk=None, count=None):
     if not pk:
         #Возвращаем требуемое settings.NOTE_COUNT
         #новостей на требуемой странице
-        params = dict(
-            count=count or settings.NOTE_COUNT,
-            page=page if isinstance(page, int) else 1)
+        try:
+            page = int(page)
+        except ValueError:
+            page = 1
+        params = dict(count=count or settings.NOTE_COUNT, page=page)
         first = params['count']*(params['page']-1)
         end = params['count']*params['page']
         notes = model.objects.filter(
