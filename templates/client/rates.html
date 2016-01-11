@@ -3,7 +3,7 @@
 <style type="text/css">
     .rates-100m .rate-item{
         width: 161px;
-        height: 450px;
+        height: 580px;
     }
     @media (min-width: 711px){
         .rates-100m .rate-item{
@@ -13,6 +13,9 @@
     @media (max-width: 720px){
         .rates-100m .rate-item {
           height: 196px;
+        }
+        .feature-des-sum .rate-item{
+            height: auto;
         }
     }
     @media (min-width: 550px) and (max-width: 710px){
@@ -57,47 +60,13 @@
 
     <div class="feature-des-sum">
         <ul class="list-group rate-item">
-            <li class="list-group-item feature">
-                <a href="{% url 'client-simple_content' page='iptv' %}">
-                    <i class="fa fa-2x fa-desktop fa-fw"></i>
-                    <span class="feature-des">
-                        <span><strong>99 каналов </strong> бесплатно</span>
-                    </span>
-                </a>
-            </li>
-
-            <li class="list-group-item feature">
-                <a href="{% url 'client-simple_content' page='free-support' %}">
-                    <i class="fa fa-2x fa-heart fa-fw"></i>
-                    <span class="feature-des">
-                        <span><strong>Круглосуточная техподдержка </strong> бесплатно</span>
-                    </span>
-                </a>
-            </li>
-
-            <li class="list-group-item feature">
-                <a href="{% url 'client-faq' %}#sms_notification">
-                    <i class="fa fa-2x fa-envelope fa-fw"></i>
-                    <span class="feature-des">
-                        <span><strong>SMS-оповещение </strong>бесплатно</span>
-                    </span>
-                </a>
-            </li>
-
-            <li class="list-group-item feature">
-                <a href="{% url 'client-payment' name='limit' %}">
-                    <i class="fa fa-2x fa-smile-o fa-fw"></i>
-                    <span class="feature-des">
-                        <span><strong> Обещанный платеж</a></strong></span>
-                    </span>
-                </a>
-            </li>
+            {% include "client/rates-feature-list.html" %}
         </ul>
     </div>
 
 </div>
 <div>
-    <p class="help-block">*с 18-00 до 00-00 в рабочие дни и с 12-00 до 00-00 в выходные и праздничные дни</p>
+    {%comment%} <p class="help-block">*с 18-00 до 00-00 в рабочие дни и с 12-00 до 00-00 в выходные и праздничные дни</p>{%endcomment%}
     <p class="help-block">Скорость доступа к сети может отличаться от заявленной на 15% и только на сети Оператора, за ее пределами отклонение может быть значительно большим.</p>
     <p class="help-block">Количество каналов может изменяться.</p>
     <p class="help-block">При недостатке денежных средств на лицевом счете происходит блокировка, для разблокировки счета необходимо внести полную сумму ежемесячной абонентской платы.</p>
