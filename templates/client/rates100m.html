@@ -1,14 +1,14 @@
 <div class="item" >
-    <ul class="list-group rate-item">
+    <ul class="list-group rate-item {{class}}">
         <li class="list-group-item rate-name" ><h3>{{name}}</h3></li>
         <li class="list-group-item rate-main">
             <div>
                 <div class="rate-price"><strong>{{payment}}</strong>руб/мес</div>
                 <div class="rate-speed"><strong>100</strong>Мб/с</div>
             </div>
-            {%comment%}
+            {% if comment %}
             <a class="rate-comment help-block {% if bold %}selectedhref{% endif %}" href="{{href}}"  style="font-size:{{fz}};font-weight:{{bold}};">{{comment}}</a>
-            {%endcomment%}
+            {% endif %}
         </li>
         <li class="list-group-item feature">
             <i class="fa fa-2x fa-tachometer fa-fw"></i>
