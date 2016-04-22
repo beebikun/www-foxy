@@ -2,26 +2,16 @@
 {% block rates-active %}
 <style type="text/css">
     .rates-100m .rate-item{
-        /*width: 161px;*/
-        /*height: 580px;*/
-        height: 617px;
+        width: 161px;
+        height: 580px;
     }
-    .rate-middle .rate-main{
-        padding-top: 29px;
-        padding-bottom: 28px;
-    }
-    .green .rate-name{background-color: #90b847!important}
-    .green .rate-comment{color: #90b847!important;}
-    .green .rate-price{border-left-color: #90b847!important;}
-    .green .rate-speed{border-right-color: #90b847!important;}
     @media (min-width: 711px){
         .rates-100m .rate-item{
-            /*width: 229px!important;*/
+            width: 229px!important;
         }
     }
     @media (max-width: 720px){
         .rates-100m .rate-item {
-          /*height: 196px;*/
           height: 234px;
         }
         .feature-des-sum .rate-item{
@@ -30,14 +20,13 @@
     }
     @media (min-width: 550px) and (max-width: 710px){
         .rates-100m .item{
-            /*width: 30%;*/
-            /*width: 24%;*/
+            width: 30%;
         }
         .rates-100m .rate-item{
             width: 100%;
         }
         .rates-100m{
-            /*max-width: none;*/
+            max-width: none;
         }
     }
     @media (max-width: 549px){
@@ -62,7 +51,10 @@
 <!-- id="carousel-example-generic" class="carousel slide" data-ride="carousel" -->
 <div class="rates-100m">
 
+{% comment %}
 {% include "client/rates100m.html" with name="Весна" speed="40" comment="Подробнее.." payment="400" href="http://www.tlvx.ru/!/vesna" bold="bold" class="green" %}
+{% endcomment %}
+
 {% include "client/rates100m.html" with name="Стандарт" speed="15" payment="690" href="http://tlvx.ru/!/how#change-rate" class="rate-middle" %}
 {% include "client/rates100m.html" with name="Комфорт" speed="25" payment="990" href="http://tlvx.ru/!/how#change-rate" class="rate-middle" %}
 {% include "client/rates100m.html" with name="Престиж" speed="40" payment="1490" href="http://tlvx.ru/!/how#change-rate" class="rate-middle" %}
