@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+from django.db.models import Q
 import re
 import uuid
 from django.core.exceptions import FieldError
@@ -714,6 +715,14 @@ class ConnRequest(models.Model):
     objects = ConnRequestManager()
 
     def send(self):
+        address = self.address.split(',')
+        second_address = ''
+        street = address[0].strip()
+        num = address[1].strip() if len(address) > 1 else ''
+        building = Building.objects.filter(
+            Q(street__name=street, num=num) | Q(street_alt__name=street, num_alt=num)).first()
+        if building:
+            second_address = building.get_address_alt()
         subject = u'%s (статус дома - %s) %s' % (
             CONN_SPAM['subject'], self.status, u'АКЦИЯ' if self.is_action else u'')
         html = u"""\
@@ -753,9 +762,10 @@ class ConnRequest(models.Model):
                   </body>
                 </html>
                 """ % {
-            'fio': self.fio, 'address': self.address, 'flat': self.flat,
+            'fio': self.fio, 'address': u'%s/%s ' % (self.address, second_address), 'flat': self.flat,
             'phone': self.phone, 'email': self.email,
             'source': self.source, 'comment': self.comment}
+        #print second_address
         sendEmail(subject, html)
         self.is_send = True
         self.date_send = timezone.now()
