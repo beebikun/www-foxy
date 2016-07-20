@@ -590,8 +590,8 @@ header section:last-child{
 	font-weight: normal;
 	text-align: center;
 	display: inline-block;
-	width: 20%;
-	margin-left: 10%;
+	width: 45%;
+	margin-left: 4%;
 	text-decoration: underline;
 }
 .content-menu>a:hover{
