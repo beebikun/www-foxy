@@ -36,9 +36,11 @@
 {% block main-top-left %}
 <div id="ratesCont" class="content">
     <div class="content-menu">
-        <a href="{% url 'client-rates' %}">Физ лица</a>
+        <a href="{% url 'client-rates' %}">Интернет для дома</a>
+        {% comment %}
         <a href="{% url 'client-ratessimple' name='jp' %}">Юр лица</a>
-        <a href="{% url 'client-ratessimple' name='other' %}">Доп услуги</a>
+        {% endcomment %}
+        <a href="{% url 'client-ratessimple' name='other' %}">Дополнительные услуги</a>
     </div>
 
     <div>
