@@ -54,7 +54,7 @@ urlpatterns = patterns(
     #Тарифы
 
     url(r'^!/rates/?$', 'tlvx.views.rates', name='client-rates'),
-    url(r'^!/rates/jp/?$', 'tlvx.views.rates_jp', name='client-ratesjp'),
+    #url(r'^!/rates/jp/?$', 'tlvx.views.rates_jp', name='client-ratesjp'),
     url(r'^!/rates/(?P<name>\w+)/$', 'tlvx.views.rates_simple',
         name='client-ratessimple'),
 
