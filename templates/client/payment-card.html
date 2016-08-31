@@ -37,7 +37,7 @@
 
 <!-- Оператор -->
         <div class="some-item">
-            <a class="some-item-body"  {% ifnotequal payment.name "ДВ-пэй" %}data-toggle="modal" href="#modal{{ payment.id }}"{% else %}href="http://tlvxplat.ru/index.html"{% endifnotequal %}   >
+            <a class="some-item-body"  {% ifnotequal payment.name "ДВ-пэй" %}data-toggle="modal" href="#modal{{ payment.id }}"{% else %}href="http://www.h-pay.ru/pay/televox.html"{% endifnotequal %}   >
                 <span class="some-item-body-title">{{ payment.name|safe }}</span>
                 <div class="some-item-body-text">
                     {{ payment.hint_line|safe }}
