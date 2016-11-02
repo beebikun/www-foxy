@@ -11,7 +11,11 @@
     <a href="{% url 'client-simple_content' page='iptv' %}">
         <i class="fa fa-2x fa-desktop fa-fw"></i>
         <span class="feature-des">
-            <span><strong>200 каналов </strong> бесплатно</span>
+            {% if tv %}
+            <span><strong>5 терминалов</strong> бесплатно</span>
+            {% else %}
+            <span><strong>200 каналов</strong> бесплатно</span>
+            {% endif %}
         </span>
     </a>
 </li>
@@ -19,11 +23,19 @@
 <li class="list-group-item feature">
     <i class="fa fa-2x fa-youtube fa-fw"></i>
     <span class="feature-des">
+        {% if tv %}
+        <span>
+            Доступ к
+            <div><a href="https://www.youtube.com/">YouTube</a>,&nbsp
+            <a href="http://www.ivi.ru/">IVI.ru</a><br></div>
+        </span>
+        {% else %}
         <span>
             <a href="https://www.youtube.com/">YouTube</a>,&nbsp
             <a href="http://www.ivi.ru/">IVI.ru</a><br>
             100Мб/с круглосуточно
         </span>
+        {% endif %}
     </span>
 </li>
 

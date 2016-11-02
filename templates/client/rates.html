@@ -1,18 +1,35 @@
 {% extends "client/rates-simple.html" %}
 {% block rates-active %}
 <style type="text/css">
-    .rates-100m .rate-item{
-        width: 161px;
-        height: 580px;
+    .rates-100m .rate-item .rate-speed strong {
+        font-size: 35px;
     }
+    .rates-100m .rate-item .rate-main {
+        font-size: 11px;
+    }
+    .rates-100m .rate-item .rate-speed {
+        margin-left: 1px;
+    }
+    .rates-100m .rate-item{
+        /*width: 161px;*/
+        /*height: 580px;*/
+        height: 637px;
+    }
+    .navy .rate-name{background-color: #00B4AA!important}
+    .navy .rate-comment{color: #00B4AA!important;}
+    .navy .rate-comment:hover{text-decoration: underline;}
+    .navy .rate-price{border-left-color: #00B4AA!important;}
+    .navy .rate-speed{border-right-color: #00B4AA!important;}
+    .navy a:hover{color: #00B4AA!important;}
     @media (min-width: 711px){
         .rates-100m .rate-item{
-            width: 229px!important;
+            /*width: 229px!important;*/
         }
     }
     @media (max-width: 720px){
         .rates-100m .rate-item {
-          height: 195px;
+          /*height: 195px;*/
+          height: 185px;
         }
         .feature-des-sum .rate-item{
             height: auto;
@@ -20,7 +37,10 @@
     }
     @media (min-width: 550px) and (max-width: 710px){
         .rates-100m .item{
-            width: 30%;
+            width: 24%;
+        }
+        .rates-100m .rate-item .rate-speed strong {
+            font-size: 32px;
         }
         .rates-100m .rate-item{
             width: 100%;
@@ -47,13 +67,13 @@
         }
     }
 </style>
-<!-- <div style="margin-top:10px; font-weight: bold">100 Мб/с без ограничений в рабочие дни с 02-00 до 18-00*</div> -->
-<!-- id="carousel-example-generic" class="carousel slide" data-ride="carousel" -->
+{% comment %}
+<!-- <div style="margin-top:10px; font-weight: bold">100 Мб/с без ограничений в рабочие дни с 02-00 до 18-00*</div>
+  id="carousel-example-generic" class="carousel slide" data-ride="carousel" -->
+{% endcomment %}
 <div class="rates-100m">
 
-{% comment %}
-{% include "client/rates100m.html" with name="Весна" speed="40" comment="Подробнее.." payment="400" href="http://www.tlvx.ru/!/vesna" bold="bold" class="green" %}
-{% endcomment %}
+{% include "client/rates100m.html" with name="TelevoxTV" payment="250" href="http://www.tlvx.ru/!/vesna" bold="bold" class="navy" tv="true" %}
 
 {% include "client/rates100m.html" with name="Стандарт" speed="15" payment="690" href="http://tlvx.ru/!/how#change-rate" class="rate-middle" %}
 {% include "client/rates100m.html" with name="Комфорт" speed="25" payment="990" href="http://tlvx.ru/!/how#change-rate" class="rate-middle" %}
