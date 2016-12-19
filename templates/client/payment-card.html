@@ -12,9 +12,25 @@
 
 {% block payment %}
 <div id="payment-card">
-    {% for payment in data %}
-        {% ifnotequal payment.name "ДВ-пэй" %}
-<!-- Модальное окно с описанием способа оплаты оператора -->
+    {% with payment=data.9 %}
+        <!-- ДВ Пей-->
+        <!-- Оператор-->
+        <div class="some-item">
+            <a class="some-item-body" href="http://www.h-pay.ru/pay/televox.html">
+                <span class="some-item-body-title">{{ payment.name|safe }}</span>
+                <div class="some-item-body-text">
+                    {{ payment.hint_line|safe }}
+                    <div class="how-play-btn">
+                        Оплатить
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endwith %}
+ 
+    {% with payment=data.8 %}
+        <!-- ВТБ-->
+        <!-- Модальное окно с описанием способа оплаты оператора -->
         <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -33,35 +49,57 @@
                 </div>
             </div>
         </div>
-        {% endifnotequal %}
-
-<!-- Оператор -->
+        <!-- Оператор -->
         <div class="some-item">
-            <a class="some-item-body"  {% ifnotequal payment.name "ДВ-пэй" %}data-toggle="modal" href="#modal{{ payment.id }}"{% else %}href="http://www.h-pay.ru/pay/televox.html"{% endifnotequal %}   >
+            <a class="some-item-body" data-toggle="modal" href="#modal{{ payment.id }}">
                 <span class="some-item-body-title">{{ payment.name|safe }}</span>
                 <div class="some-item-body-text">
                     {{ payment.hint_line|safe }}
                     <div class="how-play-btn">
-                        {% ifnotequal payment.name "ДВ-пэй" %}Как оплатить{% else %}Оплатить{% endifnotequal %}
+                        Как оплатить
                     </div>
                 </div>
             </a>
         </div>
-    {% endfor %}
-
-    {% comment %}
-<!-- Не совсем помню, что это за оператор -->
-    <div class="some-item">
-        <div class="some-item-body">
-            <div class="some-item-body-text">
-                <strong>On-line платеж</strong>
-                <div>
-                    {{data.main.content|safe}}
+   {% endwith %}
+    
+   {% with payment=data.9 %}
+        <!-- Сбербанк-->
+        <!-- Модальное окно с описанием способа оплаты оператора -->
+        <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form role="form">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ payment.description|safe }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-    {% endcomment %}
+        <!-- Оператор -->
+        <div class="some-item">
+            <a class="some-item-body" data-toggle="modal" href="#modal{{ payment.id }}">
+                <span class="some-item-body-title">{{ payment.name|safe }}</span>
+                <div class="some-item-body-text">
+                    {{ payment.hint_line|safe }}
+                    <div class="how-play-btn">
+                        Как оплатить
+                    </div>
+                </div>
+            </a>
+        </div>
+   {% endwith %}
+    
+   
+
 
 </div><!-- /#payment-card -->
 {% endblock %}
