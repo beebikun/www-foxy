@@ -247,8 +247,8 @@ def payment(request, name=None):
 def paymentcard(request):
     """Карты"""
     objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
-    data = [serializers.PaymentSerializer(instance=obj).data
-            for obj in objects]
+    data = {obj.id:serializers.PaymentSerializer(instance=obj).data
+            for obj in objects}
     return my_response(request, data, name='payment-card')
 
 
