@@ -7,7 +7,7 @@
 
 <!-- Если страница "Интернет" - делаем нужную секцию меню активной -->
 {% block internet-btn-active %}
-    {% ifequal data.name "internet" %}
+    {% ifequal name "internet" %}
         active
     {% endifequal %}
 {% endblock %}
@@ -15,7 +15,7 @@
 
 <!-- Если страница "Телевидение" - делаем нужную секцию меню активной -->
 {% block iptv-btn-active %}
-    {% ifequal data.name "iptv" %}
+    {% ifequal name "iptv" %}
         active
     {% endifequal %}
 {% endblock %}
@@ -23,6 +23,6 @@
 
 {% block main-top-left %}
 <div class="content">
-    {{ data.content|safe }}
+    {{ content|safe }}
 </div>
 {% endblock %}

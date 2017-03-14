@@ -5,23 +5,27 @@ from tlvx import settings
 from django.contrib import admin
 admin.autodiscover()
 
+from tlvx.views import (
+    static_page,
+    about,
+    rates,
+)
+
 urlpatterns = patterns(
     '',
     ###############################
     ########Служебнные страницы
     ###############################
 
-    url(r'^admin/',  include(admin.site.urls)),  # admin site
+    url(r'^admin/', include(admin.site.urls)),  # admin site
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^api/', include('tlvx.api.urls'), name='api'),
-    url(r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')),
-    # url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-    #     'document_root': settings.MEDIA_ROOT,
-    #     }),
-    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {
-    #     'document_root': settings.STATIC_URL,
-    #     }),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT,
+        }),
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.STATIC_ROOT,
+        }),
     # url(r'^client/(?P<path>.*)$', 'django.views.static.serve', {
     #     'document_root': settings.CLIENT_ROOT,
     #     }),
@@ -37,29 +41,27 @@ urlpatterns = patterns(
     ###############################
 
     ###############################
-    #Подключиться
+    # Подключиться
 
     url(r'^!/letsfox/?$', 'tlvx.views.letsfox', name='client-letsfox'),
 
     ###############################
-    #Новости
+    # Новости
 
     url(r'^!/news/?$', 'tlvx.views.news', name='client-news'),
     url(r'^!/news/(?P<pk>\d+)/$', 'tlvx.views.news', name='client-newsdetail'),
 
     ###############################
-    #Интернет -см static page
+    # Интернет -см static page
 
     ###############################
-    #Тарифы
+    # Тарифы
 
-    url(r'^!/rates/?$', 'tlvx.views.rates', name='client-rates'),
-    #url(r'^!/rates/jp/?$', 'tlvx.views.rates_jp', name='client-ratesjp'),
-    url(r'^!/rates/(?P<name>\w+)/$', 'tlvx.views.rates_simple',
-        name='client-ratessimple'),
+    url(r'^!/rates/?$', rates.RatesPhysicalView.as_view(), name='client-rates'),
+    url(r'^!/rates/(?P<name>\w+)/$', rates.RatesView.as_view(), name='client-ratessimple'),
 
     ###############################
-    #Оплата услуг
+    # Оплата услуг
 
     url(r'^!/payment/?$', 'tlvx.views.payment', name='client-payment'),
     url(r'^!/payment/card/?$', 'tlvx.views.paymentcard',
@@ -76,21 +78,21 @@ urlpatterns = patterns(
         'tlvx.views.payment', name='client-payment'),
 
     ###############################
-    #О компании
+    # О компании
 
-    url(r'^!/about/?$', 'tlvx.views.about', name='client-about'),
-    url(r'^!/documents/?$', 'tlvx.views.documents', name='client-documents'),
-    url(r'^!/vacancy/?$', 'tlvx.views.vacancy', name='client-vacancy'),
-
-    ###############################
-    #Справка
-
-    url(r'^!/how/?$', 'tlvx.views.how', name='client-faq'),
+    url(r'^!/about/?$', about.AboutPageView.as_view(), name='client-about'),
+    url(r'^!/documents/?$', about.DocumentsPageView.as_view(), kwargs={'page': 'documents'}, name='client-documents'),
+    url(r'^!/vacancy/?$', about.VacancyPageView.as_view(), kwargs={'page': 'vacancy'}, name='client-vacancy'),
 
     ###############################
-    ########Static pages
+    # Справка
+
+    url(r'^!/how/?$', static_page.HelpPageView.as_view(), kwargs={'page': 'how'}, name='client-faq'),
+
+    ###############################
+    ######## Static pages
     ###############################
 
-    url(r'^!/(?P<page>[\w-]+)?$', 'tlvx.views.simple_content',
+    url(r'^!/(?P<page>[\w-]+)?$', static_page.StaticPageView.as_view(),
         name='client-simple_content'),
 )

@@ -2,7 +2,6 @@
 import re
 from django.db.models import Max
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.template import RequestContext, loader
 from tlvx import helpers
 from tlvx.api import serializers
@@ -47,46 +46,6 @@ def my_response(request, context={}, name=''):
     return HttpResponse(template.render(context))
 
 
-class StaticPage:
-    """
-    """
-    def __init__(self, request, name='', model='StaticPage', template=''):
-        """
-        Args:
-            -request
-            -name - имя страницы в бд
-            -template - имя нужного темлейта,
-                если он не совпадает с именем страницы в бд
-        Returns:
-            -my_response
-        """
-        self.name = name or request.META.get('PATH_INFO').split('/')[-1]
-        self.model = model
-        obj = self.get_obj()  # непосредственно сам объект
-        if obj.get_child():  # для страниц вида Tree (вакансии, справка)
-            self.data = self.get_child_data(obj)
-        else:
-            self.data = self.get_data(obj)  # сериализованные данные
-        self.response = my_response(request, self.data, template or name)
-
-    def get_data(self, obj):
-        return serializers.StaticPageSerializer(instance=obj).data
-
-    def get_child_data(self, obj):
-        """Рекурсивно обходит все obj, имеющие child и возвращает дата"""
-        data = self.get_data(obj)
-        if obj.get_child():
-            data['childs'] = map(self.get_child_data, obj.get_child())
-        return data
-
-    def get_obj(self):
-        return get_object_or_404(getattr(models, self.model), name=self.name)
-
-#Простой сериалайзер статических страниц по имени
-page = lambda n: serializers.StaticPageSerializer(
-    instance=models.StaticPage.objects.get(name=n)).data
-
-
 ###############################################################################
 
 ###############################
@@ -105,15 +64,6 @@ def index(request):
                    **{'url': img.get_img_absolute_urls(), 'num': i}) for i, img
               in enumerate(images)]
     return news(request, template='index', additional_data=dict(banner=banner))
-
-
-###############################
-########Static pages
-###############################
-
-def simple_content(request, page=None):
-    """Для отображения простых static page"""
-    return StaticPage(request=request, template='simple-content').response
 
 
 ###############################
@@ -186,57 +136,6 @@ def news(request, pk=None, template='news', additional_data=None):
 
 
 ###############################
-#Интернет -см static page
-
-
-###############################
-#Тарифы
-
-
-class Rates:
-    """Класс для rates и rates_simple"""
-
-    get_data = lambda self, obj: serializers.RatesSerializer(instance=obj).data
-
-    #Возвращает тарифы нужного типа(pp, jp, other),
-    #отсортированный по убыванию даты
-    get_obj = lambda self, name: models.Rates.objects.filter(
-        rtype__name=name).order_by('-date_in')
-
-    def __init__(self, request, name,
-                 template='rates-simple', additional_data=None):
-        data = dict(result=map(self.get_data, self.get_obj(name)))
-        if additional_data:
-            data.update(additional_data)
-        self.response = my_response(request, context=data, name=template)
-
-
-def rates(request):
-    """Тарифы для физ лиц"""
-    additional_data = dict(header=dict(
-        first=page('rates-internet'),
-        second=page('rates-local'),
-        third=page('rates-iptv'),
-        ))
-    return Rates(request, name='p',
-                 template='rates', additional_data=additional_data).response
-
-
-def rates_jp(request):
-    """Rates for jp"""
-    additional_data = dict(
-        docs=models.StaticPage.objects.get(name="jp-docs").content)
-    return Rates(request, name='jp',
-                 template='rates-jp',
-                 additional_data=additional_data).response
-
-
-def rates_simple(request, name):
-    """прочее"""
-    return Rates(request, name).response
-
-
-###############################
 #Оплата услуг
 
 def payment(request, name=None):
@@ -247,7 +146,7 @@ def payment(request, name=None):
 def paymentcard(request):
     """Карты"""
     objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
-    data = {obj.id:serializers.PaymentSerializer(instance=obj).data
+    data = {obj.id: serializers.PaymentSerializer(instance=obj).data
             for obj in objects}
     return my_response(request, data, name='payment-card')
 
@@ -279,9 +178,9 @@ def paymentterminal(request):
         s = s.replace('&', '&amp;')
         while s.find('"') >= 0:
             i = s.find('"')
-            s = s[:i] + '&laquo;' + s[i+1:]
+            s = s[:i] + '&laquo;' + s[i + 1:]
             i = s.find('"')
-            s = s[:i] + '&raquo;' + s[i+1:]
+            s = s[:i] + '&raquo;' + s[i + 1:]
         return s
 
     def get_point_data(obj):
@@ -308,52 +207,3 @@ def paymentterminal(request):
     objects = models.Payment.objects.filter(is_terminal=True)
     data = [get_data(obj) for obj in objects]
     return my_response(request, data, 'payment-terminal')
-
-
-###############################
-#О компании
-
-def about(request):
-    """Контакты"""
-    def get_data(obj):
-        data = serializers.COSerializer(instance=obj).data
-        data['ico'] = obj.marker and obj.marker.name
-        return data
-
-    data = dict(result=map(get_data,
-                           models.CentralOffice.objects.filter(in_map=True)))
-    return my_response(request, data)
-
-
-def documents(request):
-    """Документы (Tree Page)"""
-    return StaticPage(request=request, model='DocumentsPage').response
-
-
-def vacancy(request):
-    """Вакансии (Tree Page)"""
-    return StaticPage(request=request, model='VacancyPage').response
-
-
-###############################
-#Справка
-
-def how(request):
-    """Справка"""
-    return StaticPage(request=request, model='HelpPage').response
-
-
-# def accessdenied(request):
-#     """
-#     """
-#     return my_response(request, name="access-denied")
-
-########################################
-
-
-# def main(request, name):
-#     """
-#     """
-#     template = loader.get_template('client/%s.html' % name)
-#     context = RequestContext(request, {})
-#     return template.render(context)

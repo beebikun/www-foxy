@@ -1,0 +1,40 @@
+{% extends "client/about/about.html" %}
+
+
+{% block content %}Телевокс - Вакансии{% endblock %}
+{% block title %}Televox -  Вакансии{% endblock %}
+
+
+{% block jsscript %}
+{% endblock %}
+
+
+{% block about %}
+<div  class="link-list">
+    <ul>
+<!-- Page top content -->
+        <div> {{ content|safe }} </div>
+
+<!-- Список доступных вакансий -->
+        {% for vacancy in childs %}
+        <li>
+            <a href="#{{vacancy.name}}"> {{ vacancy.display_name }} </a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+
+{% block main-bottom-left %}
+<!-- Описание вакансий -->
+<div id="fqaAnsw" class="link-list">
+    {% for vacancy in childs %}
+        <a href="#{{vacancy.name}}" id="{{vacancy.name}}">
+        	<strong>{{ vacancy.display_name }}</strong>
+        </a>
+        <a href="" class="pull-right"><i class="fa fa-arrow-up"></i></a>
+        <div> {{ vacancy.content|safe }} </div>
+    {% endfor %}
+</div>
+{% endblock %}

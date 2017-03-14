@@ -56,8 +56,6 @@ class CentralOffice(models.Model):
 
     lng = lambda self: self.address.lng
 
-    get_address = lambda self: self.address.get_address()
-
     get_builds_sum = lambda self: len(self.buildings.all())
 
     def __unicode__(self):
@@ -564,24 +562,20 @@ class MarkerIcon(models.Model):
 class StaticPageBase(models.Model):
     class Meta:
         abstract = True
-    name = models.CharField(
-        max_length=256, unique=True,
-        verbose_name=u"Имя. Только латиница",  blank=True)
 
+    name = models.CharField(max_length=256, unique=True, blank=True, verbose_name=u"Имя. Только латиница", )
     display_name = models.CharField(max_length=256, null=True, blank=True)
+    attach = models.FileField(upload_to='pages', null=True, blank=True)
 
-    get_child = lambda self: None
+    def get_childs(self):
+        return []
 
-    get_attach_path = lambda self, filename: 'pages/%s/%s.%s' % (
-        self.__class__.__name__.lower(), self.name, filename.split('.')[-1])
+    def get_url_attach(self, host_url=''):
+        if self.attach:
+            return '{}{}'.format(host_url, self.attach.url)
 
-    get_url_attach = lambda self, host_url='': '%s%s' % (
-        host_url, self.attach.url) if self.attach else None
-
-    attach = models.FileField(
-        upload_to=get_attach_path,  null=True, blank=True)
-
-    have_content = lambda self: True if self.content else False
+    def have_content(self):
+        return
 
     def __unicode__(self):
         return self.name
@@ -590,16 +584,21 @@ class StaticPageBase(models.Model):
 class StaticPage(StaticPageBase):
     content = models.TextField(null=True, blank=True)
 
+    def have_content(self):
+        return bool(self.content)
+
 
 class TreePage(StaticPageBase):
     class Meta:
         abstract = True
 
-    have_childs = lambda self: True if len(self.get_child()) else False
+    def have_childs(self):
+        childs = self.get_childs()
+        return len(childs) > 0
 
-    def get_child(self):
-        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
-        return list(childs.all())
+    def get_childs(self):
+        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower()).all()
+        return list(childs)
 
 
 class DocumentsPage(TreePage):
@@ -615,7 +614,7 @@ class HelpPage(TreePage):
     parent = models.ForeignKey(
         'HelpPage', null=True, blank=True, related_name="%(class)s_childs")
 
-    def get_child(self):
+    def get_childs(self):
         childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.all().order_by('num', 'display_name'))
 
@@ -643,7 +642,7 @@ class VacancyPage(TreePage):
         'VacancyPage', null=True, blank=True, related_name="%(class)s_childs")
     show = models.BooleanField(default=True)
 
-    def get_child(self):
+    def get_childs(self):
         childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.filter(show=True))
 

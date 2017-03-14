@@ -1,0 +1,67 @@
+{% extends "client/base.html" %}
+
+
+{% block content %}Телевокс - Справка{% endblock %}
+{% block title %}Televox -  Справка{% endblock %}
+
+
+{% block jsscript %}
+{% endblock %}
+
+
+<!-- Set menu active -->
+{% block how-btn-active %}active{% endblock %}
+
+
+{% block main-top-left %}
+<!-- Список вопросов -->
+<div id="faqList" class="link-list">
+    <ul>
+        {% for how in childs %}
+        <li>
+<!-- Название группы вопросов -->
+            <a href="#{{how.name}}"> {{ how.display_name }} </a>
+            <ul>
+                {% for how_var in how.childs %}
+<!-- Название вопроса -->
+                <li><a href="#{{how_var.name}}"> {{ how_var.display_name }} </a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</div><!-- /#faqList.link-list -->
+{% endblock %}
+
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
+{% endblock %}
+
+
+{% block main-bottom-left %}
+<!-- Список ответов -->
+<div id="fqaAnsw" class="link-descr-list">
+    <ul>
+        {% for how in childs %}
+        <li>
+<!-- Название группы вопросов -->
+            <a href="#{{how.name}}" name="{{how.name}}"> {{ how.display_name }} </a>
+<!-- Ответ для группы вопросов -->
+            <div> {{ how.content|safe }} </div>
+            <ul>
+                {% for how_var in how.childs %}
+                <li>
+<!-- Название вопроса -->
+                    <a href="#{{how_var.name}}" id="{{how.name}}"> {{ how_var.display_name }} </a>
+                    <a href="" class="pull-right"><i class="fa fa-arrow-up"></i></a>
+<!-- Ответ на вопрос -->
+                    <div> {{ how_var.content|safe }} </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+</div><!-- /#fqaAnsw.link-descr-list -->
+{% endblock %}
