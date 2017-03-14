@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 from tlvx.core.models import DocumentsPage, VacancyPage, CentralOffice
 from tlvx.views.static_page import StaticPageView
-# from tlvx.serializers.payments import COSerializer
 
 
 class COSerializer(serializers.ModelSerializer):
