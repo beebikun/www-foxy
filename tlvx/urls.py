@@ -31,7 +31,7 @@ urlpatterns = patterns(
     #     'document_root': settings.CLIENT_ROOT,
     #     }),
 
-    url(r'^map?$', 'tlvx.views.map_page'),
+    url(r'^map/?$', static_page.MapPageView.as_view()),
 
 
     url(r'^/?$', 'tlvx.views.index', name='client-index'),

@@ -70,7 +70,7 @@
 
 <!-- Список терминалов оператора -->
         {% for point in payment.points %}
-            <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.marker}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
+            <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.ico}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
                 <p class="some-item-date">{{ payment.name }} </p>
                 <div class="some-item-body">
                     <span class="some-item-body-title">{{ point.address }}</span>

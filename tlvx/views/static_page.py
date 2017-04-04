@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
+from django.views.generic import TemplateView
+from django.utils import timezone
+
 from rest_framework import serializers
 
-from tlvx.core.models import StaticPage, HelpPage
+from tlvx.core.models import StaticPage, HelpPage, Note
 
 
 class StaticPageSerializer(serializers.ModelSerializer):
@@ -22,6 +25,7 @@ class StaticPageSerializer(serializers.ModelSerializer):
 class StaticPageView(DetailView):
     template_name = "client/simple-content.html"
     model = StaticPage
+    page_name = None
 
     def get_context_data(self, instance):
         data = StaticPageSerializer(instance=instance).data
@@ -42,3 +46,7 @@ class StaticPageView(DetailView):
 class HelpPageView(StaticPageView):
     template_name = "client/how/how.html"
     model = HelpPage
+
+
+class MapPageView(TemplateView):
+    template_name = "client/map.html"
