@@ -1,4 +1,4 @@
-{% extends "client/payment-way.html" %}
+{% extends "client/payment/payment-way.html" %}
 {% block content %}Телевокс - Оплата электронными деньгами{% endblock %}
 {% block title %}Televox -  Оплата электронными деньгами{% endblock %}
 
@@ -9,7 +9,7 @@
 
 {% block payment %}
 <!-- Контент -->
-{{data.inn.content|safe}}
+{{inner.content|safe}}
 
 <div class="text-center"  id="connectButton">
     <a href="http://www.tele-vox.ru"  class="btn btn-default  mybtn">Личный кабинет</a>
@@ -28,7 +28,7 @@
                     <h4 class="modal-title">Инструкция по оплате</h4>
                 </div>
                 <div class="modal-body">
-                    {{data.instruction.content|safe}}
+                    {{instruction.content|safe}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
@@ -58,7 +58,7 @@
                     <h4 class="modal-title">Возврат ошибочно уплаченных денежных средств</h4>
                 </div>
                 <div class="modal-body">
-                    {{data.returns.content|safe}}
+                    {{returns.content|safe}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>

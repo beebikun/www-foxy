@@ -29,15 +29,14 @@ class StaticPageView(DetailView):
         data['childs'] = map(self.get_context_data, childs)
         return data
 
+    def _get_static_content(self, name):
+        instance = get_object_or_404(self.model, name=name)
+        return StaticPageSerializer(instance=instance).data
+
     def get(self, request, **kwargs):
-        instance = get_object_or_404(self.model, name=kwargs.get('page'))
+        instance = get_object_or_404(self.model, name=kwargs.get('page', self.page_name))
         context = self.get_context_data(instance)
         return self.render_to_response(context)
-
-
-# def simple_content(request, page=None):
-#     """Для отображения простых static page"""
-#     return StaticPageView(request=request).response
 
 
 class HelpPageView(StaticPageView):

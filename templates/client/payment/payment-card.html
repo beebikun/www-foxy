@@ -1,4 +1,4 @@
-{% extends "client/payment-way.html" %}
+{% extends "client/payment/payment-way.html" %}
 
 
 {% block content %}Телевокс - Оплата пластиковыми картами{% endblock %}
@@ -12,7 +12,7 @@
 
 {% block payment %}
 <div id="payment-card">
-    {% with payment=data.9 %}
+    {% with payment=dvpay %}
         <!-- ДВ Пей-->
         <!-- Оператор-->
         <div class="some-item">
@@ -27,8 +27,8 @@
             </a>
         </div>
     {% endwith %}
- 
-    {% with payment=data.7 %}
+
+    {% with payment=telebank%}
         <!-- ВТБ-->
         <!-- Модальное окно с описанием способа оплаты оператора -->
         <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -62,8 +62,8 @@
             </a>
         </div>
    {% endwith %}
-    
-   {% with payment=data.8 %}
+
+   {% with payment=sberbank %}
         <!-- Сбербанк-->
         <!-- Оператор -->
         <div class="some-item">
@@ -75,23 +75,23 @@
                         <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_online">
                         Оплата через личный кабинет для держателей карт Сбербанк
                         </a>
-                    </div>  
+                    </div>
                     <div>
                         <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_avtoplateg">
                         Подключение автоплатежа в Сбербанк Онлайн (мобильная версия)
                         </a>
-                    </div>  
+                    </div>
                     <div>
                         <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_avtoplateg_site">
                         Подключение автоплатежа в Сбербанк Онлайн на сайте
                         </a>
-                    </div>                 
+                    </div>
                  </div>
             </div>
         </div>
    {% endwith %}
-    
-   
+
+
 
 
 </div><!-- /#payment-card -->

@@ -9,6 +9,7 @@ from tlvx.views import (
     static_page,
     about,
     rates,
+    payment,
 )
 
 urlpatterns = patterns(
@@ -63,19 +64,14 @@ urlpatterns = patterns(
     ###############################
     # Оплата услуг
 
-    url(r'^!/payment/?$', 'tlvx.views.payment', name='client-payment'),
-    url(r'^!/payment/card/?$', 'tlvx.views.paymentcard',
-        name='client-paymentcard'),
-    url(r'^!/payment/elmoney/?$', 'tlvx.views.paymentelmoney',
-        name='client-paymentelmoney'),
-    url(r'^!/payment/limit/?$',
-        'tlvx.views.paymentlimit', name='client-paymentlimit'),
-    url(r'^!/payment/mobile/?$',
-        'tlvx.views.paymentmobile', name='client-paymentmobile'),
+    url(r'^!/payment/?$', payment.PaymentChoosePageView.as_view(), name='client-payment'),
+    url(r'^!/payment/card/?$', payment.PaymentCardsPageView.as_view(), name='client-paymentcard'),
+    url(r'^!/payment/elmoney/?$', payment.PaymentElectronicPageView.as_view(), name='client-paymentelmoney'),
+    url(r'^!/payment/limit/?$', payment.PaymentLimitPageView.as_view(), name='client-paymentlimit'),
     url(r'^!/payment/terminal/?$', 'tlvx.views.paymentterminal',
         name='client-paymentterminal'),
-    url(r'^!/payment/(?P<name>\w+)/?$',
-        'tlvx.views.payment', name='client-payment'),
+    # url(r'^!/payment/(?P<name>\w+)/?$',
+    #     'tlvx.views.payment', name='client-payment'),
 
     ###############################
     # О компании
