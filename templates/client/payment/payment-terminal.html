@@ -1,4 +1,4 @@
-{% extends "client/payment-way.html" %}
+{% extends "client/payment/payment-way.html" %}
 
 
 {% block content %}Телевокс - Оплата наличными{% endblock %}
@@ -29,7 +29,7 @@
     <div class="margin-bottom margin-top">
         <select class="form-control input-sm" id="paymentSelect">
             <option value="" selected="selected">Все</option>
-            {% for payment in data %}
+            {% for payment in payments %}
                <option id="{{payment.id}}">{{ payment.name|safe }}</option>
             {% endfor %}
         </select><!-- /.paymentSelect -->
@@ -47,7 +47,7 @@
 
 {% block simitems %}
 <div id="simmularItems" class="items-area">
-    {% for payment in data %}
+    {% for payment in payments %}
 <!-- Модальное окно с описанием способа оплаты оператора -->
         <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -69,7 +69,7 @@
         </div><!-- /.modal.fade -->
 
 <!-- Список терминалов оператора -->
-        {% for point in payment.points.result %}
+        {% for point in payment.points %}
             <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{payment.marker}}" data-payment="{{payment.name}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
                 <p class="some-item-date">{{ payment.name }} </p>
                 <div class="some-item-body">

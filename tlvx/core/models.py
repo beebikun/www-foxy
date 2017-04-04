@@ -417,12 +417,6 @@ class PaymentPoint(models.Model):
     gis_hash = models.CharField(max_length=256, blank=True, default=u'')
     contacts = models.CharField(max_length=2048, blank=True, default=u'')
 
-    lat = lambda self: self.address.lat
-
-    lng = lambda self: self.address.lng
-
-    get_address = lambda self: self.address.get_address()
-
     def save(self, *args, **kwargs):
         if kwargs:
             old = PaymentPoint.objects.filter(

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist, FieldError
+
 from tlvx.core import models
 from tlvx.helpers import change_keyboard
 
@@ -64,64 +64,6 @@ class StreetSerializer(serializers.Serializer):
         return streets[0]
 
 
-class PaymentSerializer(serializers.Serializer):
-    id = serializers.Field()
-    name = serializers.CharField(required=True)
-    description = serializers.Field()
-    marker = serializers.Field()
-    hint_line = serializers.Field()
-
-    def validate(self, attrs):
-        attrs = super(PaymentSerializer, self).validate(attrs)
-        name = attrs.get('name')
-        try:
-            payment = models.Payment.objects.get(name=name)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(_(
-                "Payment with name %s is not create in db" % (name)))
-        return payment
-
-
-class PaymentPointSerializer(serializers.Serializer):
-    id = serializers.Field()
-    name = serializers.CharField(required=False)
-    # schedule = serializers.CharField(required=False)
-    # contacts = serializers.CharField(required=False)
-    lat = serializers.FloatField(required=False, source="lat")
-    lng = serializers.FloatField(required=False, source="lng")
-    address = serializers.CharField(required=False, source="get_address")
-
-    def validate(self, attrs):
-        attrs = super(PaymentPointSerializer, self).validate(attrs)
-        pk = attrs.get('id')
-        try:
-            point = models.PaymentPoint.objects.get(id=pk)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(_(
-                "PaymentPoint with pk %s is not create in db" % (pk)))
-        return point
-
-
-class RatesSerializer(serializers.Serializer):
-    id = serializers.Field()
-    name = serializers.CharField(required=False)
-    tables = serializers.Field()
-    active = serializers.BooleanField(required=False)
-    date_in = serializers.DateTimeField(required=False)
-    date_out = serializers.DateTimeField(required=False)
-
-    def validate(self, attrs):
-        attrs = super(RatesSerializer, self).validate(attrs)
-        return attrs
-
-
-class MarkerIconSerializer(serializers.Serializer):
-    id = serializers.Field()
-    name = serializers.CharField(required=False)
-    path = serializers.CharField(required=False, source="get_absolute_url")
-    width = serializers.IntegerField(required=False, source="width")
-    height = serializers.IntegerField(required=False, source="height")
-
 
 class NoteSerializer(serializers.Serializer):
     id = serializers.Field()
@@ -129,25 +71,6 @@ class NoteSerializer(serializers.Serializer):
     text = serializers.Field()
     date = serializers.IntegerField(required=False)
     ntype = serializers.Field()
-
-
-class StaticPageSerializer(serializers.Serializer):
-    id = serializers.Field()
-    name = serializers.CharField(required=True)
-    content = serializers.Field()
-    display_name = serializers.CharField(required=False)
-    childs = serializers.Field(source='get_child')
-    attach = serializers.Field(source='get_url_attach')
-
-    def validate(self, attrs):
-        attrs = super(StaticPageSerializer, self).validate(attrs)
-        name = attrs.get('name')
-        try:
-            page = models.StaticPage.objects.get(name=name)
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError(_(
-                "StaticPage with name %s is not create in db" % (name)))
-        return page
 
 
 class DoitSerializer(serializers.Serializer):
@@ -214,6 +137,10 @@ class ImageSerializer(serializers.ModelSerializer):
         model = models.Image
 
 
-class COSerializer(PaymentPointSerializer):
-    schedule = serializers.CharField(required=False)
-    contacts = serializers.CharField(required=False)
+class MarkerIconSerializer(serializers.Serializer):
+    id = serializers.Field()
+    name = serializers.CharField(required=False)
+    path = serializers.CharField(required=False, source="get_absolute_url")
+    width = serializers.IntegerField(required=False, source="width")
+    height = serializers.IntegerField(required=False, source="height")
+

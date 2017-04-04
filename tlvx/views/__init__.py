@@ -1,32 +1,9 @@
 # -*- coding: utf-8 -*-
-import re
-from django.db.models import Max
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from tlvx import helpers
 from tlvx.api import serializers
 from tlvx.core import models
-
-
-def is_gray_ip(ip):
-    """Определяет, является ли полученный ip серым
-
-    Args:
-        ip - str
-    Returns:
-        True/False
-    """
-    ip = re.match('[\d]+.[\d]+.[\d]+.[\d]+', ip)
-    if not ip:
-        return
-    A, B, C, D = [int(i) for i in ip.group().split('.')]
-    if A == 10:
-        return True
-    if A == 172 and 16 <= B <= 31:
-        return True
-    if A == 192 and B == 168:
-        return True
-    return False
 
 
 def my_response(request, context={}, name=''):
@@ -133,46 +110,3 @@ def news(request, pk=None, template='news', additional_data=None):
         #запихать в контекст что-нибудь еще
         data.update(additional_data)
     return my_response(request, data, template)
-
-
-###############################
-#Оплата услуг
-
-
-def paymentterminal(request):
-    """Наличные и терминалы"""
-    def _clear(s):
-        if not s:
-            return
-        s = s.replace('&', '&amp;')
-        while s.find('"') >= 0:
-            i = s.find('"')
-            s = s[:i] + '&laquo;' + s[i + 1:]
-            i = s.find('"')
-            s = s[:i] + '&raquo;' + s[i + 1:]
-        return s
-
-    def get_point_data(obj):
-        data = serializers.PaymentPointSerializer(instance=obj).data
-        data['name'] = _clear(data.get('name', data.get('address')))
-        if isinstance(obj, models.CentralOffice):
-            #Заменяем ид в офисах продаж, потому что
-            #их ид уже заняты другими ppoint
-            data['id'] = models.PaymentPoint.objects.aggregate(
-                Max('id')).get('id__max') + data['id']
-        return data
-
-    def get_data(obj):
-        data = serializers.PaymentSerializer(instance=obj).data
-        data['name'] = _clear(data['name'])
-        if data['name'] != u'Офисы продаж':
-            points = obj.get_points()
-        else:
-            points = models.CentralOffice.objects.filter(in_map=True)
-        data['points'] = dict(total=(points),
-                              result=map(get_point_data, points))
-        return data
-
-    objects = models.Payment.objects.filter(is_terminal=True)
-    data = [get_data(obj) for obj in objects]
-    return my_response(request, data, 'payment-terminal')

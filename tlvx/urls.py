@@ -68,10 +68,7 @@ urlpatterns = patterns(
     url(r'^!/payment/card/?$', payment.PaymentCardsPageView.as_view(), name='client-paymentcard'),
     url(r'^!/payment/elmoney/?$', payment.PaymentElectronicPageView.as_view(), name='client-paymentelmoney'),
     url(r'^!/payment/limit/?$', payment.PaymentLimitPageView.as_view(), name='client-paymentlimit'),
-    url(r'^!/payment/terminal/?$', 'tlvx.views.paymentterminal',
-        name='client-paymentterminal'),
-    # url(r'^!/payment/(?P<name>\w+)/?$',
-    #     'tlvx.views.payment', name='client-payment'),
+    url(r'^!/payment/terminal/?$', payment.PaymentTerminalsPageView.as_view(), name='client-paymentterminal'),
 
     ###############################
     # О компании
@@ -89,6 +86,5 @@ urlpatterns = patterns(
     ######## Static pages
     ###############################
 
-    url(r'^!/(?P<page>[\w-]+)?$', static_page.StaticPageView.as_view(),
-        name='client-simple_content'),
+    url(r'^!/(?P<page>[\w-]+)?$', static_page.StaticPageView.as_view(), name='client-simple_content'),
 )
