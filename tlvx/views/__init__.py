@@ -138,37 +138,6 @@ def news(request, pk=None, template='news', additional_data=None):
 ###############################
 #Оплата услуг
 
-def payment(request, name=None):
-    """Выбор типа оплаты"""
-    return my_response(request, name='payment')
-
-
-def paymentcard(request):
-    """Карты"""
-    objects = models.Payment.objects.filter(is_terminal=False).order_by('num')
-    data = {obj.id: serializers.PaymentSerializer(instance=obj).data
-            for obj in objects}
-    return my_response(request, data, name='payment-card')
-
-
-def paymentelmoney(request):
-    """Эл деньги (Асист)"""
-    data = dict(instruction=page('asist-instruction'),
-                returns=page('asist-returns'), inn=page('payment-elmoney-inn'))
-    return my_response(request, data, name='payment-elmoney')
-
-
-def paymentlimit(request):
-    """Взятие лимита"""
-    return StaticPage(request=request, name='payment-limit').response
-
-
-def paymentmobile(request):
-    """Мобильные платежи"""
-    gray_ip = is_gray_ip(request.META['REMOTE_ADDR'])
-    return my_response(request, name="payment-mobile",
-                       context=dict(gray_ip=gray_ip))
-
 
 def paymentterminal(request):
     """Наличные и терминалы"""
