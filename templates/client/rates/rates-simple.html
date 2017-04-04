@@ -44,7 +44,7 @@
     </div>
 
     <div>
-        {% for rates in data.result %}
+        {% for rates in result %}
             {% if rates.active%}
             <div class="table-box some-item">
                 <div class="some-item-body">
@@ -72,7 +72,7 @@
     <div id="simmularItems">
 <!-- Rates archive -->
         <div class="rates-archive">
-            {% for rates in data.result %}{% if not rates.active %}
+            {% for rates in result %}{% if not rates.active %}
                 <div class="table-box some-item">
                     <div class="some-item-body">
                         <a class="some-item-body-title rate-date" id='{{rates.date_in|date:"dmY"}}' href='#{{rates.date_in|date:"dmY"}}'>

@@ -1,32 +1,28 @@
 # -*- coding: utf-8 -*-
-from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from rest_framework import serializers
 
 from tlvx.core.models import Rates
-from tlvx.serializers.rates import RatesSerializer
 
 
-class RatesView(ListView):
+class RatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rates
+
+
+class RatesView(DetailView):
     model = Rates
     template_name = 'client/rates/rates-simple.html'
-    name = 'other'
 
-    def get_queryset(self, **kwargs):
-        return self.model.filter(name=self.name).order_by('-date_in')
+    def get_context_data(self, instances):
+        data = RatesSerializer(instance=instances, many=True).data
+        return {'result': data}
 
-    def get_context_data(self, **kwargs):
-        data = RatesSerializer(instance=self.get_queryset(), many=True).data
-        return data
+    def get(self, response, name='p'):
+        instances = self.model.objects.filter(rtype__name=name).order_by('-date_in')
+        context = self.get_context_data(instances)
+        return self.render_to_response(context)
 
 
 class RatesPhysicalView(RatesView):
     template_name = 'client/rates/rates.html'
-    name = 'p'
-
-    def get_context_data(self, **kwargs):
-        data = super(RatesPhysicalView, self).get_context_data(**kwargs)
-        data['header'] = {
-            'first': 'rates-internet',
-            'second': 'rates-local',
-            'third': 'rates-iptv',
-        }
-        return data
