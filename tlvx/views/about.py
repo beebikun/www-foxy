@@ -4,11 +4,14 @@ from rest_framework import serializers
 
 from tlvx.core.models import DocumentsPage, VacancyPage, CentralOffice
 from tlvx.views.static_page import StaticPageView
+# from tlvx.serializers.payments import COSerializer
 
 
 class COSerializer(serializers.ModelSerializer):
     ico = serializers.Field(source='marker.name')
     address = serializers.Field(source='address.get_address')
+    lat = serializers.Field(source='address.lat')
+    lng = serializers.Field(source='address.lng')
 
     class Meta:
         model = CentralOffice
