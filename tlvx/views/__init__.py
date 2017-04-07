@@ -25,31 +25,6 @@ def my_response(request, context={}, name=''):
 
 ###############################################################################
 
-###############################
-########Служебнные страницы
-###############################
-
-def map_page(request):
-    """Служебная страница, где можно по клику получить координаты(lonlat)"""
-    return my_response(request, name="map")
-
-
-def index(request):
-    """Главная страница"""
-    images = models.Image.objects.filter(is_displ=True).order_by('num')
-    banner = [dict(serializers.ImageSerializer(instance=img).data,
-                   **{'url': img.get_img_absolute_urls(), 'num': i}) for i, img
-              in enumerate(images)]
-    return news(request, template='index', additional_data=dict(banner=banner))
-
-
-###############################
-########Menu sections
-###############################
-
-
-###############################
-#Подключиться
 
 def letsfox(request):
     """В request.POST должны быть
@@ -95,18 +70,3 @@ def letsfox(request):
         return data['result'] and data
 
     return my_response(request, get(params) or dict(params=params), 'letsfox')
-
-
-###############################
-#Новости
-
-def news(request, pk=None, template='news', additional_data=None):
-    """Возвращаеи страницу со списком новостей. Также используется в index"""
-    data = helpers.get_news(
-        srlz=serializers.NoteSerializer, model=models.Note,
-        page=request.GET.get('page', 1), pk=pk)
-    if additional_data:
-        #Т.к эту же функцию использует еще и index, то есть возможность
-        #запихать в контекст что-нибудь еще
-        data.update(additional_data)
-    return my_response(request, data, template)
