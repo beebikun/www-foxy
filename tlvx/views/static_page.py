@@ -7,7 +7,7 @@ from django.utils import timezone
 from rest_framework import serializers
 import math
 
-from tlvx.core.models import StaticPage, HelpPage, Note
+from tlvx.core.models import StaticPage, HelpPage, Note, Image
 
 
 class StaticPageSerializer(serializers.ModelSerializer):
@@ -75,5 +75,16 @@ class NewsDetailPageView(NewsPageView):
     def get(self, request, pk=None):
         context = {
             'notes': Note.objects.filter(pk=pk)
+        }
+        return self.render_to_response(context)
+
+
+class IndexPageView(NewsPageView):
+    template_name = "client/index.html"
+
+    def get(self, request, **kwargs):
+        context = {
+            'notes': self.get_news()[:3],
+            'banners': Image.objects.filter(is_displ=True).order_by('num'),
         }
         return self.render_to_response(context)

@@ -34,8 +34,8 @@ urlpatterns = patterns(
     url(r'^map/?$', static_page.MapPageView.as_view()),
 
 
-    url(r'^/?$', 'tlvx.views.index', name='client-index'),
-    url(r'^!/?$', 'tlvx.views.index'),
+    url(r'^/?$', static_page.IndexPageView.as_view(), name='client-index'),
+    url(r'^!/?$', static_page.IndexPageView.as_view()),
 
     ###############################
     ########Menu sections

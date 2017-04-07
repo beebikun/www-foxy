@@ -132,11 +132,6 @@ class DoitSerializer(serializers.Serializer):
         return request
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Image
-
-
 class MarkerIconSerializer(serializers.Serializer):
     id = serializers.Field()
     name = serializers.CharField(required=False)
