@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.utils import timezone
 
 from rest_framework import serializers
+import math
 
 from tlvx.core.models import StaticPage, HelpPage, Note
 
@@ -42,8 +43,37 @@ class StaticPageView(DetailView):
 
 class HelpPageView(StaticPageView):
     template_name = "client/how/how.html"
+    page_name = 'how'
     model = HelpPage
 
 
 class MapPageView(TemplateView):
     template_name = "client/map.html"
+
+
+class NewsPageView(TemplateView):
+    template_name = "client/news.html"
+    count = 10
+
+    def get_news(self):
+        return Note.objects.filter(date__lte=timezone.now()).order_by('num', '-date')
+
+    def get(self, request):
+        notes = self.get_news()
+        page_num = int(request.GET.get('page') or 1)
+        first = self.count * (page_num - 1)
+        end = self.count * page_num
+
+        context = {
+            'notes': notes[first:end],
+            'max_page': int(math.ceil(notes.count() / float(self.count))),
+        }
+        return self.render_to_response(context)
+
+
+class NewsDetailPageView(NewsPageView):
+    def get(self, request, pk=None):
+        context = {
+            'notes': Note.objects.filter(pk=pk)
+        }
+        return self.render_to_response(context)

@@ -19,8 +19,10 @@ class AboutPageView(TemplateView):
 class DocumentsPageView(StaticPageView):
     template_name = 'client/about/documents.html'
     model = DocumentsPage
+    page_name = 'documents'
 
 
 class VacancyPageView(StaticPageView):
     template_name = 'client/about/vacancy.html'
     model = VacancyPage
+    page_name = 'vacancy'

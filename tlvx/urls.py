@@ -49,8 +49,8 @@ urlpatterns = patterns(
     ###############################
     # Новости
 
-    url(r'^!/news/?$', 'tlvx.views.news', name='client-news'),
-    url(r'^!/news/(?P<pk>\d+)/$', 'tlvx.views.news', name='client-newsdetail'),
+    url(r'^!/news/?$', static_page.NewsPageView.as_view(), name='client-news'),
+    url(r'^!/news/(?P<pk>\d+)/$', static_page.NewsDetailPageView.as_view(), name='client-newsdetail'),
 
     ###############################
     # Интернет -см static page
@@ -74,13 +74,13 @@ urlpatterns = patterns(
     # О компании
 
     url(r'^!/about/?$', about.AboutPageView.as_view(), name='client-about'),
-    url(r'^!/documents/?$', about.DocumentsPageView.as_view(), kwargs={'page': 'documents'}, name='client-documents'),
-    url(r'^!/vacancy/?$', about.VacancyPageView.as_view(), kwargs={'page': 'vacancy'}, name='client-vacancy'),
+    url(r'^!/documents/?$', about.DocumentsPageView.as_view(), name='client-documents'),
+    url(r'^!/vacancy/?$', about.VacancyPageView.as_view(), name='client-vacancy'),
 
     ###############################
     # Справка
 
-    url(r'^!/how/?$', static_page.HelpPageView.as_view(), kwargs={'page': 'how'}, name='client-faq'),
+    url(r'^!/how/?$', static_page.HelpPageView.as_view(), name='client-faq'),
 
     ###############################
     ######## Static pages
