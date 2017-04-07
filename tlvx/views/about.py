@@ -1,30 +1,19 @@
 # -*- coding: utf-8 -*-
-from django.views.generic.detail import DetailView
-from rest_framework import serializers
+from django.views.generic import TemplateView
 
 from tlvx.core.models import DocumentsPage, VacancyPage, CentralOffice
 from tlvx.views.static_page import StaticPageView
-# from tlvx.serializers.payments import COSerializer
 
 
-class COSerializer(serializers.ModelSerializer):
-    ico = serializers.Field(source='marker.name')
-    address = serializers.Field(source='address.get_address')
-    lat = serializers.Field(source='address.lat')
-    lng = serializers.Field(source='address.lng')
-
-    class Meta:
-        model = CentralOffice
-
-
-class AboutPageView(DetailView):
+class AboutPageView(TemplateView):
     template_name = 'client/about/about.html'
     model = CentralOffice
 
     def get(self, request, **kwargs):
-        offices = CentralOffice.objects.filter(in_map=True)
-        data = COSerializer(instance=offices, many=True).data
-        return self.render_to_response({'offices': data})
+        context = {
+            'offices': CentralOffice.objects.filter(in_map=True),
+        }
+        return self.render_to_response(context)
 
 
 class DocumentsPageView(StaticPageView):

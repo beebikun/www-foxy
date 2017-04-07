@@ -40,8 +40,9 @@
 <div id="simmularItems" class="items-area">
     {% for office in offices %}
         <div class="some-item" id="simmularItemsID_{{office.id}}"
-             data-ico="{{office.ico}}" data-lat="{{office.lat}}" data-lng="{{office.lng}}">
-            <div class="some-item-date">{{ office.address }}</div>
+             data-ico="{{office.marker.name}}"
+             data-lat="{{office.address.lat}}" data-lng="{{office.address.lng}}">
+            <div class="some-item-date">{{ office.address.get_address }}</div>
             <div class="some-item-body">
                 <span class="some-item-body-title">{{ office.contacts }}</span>
                 <div class="some-item-body-text"> {{ office.schedule }} </div>

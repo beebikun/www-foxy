@@ -19,6 +19,8 @@ from tlvx.core.gis import get_gis_url, make_get, get_gis_answer
 formatted_date = lambda date: dateformat.format(date, DATE_FORMAT)
 
 
+# @TODO: Clean it
+
 class City(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
@@ -416,6 +418,12 @@ class PaymentPoint(models.Model):
     gis_id = models.CharField(max_length=256, blank=True, default=u'')
     gis_hash = models.CharField(max_length=256, blank=True, default=u'')
     contacts = models.CharField(max_length=2048, blank=True, default=u'')
+
+    @property
+    def display_name(self):
+        if self.name is None:
+            return self.address.get_address()
+        return self.name
 
     def save(self, *args, **kwargs):
         if kwargs:

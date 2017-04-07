@@ -10,6 +10,7 @@ from tlvx.core.models import StaticPage, HelpPage, Note
 
 
 class StaticPageSerializer(serializers.ModelSerializer):
+    # @TODO: get rid off all serializers
     attach = serializers.Field(source='get_url_attach')
 
     class Meta:
@@ -32,10 +33,6 @@ class StaticPageView(DetailView):
         childs = instance.get_childs()
         data['childs'] = map(self.get_context_data, childs)
         return data
-
-    def _get_static_content(self, name):
-        instance = get_object_or_404(self.model, name=name)
-        return StaticPageSerializer(instance=instance).data
 
     def get(self, request, **kwargs):
         instance = get_object_or_404(self.model, name=kwargs.get('page', self.page_name))
