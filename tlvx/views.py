@@ -213,7 +213,7 @@ class Rates:
 
 def rates(request):
     """Тарифы для физ лиц"""
-    additional_data = {'tv_count': models.StaticPage.objects.get(name='tv_count').content}
+    additional_data = {'tv_count': models.StaticPage.objects.get(name='tv_count').display_name}
     return Rates(request, name='p',
                  template='rates', additional_data=additional_data).response
 
@@ -221,7 +221,7 @@ def rates(request):
 def rates_jp(request):
     """Rates for jp"""
     additional_data = dict(
-        docs=models.StaticPage.objects.get(name="jp-docs").display_name)
+        docs=models.StaticPage.objects.get(name="jp-docs").content)
     return Rates(request, name='jp',
                  template='rates-jp',
                  additional_data=additional_data).response
