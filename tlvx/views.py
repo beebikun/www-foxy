@@ -221,7 +221,7 @@ def rates(request):
 def rates_jp(request):
     """Rates for jp"""
     additional_data = dict(
-        docs=models.StaticPage.objects.get(name="jp-docs").content)
+        docs=models.StaticPage.objects.get(name="jp-docs").display_name)
     return Rates(request, name='jp',
                  template='rates-jp',
                  additional_data=additional_data).response
