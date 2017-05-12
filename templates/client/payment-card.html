@@ -30,34 +30,17 @@
  
     {% with payment=data.7 %}
         <!-- ВТБ-->
-        <!-- Модальное окно с описанием способа оплаты оператора -->
-        <div class="modal fade" id="modal{{ payment.id }}" tabindex="-1" role="dialog"  aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form role="form">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Как оплатить через {{ payment.name }}</h4>
-                        </div>
-                        <div class="modal-body">
-                            {{ payment.description|safe }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"> Понятно </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <!-- Оператор -->
         <div class="some-item">
             <a class="some-item-body" data-toggle="modal" href="#modal{{ payment.id }}">
                 <span class="some-item-body-title">{{ payment.name|safe }}</span>
                 <div class="some-item-body-text">
                     {{ payment.hint_line|safe }}
-                    <div class="how-play-btn">
+                    <div>
+                        <a class="how-play-btn" href="http://tlvx.ru/!/vtb_online">
                         Как оплатить
-                    </div>
+                        </a>
+                    </div> 
                 </div>
             </a>
         </div>
