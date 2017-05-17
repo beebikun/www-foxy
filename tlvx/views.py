@@ -213,7 +213,10 @@ class Rates:
 
 def rates(request):
     """Тарифы для физ лиц"""
-    additional_data = {'tv_count': models.StaticPage.objects.get(name='tv_count').display_name}
+    additional_data = {
+        'tv_count': models.StaticPage.objects.get(name='tv_count').display_name,
+        'televoxtv_tv_count': models.StaticPage.objects.get(name='televoxtv_tv_count').display_name,
+    }
     return Rates(request, name='p',
                  template='rates', additional_data=additional_data).response
 
