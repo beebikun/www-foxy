@@ -37,7 +37,9 @@
                 <div class="some-item-body-text">
                     {{ payment.hint_line|safe }}
                     <div>
-                        <a class="how-play-btn" href="http://tlvx.ru/!/vtb_online">Как оплатить
+                        <a class="how-play-btn"
+                           href="{% url 'client-simple_content' page='vtb_online' %}">
+                           Как оплатить
                         </a>
                     </div> 
                 </div>
@@ -54,17 +56,23 @@
                 <div class="some-item-body-text">
                     {{ payment.hint_line|safe }}
                     <div>
-                        <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_online">
+                        <a class="how-play-btn"
+                           href="{% url 'client-simple_content' page='sberbank_online' %}"
+                        >
                         Оплата через личный кабинет для держателей карт Сбербанк
                         </a>
                     </div>  
                     <div>
-                        <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_avtoplateg">
+                        <a class="how-play-btn"
+                          href="{% url 'client-simple_content' page='sberbank_avtoplateg' %}"
+                        >
                         Подключение автоплатежа в Сбербанк Онлайн (мобильная версия)
                         </a>
                     </div>  
                     <div>
-                        <a class="how-play-btn" href="http://tlvx.ru/!/sberbank_avtoplateg_site">
+                        <a class="how-play-btn"
+                           href="{% url 'client-simple_content' page='sberbank_avtoplateg_site' %}"
+                      >
                         Подключение автоплатежа в Сбербанк Онлайн на сайте
                         </a>
                     </div>                 
