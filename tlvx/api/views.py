@@ -114,7 +114,7 @@ class MarkerIconsRoot(ApiRoot):
 
     def get_data(self, obj, request):
         data = serializers.MarkerIconSerializer(instance=obj).data
-        root_url = reverse('client-index', request=request)
+        root_url = 'http://tlvx.ru/'
         data['path'] = obj.get_absolute_url(root_url)
         return data
 
