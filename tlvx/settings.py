@@ -11,6 +11,13 @@ ADMINS = (
     ('Televox', 'info@tlvx.ru'),
 )
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(TLVX_ROOT, 'db.sqlite3'),
+    }
+}
+
 MANAGERS = ADMINS
 
 TIME_ZONE = 'Asia/Yakutsk'
