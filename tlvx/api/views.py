@@ -168,7 +168,7 @@ class CaptchaRoot(ApiRoot):
         new_obj = self.clone_model.create(
             key=key, img=File(open(settings.MEDIA_ROOT+'/'+orig_obj.img.name)),
             right=orig_obj.right)
-        root_url = reverse('client-index', request=request)
+        root_url = 'http://tlvx.ru/'
         return dict(
             src=new_obj.get_absolute_url(root_url),
             name=new_obj.img.name
