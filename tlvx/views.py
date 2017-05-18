@@ -50,7 +50,7 @@ def my_response(request, context={}, name=''):
 class StaticPage:
     """
     """
-    def __init__(self, request, name='', model='StaticPage', template=''):
+    def __init__(self, request, name, model='StaticPage', template=''):
         """
         Args:
             -request
@@ -60,7 +60,7 @@ class StaticPage:
         Returns:
             -my_response
         """
-        self.name = name or request.META.get('PATH_INFO').split('/')[-1]
+        self.name = name
         self.model = model
         obj = self.get_obj()  # непосредственно сам объект
         if obj.get_child():  # для страниц вида Tree (вакансии, справка)
@@ -113,7 +113,7 @@ def index(request):
 
 def simple_content(request, page=None):
     """Для отображения простых static page"""
-    return StaticPage(request=request, template='simple-content').response
+    return StaticPage(request=request, template='simple-content', name=page).response
 
 
 ###############################
@@ -235,6 +235,7 @@ def rates_simple(request, name):
     return Rates(request, name).response
 
 
+
 ###############################
 #Оплата услуг
 
@@ -326,12 +327,12 @@ def about(request):
 
 def documents(request):
     """Документы (Tree Page)"""
-    return StaticPage(request=request, model='DocumentsPage').response
+    return StaticPage(request=request, model='DocumentsPage', name='documents').response
 
 
 def vacancy(request):
     """Вакансии (Tree Page)"""
-    return StaticPage(request=request, model='VacancyPage').response
+    return StaticPage(request=request, model='VacancyPage', name='vacancy').response
 
 
 ###############################
@@ -339,7 +340,7 @@ def vacancy(request):
 
 def how(request):
     """Справка"""
-    return StaticPage(request=request, model='HelpPage').response
+    return StaticPage(request=request, model='HelpPage', name='how').response
 
 
 # def accessdenied(request):
