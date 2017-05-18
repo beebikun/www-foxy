@@ -79,7 +79,7 @@
                                             {% comment %} <li><a href="http://hub.tlvx.ru/" >Hub</a></li> {% endcomment %}
                                             <li><a href="ftp://ftp.tele-vox.ru/" >FTP-сервер</a></li>
                                             <li><a href="http://local.tele-vox.ru/wiki/" >Поддержка</a></li>
-                                            <li class="orange"><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
+                                            <li class="orange"><a href="https://www.tele-vox.ru/" >Личный кабинет</a></li>
                                         </ul>
                                         <a href="/"  id="logo">
                                             <img src="{{ STATIC_URL }}img/logo.png" alt="Телевокс - Интернет в каждый дом">
@@ -135,7 +135,6 @@
                                 {% block mainmenu %}
                                     <nav id="mainMenu">
                                         <a href="{% url 'client-letsfox' %}" class="btn btn-default btn-orange mybtn mybtn-block">Подключить</a>
-                                        <!-- <a href="http://www.tele-vox.ru/" class="btn btn-default btn-orange mybtn mybtn-block">Личный кабинет</a> -->
                                         <a href="{% url 'client-simple_content' page='iptv' %}" class="btn btn-default mybtn mybtn-block {% block iptv-btn-active %}{% endblock %}" id="iptv">Телевидение</a>
                                         <a href="{% url 'client-simple_content' page='internet' %}" class="btn btn-default mybtn mybtn-block {% block internet-btn-active %}{% endblock %}" id="internet">Интернет</a>
                                         <a href="{% url 'client-rates' %}" class="btn btn-default mybtn mybtn-block {% block rates-btn-active %}{% endblock %}" id="rates">Тарифы</a>
@@ -191,7 +190,7 @@
                     <li><a href="http://hub.tlvx.ru/" >Hub</a></li>
                     <li><a href="ftp://ftp.tele-vox.ru/" >FTP-сервер</a></li>
                     <li><a href="http://local.tele-vox.ru/wiki/" >Поддержка</a></li>
-                    <li><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
+                    <li><a href="https://www.tele-vox.ru/" >Личный кабинет</a></li>
                 </ul><!-- /#bottomnav -->
 
                 <div id="license-info">
