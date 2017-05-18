@@ -50,7 +50,7 @@ def my_response(request, context={}, name=''):
 class StaticPage:
     """
     """
-    def __init__(self, request, name='', model='StaticPage', template=''):
+    def __init__(self, request, name, model='StaticPage', template=''):
         """
         Args:
             -request
@@ -60,7 +60,7 @@ class StaticPage:
         Returns:
             -my_response
         """
-        self.name = name or request.META.get('PATH_INFO').split('/')[-1]
+        self.name = name
         self.model = model
         obj = self.get_obj()  # непосредственно сам объект
         if obj.get_child():  # для страниц вида Tree (вакансии, справка)
@@ -113,7 +113,7 @@ def index(request):
 
 def simple_content(request, page=None):
     """Для отображения простых static page"""
-    return StaticPage(request=request, template='simple-content').response
+    return StaticPage(request=request, template='simple-content', name=page).response
 
 
 ###############################
