@@ -3,13 +3,11 @@ import json
 import os
 from django.db.models import Q
 import re
-import uuid
+# import uuid
 from django.core.exceptions import FieldError
 from django.db import models
 from django.utils import dateformat
 from django.utils import timezone
-from imagekit import models as imagekit_models
-from imagekit import processors
 from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
     DATE_FORMAT, DEFAULT_IMAGE_HOST_URL, CONN_SPAM
 from tlvx.helpers import sendEmail
@@ -571,10 +569,9 @@ class MarkerIcon(models.Model):
 
     get_absolute_url = lambda self, host_url='': '%s%s' % (
         host_url, self.ico.url) if self.ico else None
-    ico = imagekit_models.ProcessedImageField(
+    ico = models.ImageField(
         upload_to=get_photo_path,
-        verbose_name=u"иконка", null=True, blank=True, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
+        verbose_name=u"иконка", null=True, blank=True
     )
 
     width = lambda self: self.ico.width if self.ico else 0
@@ -706,24 +703,24 @@ class Captcha(models.Model):
         return "%s:%s" % (self.right, self.get_absolute_url())
 
 
-class CaptchaImage(Captcha):
-    def get_photo_path(self, filename):
-        new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
-        return os.path.join('captcha', new)
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
-    )
+# class CaptchaImage(Captcha):
+#     def get_photo_path(self, filename):
+#         new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
+#         return os.path.join('captcha', new)
+#     img = imagekit_models.ProcessedImageField(
+#         upload_to=get_photo_path, options={'quality': 85},
+#         processors=[processors.ResizeToFit(100, 100), ]
+#     )
 
 
-class CaptchaImageClone(Captcha):
-    def get_photo_path(self, filename):
-        new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
-        return os.path.join('captcha/clone', new)
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
-    )
+# class CaptchaImageClone(Captcha):
+#     def get_photo_path(self, filename):
+#         new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
+#         return os.path.join('captcha/clone', new)
+#     img = imagekit_models.ProcessedImageField(
+#         upload_to=get_photo_path, options={'quality': 85},
+#         processors=[processors.ResizeToFit(100, 100), ]
+#     )
 
 
 # ConnRequest
@@ -826,8 +823,8 @@ class Image(models.Model):
         blank=True, null=True,
         help_text="Directory for save. Image will available by full path:\
         %_SITE_URL_%/media/%_DIRECTORY_%/%_IMAGE_NAME_%")
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
+    img = models.ImageField(
+        upload_to=get_photo_path,
     )
     description = models.CharField(max_length=256)
 

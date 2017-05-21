@@ -13,7 +13,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'tlvx.core',
     'tlvx.api',
-    'imagekit'
+    # 'imagekit'
 )
 
 MIDDLEWARE = [

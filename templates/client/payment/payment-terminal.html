@@ -1,4 +1,5 @@
 {% extends "client/payment/payment-way.html" %}
+{% load staticfiles %}
 
 
 {% block content %}Телевокс - Оплата наличными{% endblock %}
@@ -6,7 +7,7 @@
 
 
 {% block jsscript %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
+<script type="text/javascript" src="{% static "js/libs/2gis/1.0/2gis.js" %}"></script>
 <script type="text/javascript">
     document.getElementById('searchInPoints').onkeydown = searchPaymentTermonal;
     document.getElementById('paymentSelect').onchange = selectPayment;

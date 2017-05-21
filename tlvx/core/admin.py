@@ -221,15 +221,15 @@ Captcha
 """
 
 
-class CaptchaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_absolute_url', 'right', 'key', 'date')
-    list_filter = ['right', 'date']
-admin.site.register(CaptchaImage, CaptchaAdmin)
+# class CaptchaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'get_absolute_url', 'right', 'key', 'date')
+#     list_filter = ['right', 'date']
+# admin.site.register(CaptchaImage, CaptchaAdmin)
 
 
-class CaptchaCloneAdmin(CaptchaAdmin):
-    pass
-admin.site.register(CaptchaImageClone, CaptchaCloneAdmin)
+# class CaptchaCloneAdmin(CaptchaAdmin):
+#     pass
+# admin.site.register(CaptchaImageClone, CaptchaCloneAdmin)
 
 """
 Заявки
