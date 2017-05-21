@@ -166,25 +166,6 @@ function request(params){
     function error(e){console.log(e)};
     if(method == 'GET') $.getJSON(path, query, _success, error)
     else $.post(path, data, _success, error)
-    /*var xhr = new XMLHttpRequest();
-    if(query) var path = path + '?' + query;
-    xhr.open(method, path, true);
-    if(data){
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        var data = serialize(data);
-    }
-    xhr.onerror = error;
-    xhr.onload = function(e){
-        console.log(xhr.responseText)
-        try{var r = eval("("+xhr.responseText+")");}
-        catch(e){var r = {'exception': e}}
-        finally{
-            if(r.exception===undefined&&(xhr.status==200||xhr.status==201)) var obj = {fn:success, r:r.data}
-            else var obj = {fn:error, r:r}
-            if(obj.fn) obj.fn(obj.r);
-        }
-    };
-    xhr.send(data);*/
 }
 
 /*----------------------------------------------------------------------------*/

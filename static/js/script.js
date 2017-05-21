@@ -90,7 +90,9 @@ function enlargeLimit(){
         path: 'bglimit',
         post: true,
         data: data,
-        success: function(data){document.getElementById('message').innerHTML = data.message}
+        success: function(data){
+            document.getElementById('message').innerHTML = data.message
+        }
     });
 }
 

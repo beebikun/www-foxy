@@ -7,7 +7,7 @@ from django.conf import settings
 
 class BGBilling(object):
     """Класс для связи с личным кабинетом BGBilling"""
-    BASE_URL = "http://www.tele-vox.ru"
+    BASE_URL = "https://www.tele-vox.ru"
     LIMIT_WRN = u'Лимит на вашем лицевом счете уже взят.'
     LIMIT_SCS = u'Лимит для вашего лицевого счета понижен.'
 
@@ -17,6 +17,7 @@ class BGBilling(object):
         r = self.s.post(self.BASE_URL, data=data)
         title_re = re.search(ur'class="pageTitle">([\S\s]+?)</div>', r.text)
         title = title_re.groups()[0].strip() if title_re else u''
+        print title
         if title != u'Договор № {}'.format(lgn):
             raise LoginException(reason=title)
         return r.text
