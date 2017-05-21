@@ -1,0 +1,17 @@
+<div class="some-item"
+    data-lat="{{building.lat}}" data-lng="{{building.lng}}" data-ico="{{building.ico}}"
+    is-result="{{is_result}}"
+    id="simmularItemsID_{{building.id}}">
+<p class="some-item-date">{{building.status}}</p> <!-- /.some-item-date -->
+
+<div class="some-item-body">
+    <span class="some-item-body-title">{{ building.get_address }}</span>
+    <div class="some-item-body-text" >
+        <a class="btn btn-link mybtn-link no-margin no-padding open-doit" data-toggle="modal" href="#doit"
+           address="{{building.get_address}}" co="{{building.co_address}}" status="{{building.status}}"
+           building-id="{{building.id}}"
+            >
+            Оставить заявку</a>
+    </div><!-- /.some-item-body-text -->
+</div><!-- /.some-item-body -->
+</div><!-- /.some-item -->

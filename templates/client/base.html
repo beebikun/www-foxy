@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <!--[if IE 8]><html class="lt-ie10 ie8" lang="ru"><![endif]-->
 <!--[if IE 9]><html class="lt-ie10 ie9" lang="ru"><![endif]-->
@@ -6,20 +7,20 @@
     <meta charset="utf-8">
     <meta name="description" content="{% block content %}Интернет провайдер Телевокс - Интернет в каждый дом!{% endblock %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <link rel="icon" type="image/png" href="{{ STATIC_URL }}img/favicon.png" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-3.0.0/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome-4.6.3/css/font-awesome.min.css" />
+    <link rel="icon" type="image/png" href="{% static "img/favicon.png" %}" />
+    <link rel="stylesheet" href="{% static "css/bootstrap-3.0.0/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/font-awesome-4.6.3/css/font-awesome.min.css" %}" />
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/mobile.css" media='all and (max-width: 711px)'/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/tablet.css" media='all and (min-width: 712px) and (max-width: 989px)'/>
-    <!--[if IE]> <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" /> <![endif]-->
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/pc.css" media='all and (min-width: 990px)'/>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/tlvx.css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/fonts.css" />
+    <link rel="stylesheet" href="{% static "css/mobile.css" %}" media='all and (max-width: 711px)'/>
+    <link rel="stylesheet" href="{% static "css/tablet.css" %}" media='all and (min-width: 712px) and (max-width: 989px)'/>
+    <!--[if IE]> <link rel="stylesheet" href="{% static "css/pc.css" %}" /> <![endif]-->
+    <link rel="stylesheet" href="{% static "css/pc.css" %}" media='all and (min-width: 990px)'/>
+    <link rel="stylesheet" href="{% static "css/tlvx.css" %}" />
+    <link rel="stylesheet" href="{% static "css/fonts.css" %}" />
 
 
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}ShapeHoverEffectSVG/css/component.css" />
-    <script src="{{ STATIC_URL }}ShapeHoverEffectSVG/js/snap.svg-min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "ShapeHoverEffectSVG/css/component.css" %}" />
+    <script src="{% static "ShapeHoverEffectSVG/js/snap.svg-min.js" %}"></script>
 
     <title>{% block title %}Televox -  Интернет в каждый дом{% endblock %}</title>
 <script type="text/javascript">
@@ -82,7 +83,7 @@
                                             <li class="orange"><a href="http://www.tele-vox.ru/" >Личный кабинет</a></li>
                                         </ul>
                                         <a href="/"  id="logo">
-                                            <img src="{{ STATIC_URL }}img/logo.png" alt="Телевокс - Интернет в каждый дом">
+                                            <img src="{% static "img/logo.png" %}" alt="Телевокс - Интернет в каждый дом">
                                         </a>
                                         <button id="collapseMenuBtn" class="btn btn-link mybtn-link">
                                             <i class="fa fa-bars fa-2x"></i>
@@ -98,8 +99,8 @@
                         {% block header-bottom %}
                         <section id="makeConReq">
                                 {% block makeconreq %}
-                            <form class="form-inline" role="form"  action="{% url 'client-letsfox' %}" method="post">
-                                {% csrf_token %}
+                            <form class="form-inline" role="form"  action="{% url 'client-letsfox' %}"
+                                  id="connRequest">
                                 <div class="form-group" id="makeConReqTitle">
                                 Возможность подключения:
                                 </div>
@@ -110,10 +111,12 @@
                                 </div>
                                 <div class="form-group" id="makeConReqHouse">Дом</div>
                                 <div class="form-group makeConReqInput">
-                                    <input type="text" class="form-control input-sm" name="num" value="{% if data.params.num %}{{data.params.num}}{% endif %}" placeholder="Дом">
+                                    <input type="text" class="form-control input-sm" name="num" placeholder="Дом"
+                                           value="{% if data.params.num %}{{data.params.num}}{% endif %}" >
                                 </div>
                                 <div class="form-group makeConReqBut">
-                                    <button type="submit" class="btn btn-default btn-sm " value='Проверить' >Проверить</button>
+                                    <button type="button" class="btn btn-default btn-sm "
+                                           onclick="checkAddress()">Проверить</button>
                                 </div>
                             </form>
                             {% endblock %}
@@ -209,25 +212,23 @@
         {% endblock %}
     </footer><!-- /footer -->
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/jquery/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/helpers.js"></script>
+<script type="text/javascript" src="{% static "js/libs/jquery/jquery-1.9.1.min.js" %}"></script>
+<script type="text/javascript" src="{% static "/js/helpers.js" %}"></script>
 <script type="text/javascript">
     var url = window.location.host + '/';
     var api = new Object;
     api.api = 'http://' + url + "api/"
-    api.street = api.api + 'street';
-    api.markers = api.api + 'markers-icons';
-    api.doit = api.api + 'doit';
-    api.captcha = api.api + 'captcha';
-    api.buildingSearch = api.api + 'buildings/search';
+    // api.street = api.api + 'street';
     api.bg = new Object;
     api.bg.root = api.api + 'bg/';
     api.bglimit = api.bg.root + 'limit';
+
+    var Icons = {{ icons | safe }};
 </script>
-<script src="{{ STATIC_URL }}css/bootstrap-3.0.0/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/address.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/modal.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/script.js"></script>
+<script src="{% static "css/bootstrap-3.0.0/bootstrap/js/bootstrap.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/address.js" %}"></script>
+<script type="text/javascript" src="{% static "js/modal.js" %}"></script>
+<script type="text/javascript" src="{% static "js/script.js" %}"></script>
 {% block jsscript %}{% endblock %}
 </body>
 </html>

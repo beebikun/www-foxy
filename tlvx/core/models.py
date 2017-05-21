@@ -14,6 +14,7 @@ from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
     DATE_FORMAT, DEFAULT_IMAGE_HOST_URL, CONN_SPAM
 from tlvx.helpers import sendEmail
 from tlvx.core.gis import get_gis_url, make_get, get_gis_answer
+from rest_framework.reverse import reverse
 
 
 formatted_date = lambda date: dateformat.format(date, DATE_FORMAT)
@@ -155,6 +156,28 @@ class Building(models.Model):
     get_pp = lambda self: len(self.points.all())
 
     get_position = lambda self: [self.lat, self.lng]
+
+    @property
+    def co_address(self):
+        if self.co is None:
+            return
+        return u'{}, {}'.format(self.co.contacts or '', self.co.schedule or '')
+
+    @property
+    def status(self):
+        if self.active:
+            return u'Подключен'
+        if self.plan:
+            return u'Сбор заявок'
+        return u'Не подключен'
+
+    @property
+    def ico(self):
+        if self.active:
+            return 'active'
+        if self.plan:
+            return 'plan'
+        return 'not_in_list'
 
     def search_by_address(self, street='', num=''):
         if street.lower() in self.street.name.lower() and \
@@ -559,6 +582,16 @@ class MarkerIcon(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def data(self, request):
+        root_url = reverse('client-index', request=request)
+        return {
+            'id': self.id,
+            'name': self.name,
+            'path': self.get_absolute_url(root_url),
+            'width': self.width(),
+            'height': self.height(),
+        }
 
 
 class StaticPageBase(models.Model):

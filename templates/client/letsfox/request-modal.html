@@ -1,0 +1,80 @@
+
+<!-- Модальное окно с формой заявки -->
+<div class="modal fade" id="doit" tabindex="-1" role="dialog"  aria-hidden="true" data-close="1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form role="form" method="post" action="{% url 'client-letsfox' %}" id="okModal">
+        {% csrf_token %}
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Заявка на подключение</h4>
+        </div><!-- /.modal-header -->
+
+        <div class="modal-body">
+          <input type="hidden" name="status" value="" autocomplete="off">
+          <input type="hidden" name="building-id" value="" autocomplete="off">
+          <label for="requestContacts">Контактная информация</label>
+          <section id="requestContacts">
+            <div class="form-group {% if errors.fio %} has-error {% endif %}">
+              <input type="text" class="form-control" placeholder="Фамилия, Имя, Отчество" name="fio">
+              {% if errors.fio %}
+                  <span class="help-block help-error">Пожалуйста, укажите Ваше имя</span>
+              {% endif %}
+            </div>
+
+            <div class="form-group {% if errors.phone %} has-error {% endif %}">
+              <input type="text" class="form-control my-form-control" placeholder="Телефон или email" name="phone">
+              {% if errors.phone %}
+                  <span class="help-block help-error">Пожалуйста, укажите как с Вами связаться</span>
+              {% endif %}
+            </div>
+          </section><!-- /#requestContacts -->
+
+          <label for="requestAddres">Адрес подключения</label>
+          <section id="requestAddres">
+            <div class="form-group ">
+              <div class="col-lg-6" id="address">
+                <input type="text" class="form-control" readonly name="address">
+              </div>
+              <div class="col-lg-6">
+                <input type="text" class="form-control" id="flat" placeholder="Номер квартиры" name="flat">
+                <span class="help-block help-error"></span>
+              </div>
+              <br>
+            </div>
+          </section><!-- /#requestAddres -->
+
+          <label for="requsetSrc">Откуда узнали о нас</label>
+          <section id="requsetSrc">
+            <div class="form-group">
+              <input type="text" class="form-control" name="source">
+              <span class="help-block">Пожалуйста, укажите источник, откуда вы узнали о нас</span>
+            </div>
+          </section><!-- /#requsetSrc -->
+
+          <label for="requsetCmnt">Комментарий</label>
+          <section id="requsetCmnt">
+            <div class="form-group">
+              <span class="help-block">Здесь вы можете указать желательное время звонка или оставить какой-нибудь комментарий</span>
+              <input type="text" class="form-control"  placeholder=""  name="comment">
+            </div>
+          </section><!-- /#requsetCmnt -->
+
+
+          <section class="form-group" id="doit_contacts">
+            <br>
+            <span class="help-block">
+              Для получения более подробной информации обратитесь в офис компании:<br>
+              <span id="doit_contacts_area"></span>
+            </span>
+          </section><!-- /#doit_contacts -->
+        </div><!-- /.modal-body -->
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal"> Отмена </button>
+          <button type="submit" class="btn btn-default btn-orange">Оставить</button>
+        </div><!-- /.modal-footer -->
+      </form>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- #doit -->

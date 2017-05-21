@@ -1,12 +1,7 @@
 var mapH;
-var menuSettings = {
-    hide : { h: 0, b: 'none'},
-    normal: { h: 253, b: '1px solid #DADADA'}
-};
-var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
-var numInput = filterVisible(document.querySelectorAll('[name=num]'));
-var streetTips = document.getElementById('streetTips');
-
+var street;
+var num;
+var templateLoadFn;
 /*--------------------Buttons Section----------------*/
 
 function initRadioButtons(){
@@ -34,7 +29,7 @@ function initMap(){
                 showHideElBlock(mymap)
             } else{
                 showHideElBlock(mymap, true);
-                if( window.mapH === undefined ) mapH = new M(mapId, numInput, streetInput);
+                if( window.mapH === undefined ) mapH = new M(mapId, num, street);
             }
         }
         map_in_little_window();
@@ -46,9 +41,11 @@ function initMap(){
 
 
 window.onload = function(){
+    if (templateLoadFn) {
+        templateLoadFn();
+    }
     initMap();
     initModal();
-    initAddresses();
 
     tagnameEach( 'table',  function(el){ addClass(el, "table table-bordered") } );
     tagnameEach( 'img', function(el){ addClass(el, "img-responsive") });
@@ -76,74 +73,8 @@ window.onload = function(){
             if(a.getAttribute('href')==path) addClass(a, 'active');
         }
     })();
-
 }
 
-
-
-/*--------------------//letsfox.html//------------------------*/
-function createCaptcha(id){
-    var captcha = document.getElementById(id);
-    captcha.innerHTML = '';
-    request({
-        path: 'captcha',
-        success: function(data){
-            if(!data || data.length == 0) return;
-            document.querySelectorAll('[name=captcha_key]').value = data.key;
-            for (var i = 0; i < data.images.length; i++) {
-                var val = data.images[i]
-                captcha.innerHTML = [captcha.innerHTML, '<label class="btn btn-default mybtn">',
-                                     '<input type="radio" name="captcha" value="', val.name, '">',
-                                     '<img src="', val.src, '" >', '</label>'].join('');
-            };
-            initRadioButtons()
-        }
-    });
-}
-
-function doitOkBtnClick(e){
-    var form = findParent('form', this);
-    var data = new Object;
-    var inputs = filterNodes(form.getElementsByTagName('input'),
-                             function(input){return input.getAttribute('name')});
-
-    inputs.forEach(function(input){
-        var t = input.getAttribute('type');
-        if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ){
-            data[input.getAttribute('name')] = t == 'checkbox' ? input.checked : input.value
-        }
-    });
-    node2array( document.querySelectorAll('.btn') ).forEach(function(el){el.setAttribute('disabled', true) });
-    request({
-        post: true,
-        path: 'doit',
-        data: data,
-        success: function(data){
-            node2array( document.querySelectorAll('.btn') ).forEach(function(el){
-                el.removeAttribute('disabled')
-            });
-            node2array( document.querySelectorAll('.has-error') ).forEach(function(el){
-                removeClass( el, 'has-error');
-            });
-            node2array( document.querySelectorAll('.help-error') ).forEach(function(el){showHideElBlock(el);});
-            if(data.doit === undefined){
-                for(var field in data){
-                    var err = data[field];
-                    var errInput = document.querySelector('[name=' + field + ']');
-                    var formGroup =  findParent('.form-group', errInput);
-                    addClass( formGroup, 'has-error');
-                    var errText = formGroup.getElementsByClassName( 'help-error' )[0];
-                    showHideElBlock(errText, true)
-                    errText.innerText = err;
-                }
-            } else {
-                showHideModal( document.getElementById('doit') );
-                showHideModal( document.getElementById('doitOk'), true );
-            }
-            createCaptcha('captcha');
-        }
-    });
-}
 
 
 /*--------------------//payment-limit.html//------------------------*/
@@ -215,47 +146,3 @@ function searchPaymentTermonal(e){
     };
 }
 
-/*---------------------------------//rates.html//-----------------------------*/
-
-
-function initShapeHover() {
-    var speed = 330,
-        easing = mina.backout;
-
-    [].slice.call ( document.querySelectorAll( '.shapehover-item' ) ).forEach( function( el ) {
-        var svg = el.querySelector( 'svg' ), path = svg ? svg.querySelector('path') : null;
-        if(!path) return
-        var s = Snap( el.querySelector( 'svg' ) ), path = s.select( 'path' ),
-            pathConfig = {
-                from : path.attr( 'd' ),
-                to : el.getAttribute( 'data-path-hover' )
-            };
-        el.setAttribute('data-state', 'in')
-
-        function collapse(){
-            removeClass(el, 'shapeHover-in')
-            path.animate( { 'path' : pathConfig.from }, speed, easing );
-        }
-
-        function spread(){
-            addClass(el, 'shapeHover-in')
-            path.animate( { 'path' : pathConfig.to }, speed, easing );
-        }
-
-        el.addEventListener( 'click', function() {
-            if(hasClass(el, 'shapeHover-in')) collapse()
-            else spread()
-        } );
-
-        el.addEventListener( 'mouseenter', function() {
-            spread()
-        } );
-
-        el.addEventListener( 'mouseleave', function() {
-            collapse()
-        } );
-
-    } );
-}
-
-initShapeHover();

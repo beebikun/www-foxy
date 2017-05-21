@@ -23,7 +23,7 @@ function showHideModal(el, show){
 
 
 function clickModalA(a){
-  //функция для onlick
+    //функция для onlick
     if(preModalFn) preModalFn(a);
     var id = a.getAttribute('href').slice(1);
     var modal = document.getElementById( trim(id) );
