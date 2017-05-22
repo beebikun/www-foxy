@@ -12,7 +12,7 @@ from tlvx.core.models import StaticPage, HelpPage, Note, Image
 
 class StaticPageSerializer(serializers.ModelSerializer):
     # @TODO: get rid off all serializers
-    attach = serializers.Field(source='get_url_attach')
+    attach = serializers.ReadOnlyField(source='get_url_attach')
 
     class Meta:
         model = StaticPage
@@ -22,6 +22,7 @@ class StaticPageSerializer(serializers.ModelSerializer):
             'display_name',
             'attach',
         )
+        read_only_fields = fields
 
 
 class StaticPageView(DetailView):
@@ -31,6 +32,7 @@ class StaticPageView(DetailView):
 
     def get_context_data(self, instance):
         data = StaticPageSerializer(instance=instance).data
+        print data
         childs = instance.get_childs()
         data['childs'] = map(self.get_context_data, childs)
         return data
@@ -56,7 +58,7 @@ class NewsPageView(TemplateView):
     count = 10
 
     def get_news(self):
-        return Note.objects.filter(date__lte=timezone.now()).order_by('num', '-date')
+        return Note.objects.filter(date__lte=timezone.now()).order_by('-num', '-date')
 
     def get(self, request):
         notes = self.get_news()
