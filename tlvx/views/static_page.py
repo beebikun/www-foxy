@@ -56,7 +56,7 @@ class NewsPageView(TemplateView):
     count = 10
 
     def get_news(self):
-        return Note.objects.filter(date__lte=timezone.now()).order_by('num', '-date')
+        return Note.objects.filter(date__lte=timezone.now()).order_by('-num', '-date')
 
     def get(self, request):
         notes = self.get_news()
