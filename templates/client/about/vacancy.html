@@ -22,12 +22,8 @@
         </li>
         {% endfor %}
     </ul>
-</div>
-{% endblock %}
-
-
-{% block main-bottom-left %}
-<!-- Описание вакансий -->
+    
+    <!-- Описание вакансий -->
 <div id="fqaAnsw" class="link-list">
     {% for vacancy in childs %}
         <a href="#{{vacancy.name}}" id="{{vacancy.name}}">
@@ -37,4 +33,10 @@
         <div> {{ vacancy.content|safe }} </div>
     {% endfor %}
 </div>
+</div>
+{% endblock %}
+
+
+{% block main-bottom-left %}
+
 {% endblock %}
