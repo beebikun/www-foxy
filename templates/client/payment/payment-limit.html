@@ -1,4 +1,4 @@
-{% extends "client/payment-way.html" %}
+{% extends "client/payment/payment-way.html" %}
 
 
 {% block content %}Телевокс - Обещанный платеж{% endblock %}
@@ -6,7 +6,7 @@
 
 
 {% block payment %}
-{{data.content|safe}}
+{{page.content|safe}}
 <!-- Форма авторизации в лк -->
 <div class="form-inline form-group" role="form" id="limit_form">
     {% csrf_token %}

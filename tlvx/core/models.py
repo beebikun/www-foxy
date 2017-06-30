@@ -3,21 +3,22 @@ import json
 import os
 from django.db.models import Q
 import re
-import uuid
+# import uuid
 from django.core.exceptions import FieldError
 from django.db import models
 from django.utils import dateformat
 from django.utils import timezone
-from imagekit import models as imagekit_models
-from imagekit import processors
 from tlvx.settings import BUILD_TYPES, NOTE_TYPES, RATES_TYPES, \
     DATE_FORMAT, DEFAULT_IMAGE_HOST_URL, CONN_SPAM
 from tlvx.helpers import sendEmail
 from tlvx.core.gis import get_gis_url, make_get, get_gis_answer
+from rest_framework.reverse import reverse
 
 
 formatted_date = lambda date: dateformat.format(date, DATE_FORMAT)
 
+
+# @TODO: Clean it
 
 class City(models.Model):
     name = models.CharField(max_length=256, unique=True)
@@ -55,8 +56,6 @@ class CentralOffice(models.Model):
     lat = lambda self: self.address.lat
 
     lng = lambda self: self.address.lng
-
-    get_address = lambda self: self.address.get_address()
 
     get_builds_sum = lambda self: len(self.buildings.all())
 
@@ -155,6 +154,28 @@ class Building(models.Model):
     get_pp = lambda self: len(self.points.all())
 
     get_position = lambda self: [self.lat, self.lng]
+
+    @property
+    def co_address(self):
+        if self.co is None:
+            return
+        return u'{}, {}'.format(self.co.contacts or '', self.co.schedule or '')
+
+    @property
+    def status(self):
+        if self.active:
+            return u'Подключен'
+        if self.plan:
+            return u'Сбор заявок'
+        return u'Не подключен'
+
+    @property
+    def ico(self):
+        if self.active:
+            return 'active'
+        if self.plan:
+            return 'plan'
+        return 'not_in_list'
 
     def search_by_address(self, street='', num=''):
         if street.lower() in self.street.name.lower() and \
@@ -419,11 +440,11 @@ class PaymentPoint(models.Model):
     gis_hash = models.CharField(max_length=256, blank=True, default=u'')
     contacts = models.CharField(max_length=2048, blank=True, default=u'')
 
-    lat = lambda self: self.address.lat
-
-    lng = lambda self: self.address.lng
-
-    get_address = lambda self: self.address.get_address()
+    @property
+    def display_name(self):
+        if self.name is None:
+            return self.address.get_address()
+        return self.name
 
     def save(self, *args, **kwargs):
         if kwargs:
@@ -548,10 +569,9 @@ class MarkerIcon(models.Model):
 
     get_absolute_url = lambda self, host_url='': '%s%s' % (
         host_url, self.ico.url) if self.ico else None
-    ico = imagekit_models.ProcessedImageField(
+    ico = models.ImageField(
         upload_to=get_photo_path,
-        verbose_name=u"иконка", null=True, blank=True, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
+        verbose_name=u"иконка", null=True, blank=True
     )
 
     width = lambda self: self.ico.width if self.ico else 0
@@ -560,28 +580,34 @@ class MarkerIcon(models.Model):
     def __unicode__(self):
         return self.name
 
+    def data(self, request):
+        root_url = reverse('client-index', request=request)
+        return {
+            'id': self.id,
+            'name': self.name,
+            'path': self.get_absolute_url(root_url),
+            'width': self.width(),
+            'height': self.height(),
+        }
+
 
 class StaticPageBase(models.Model):
     class Meta:
         abstract = True
-    name = models.CharField(
-        max_length=256, unique=True,
-        verbose_name=u"Имя. Только латиница",  blank=True)
 
+    name = models.CharField(max_length=256, unique=True, blank=True, verbose_name=u"Имя. Только латиница", )
     display_name = models.CharField(max_length=256, null=True, blank=True)
+    attach = models.FileField(upload_to='pages', null=True, blank=True)
 
-    get_child = lambda self: None
+    def get_childs(self):
+        return []
 
-    get_attach_path = lambda self, filename: 'pages/%s/%s.%s' % (
-        self.__class__.__name__.lower(), self.name, filename.split('.')[-1])
+    def get_url_attach(self, host_url=''):
+        if self.attach:
+            return '{}{}'.format(host_url, self.attach.url)
 
-    get_url_attach = lambda self, host_url='': '%s%s' % (
-        host_url, self.attach.url) if self.attach else None
-
-    attach = models.FileField(
-        upload_to=get_attach_path,  null=True, blank=True)
-
-    have_content = lambda self: True if self.content else False
+    def have_content(self):
+        return
 
     def __unicode__(self):
         return self.name
@@ -590,16 +616,21 @@ class StaticPageBase(models.Model):
 class StaticPage(StaticPageBase):
     content = models.TextField(null=True, blank=True)
 
+    def have_content(self):
+        return bool(self.content)
+
 
 class TreePage(StaticPageBase):
     class Meta:
         abstract = True
 
-    have_childs = lambda self: True if len(self.get_child()) else False
+    def have_childs(self):
+        childs = self.get_childs()
+        return len(childs) > 0
 
-    def get_child(self):
-        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
-        return list(childs.all())
+    def get_childs(self):
+        childs = getattr(self, '%s_childs' % self.__class__.__name__.lower()).all()
+        return list(childs)
 
 
 class DocumentsPage(TreePage):
@@ -615,7 +646,7 @@ class HelpPage(TreePage):
     parent = models.ForeignKey(
         'HelpPage', null=True, blank=True, related_name="%(class)s_childs")
 
-    def get_child(self):
+    def get_childs(self):
         childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.all().order_by('num', 'display_name'))
 
@@ -643,7 +674,7 @@ class VacancyPage(TreePage):
         'VacancyPage', null=True, blank=True, related_name="%(class)s_childs")
     show = models.BooleanField(default=True)
 
-    def get_child(self):
+    def get_childs(self):
         childs = getattr(self, '%s_childs' % self.__class__.__name__.lower())
         return list(childs.filter(show=True))
 
@@ -672,24 +703,24 @@ class Captcha(models.Model):
         return "%s:%s" % (self.right, self.get_absolute_url())
 
 
-class CaptchaImage(Captcha):
-    def get_photo_path(self, filename):
-        new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
-        return os.path.join('captcha', new)
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
-    )
+# class CaptchaImage(Captcha):
+#     def get_photo_path(self, filename):
+#         new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
+#         return os.path.join('captcha', new)
+#     img = imagekit_models.ProcessedImageField(
+#         upload_to=get_photo_path, options={'quality': 85},
+#         processors=[processors.ResizeToFit(100, 100), ]
+#     )
 
 
-class CaptchaImageClone(Captcha):
-    def get_photo_path(self, filename):
-        new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
-        return os.path.join('captcha/clone', new)
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
-        processors=[processors.ResizeToFit(100, 100), ]
-    )
+# class CaptchaImageClone(Captcha):
+#     def get_photo_path(self, filename):
+#         new = "%s.%s" % (uuid.uuid4(), filename.split('.')[-1])
+#         return os.path.join('captcha/clone', new)
+#     img = imagekit_models.ProcessedImageField(
+#         upload_to=get_photo_path, options={'quality': 85},
+#         processors=[processors.ResizeToFit(100, 100), ]
+#     )
 
 
 # ConnRequest
@@ -792,8 +823,8 @@ class Image(models.Model):
         blank=True, null=True,
         help_text="Directory for save. Image will available by full path:\
         %_SITE_URL_%/media/%_DIRECTORY_%/%_IMAGE_NAME_%")
-    img = imagekit_models.ProcessedImageField(
-        upload_to=get_photo_path, options={'quality': 85},
+    img = models.ImageField(
+        upload_to=get_photo_path,
     )
     description = models.CharField(max_length=256)
 

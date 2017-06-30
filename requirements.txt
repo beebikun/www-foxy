@@ -1,0 +1,7 @@
+Django==1.10
+pillow==4.1.1
+djangorestframework==3.6.3
+requests
+flup
+pytz
+uwsgi==2.0.15

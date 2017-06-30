@@ -7,7 +7,7 @@
                 {% if not tv %}
                 <div class="rate-speed"><strong>100</strong>Мб/с</div>
                 {% else %}
-                <div class="rate-speed"><strong>{{data.televoxtv_tv_count}}</strong>TV каналов*</div>
+                <div class="rate-speed">{{televoxtv_tv_count | safe }}</div>
                 {% endif %}
             </div>
         </li>
@@ -24,6 +24,6 @@
             {% endif %}
         </li>
 
-        {% include "client/rates-feature-list.html" %}
+        {% include "client/rates/rates-feature-list.html" %}
     </ul>
 </div>

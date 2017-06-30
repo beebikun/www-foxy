@@ -1,12 +1,7 @@
 var mapH;
-var menuSettings = {
-    hide : { h: 0, b: 'none'},
-    normal: { h: 253, b: '1px solid #DADADA'}
-};
-var streetInput = filterVisible(document.querySelectorAll('[name=street]'));
-var numInput = filterVisible(document.querySelectorAll('[name=num]'));
-var streetTips = document.getElementById('streetTips');
-
+var street;
+var num;
+var templateLoadFn;
 /*--------------------Buttons Section----------------*/
 
 function initRadioButtons(){
@@ -21,78 +16,6 @@ function initRadioButtons(){
         }
     });
 }
-
-/*-----------------------------------------------*/
-
-
-/*--------------------Modal Section----------------*/
-var preModalFn;
-
-function showHideModal(el, show){
-    var classes = getClass(el);
-    if(show){
-        el.style.display = 'block';
-        setTimeout(function(){
-            addClass(el, 'in');
-            var div = document.createElement('div');
-            addClass(div, 'modal-backdrop fade in');
-            if(document.body != null) document.body.appendChild(div);
-        }, 50);
-    }else{
-        removeClass(el, 'in');
-        setTimeout(function(){
-            el.style.display = 'none'
-            removeEl('.modal-backdrop');
-        }, 50);
-    }
-    el.setAttribute('aria-hidden', show ? false : true)
-}
-
-
-
-function clickModalA(a){
-	//функция для onlick
-    if(preModalFn) preModalFn(a);
-    var id = a.getAttribute('href').slice(1);
-    var modal = document.getElementById( trim(id) );
-    if(modal) showHideModal(modal, true)
-}
-
-function initModal(){
-    var modalClass = '.modal';
-
-    //find and set all modal dismiss buttons
-    node2array(document.querySelectorAll('[data-dismiss=modal]')).forEach(
-        function(btn){
-            btn.onclick = function(e){
-                var modal = findParent(modalClass, this);
-                if(modal) showHideModal(modal);
-            }
-         }
-    );
-
-    //find and set all modal open elements (<a>)
-    node2array(document.querySelectorAll('[data-toggle=modal]')).forEach(
-        function(a){
-            a.onclick = function(){clickModalA(this);}
-        }
-    );
-
-    //find and set all modal elements (<div class="modal">)
-    node2array(document.querySelectorAll(modalClass)).forEach(
-        function(modal){
-            modal.onclick = function(e){
-                if( ~e.target.className.split(' ').indexOf('modal') ) showHideModal(this)}
-        }
-    );
-}
-/*-----------------------------------------------*/
-
-/*----------------Carusel Section---------------*/
-
-
-/*-----------------------------------------------*/
-
 /*------------------Map Section-----------------*/
 
 function initMap(){
@@ -106,7 +29,7 @@ function initMap(){
                 showHideElBlock(mymap)
             } else{
                 showHideElBlock(mymap, true);
-                if( window.mapH === undefined ) mapH = new M(mapId, numInput, streetInput);
+                if( window.mapH === undefined ) mapH = new M(mapId, num, street);
             }
         }
         map_in_little_window();
@@ -118,17 +41,20 @@ function initMap(){
 
 
 window.onload = function(){
+    if (templateLoadFn) {
+        templateLoadFn();
+    }
     initMap();
     initModal();
 
     tagnameEach( 'table',  function(el){ addClass(el, "table table-bordered") } );
     tagnameEach( 'img', function(el){ addClass(el, "img-responsive") });
-    tagnameEach( 'input', function(el){ el.setAttribute('autocomplete','off') }); //Если js отключен - то пусть хоть такая подсказка остается
-    /*node2array( document.getElementsByClassName('map') ).forEach(function(el){ showHideElBlock(el, true) });*/
+    // Если js отключен - то пусть хоть такая подсказка остается
+    tagnameEach( 'input', function(el){ el.setAttribute('autocomplete','off') });
 
 
     (function(){
-        //Open/close menu for mobile divices
+        // Open/close menu for mobile divices
         var body = document.getElementsByTagName('body')[0];
         document.getElementById('collapseMenuBtn').onclick = function(e){
             //window.scrollTo(0,0);
@@ -138,7 +64,7 @@ window.onload = function(){
 
 
     (function(){
-        //Hightigh a current content-menu item
+        // Highlight a current content-menu item
         var contentmenu = document.getElementsByClassName('content-menu');
         var contentmenuEl = contentmenu.length ? node2array(contentmenu[0].getElementsByTagName('a')) : [];
         var path = window.location.pathname;
@@ -147,147 +73,8 @@ window.onload = function(){
             if(a.getAttribute('href')==path) addClass(a, 'active');
         }
     })();
-
-
-    (function() {
-        //Behavior in address building num input
-        if(!numInput) return
-        numInput.onkeydown = function(e){
-            var code = e.keyCode || e.which;
-            if(code==27){//esc
-                this.blur();
-                return
-            }
-            if(code==13){//enter
-                return
-            }
-        }
-    })();
-
-
-    (function(){
-        //Behavior in address street name input
-        if(!streetInput) return
-        var ul = streetTips.getElementsByTagName('ul')[0];
-
-        streetInput.onblur = function(){
-            setTimeout(function () {showHideElBlock(streetTips); }, 100)
-        }
-
-        streetInput.onkeydown = function(e){
-            var code = e.keyCode || e.which;
-            if(code==27){//esc
-                this.blur();
-                return
-            }
-            if(code==13){//enter
-                var liActive = node2array(ul.getElementsByClassName('active'));
-                if(liActive.length) streetInput.value = liActive[0].innerText || liActive[0].innerHTML;
-                return
-            }
-            if(code == 40 || code == 38){//40 - arrow down; 38 - arrow up
-                (function(isUp){
-                    var lis = node2array(ul.getElementsByTagName('li'));
-                    var liActive = lis.filter(function(li){return hasClass(li, 'active')});
-                    var liNext = (function(){
-                        var fn = isUp ? 'previousElementSibling' : 'nextElementSibling';
-                        return liActive.length ? liActive[0][fn] : null;;
-                    })();
-                    for (var i = liActive.length - 1; i >= 0; i--) {
-                        removeClass(liActive[i], 'active');
-                    };
-                    addClass(liNext ? liNext : lis[0], 'active');
-                })(code == 38 ? true : false);
-            } else{
-                var newval = streetInput.value;
-                if(newval.length < 3) return;
-                ul.innerHTML = '';
-                request({
-                    path: 'street',
-                    query: {name: newval},
-                    success: function(data){
-                        var streetsVal = 2, streetLen = data.length;
-                        if(streetLen==0) return;
-                        for (var i = streetLen > streetsVal ? streetsVal : (streetLen - 1); i >= 0; i--) {
-                            var el = document.createElement('li'), name = data[i].name;
-                            el.innerHTML = name;
-                            el.onclick = function(){streetInput.value = name;}
-                            ul.appendChild(el);
-                        };
-                        showHideElBlock(streetTips, true);
-                    }
-                })
-            }
-        }
-    })();
-
 }
 
-
-
-/*--------------------//letsfox.html//------------------------*/
-function createCaptcha(id){
-    var captcha = document.getElementById(id);
-    captcha.innerHTML = '';
-    request({
-        path: 'captcha',
-        success: function(data){
-            if(!data || data.length == 0) return;
-            document.querySelectorAll('[name=captcha_key]').value = data.key;
-            for (var i = 0; i < data.images.length; i++) {
-                var val = data.images[i]
-                captcha.innerHTML = [captcha.innerHTML, '<label class="btn btn-default mybtn">',
-                                     '<input type="radio" name="captcha" value="', val.name, '">',
-                                     '<img src="', val.src, '" >', '</label>'].join('');
-            };
-            initRadioButtons()
-        }
-    });
-}
-
-function doitOkBtnClick(e){
-    var form = findParent('form', this);
-    var data = new Object;
-    var inputs = filterNodes(form.getElementsByTagName('input'),
-                             function(input){return input.getAttribute('name')});
-
-    inputs.forEach(function(input){
-        var t = input.getAttribute('type');
-        if(t !='radio' || (t =='radio' && input.parentNode.className.indexOf('active') >= 0) ){
-            data[input.getAttribute('name')] = t == 'checkbox' ? input.checked : input.value
-        }
-    });
-    node2array( document.querySelectorAll('.btn') ).forEach(function(el){el.setAttribute('disabled', true) });
-    request({
-        post: true,
-        path: 'doit',
-        data: data,
-        success: function(data){
-            node2array( document.querySelectorAll('.btn') ).forEach(function(el){
-                el.removeAttribute('disabled')
-            });
-            node2array( document.querySelectorAll('.has-error') ).forEach(function(el){
-                removeClass( el, 'has-error');
-            });
-            node2array( document.querySelectorAll('.help-error') ).forEach(function(el){showHideElBlock(el);});
-            if(data.doit === undefined){
-                for(var field in data){
-                    var err = data[field];
-                    var errInput = document.querySelector('[name=' + field + ']');
-                    var formGroup =  findParent('.form-group', errInput);
-                    addClass( formGroup, 'has-error');
-                    var errText = formGroup.getElementsByClassName( 'help-error' )[0];
-                    showHideElBlock(errText, true)
-                    errText.innerText = err;
-                }
-            } else {
-                showHideModal( document.getElementById('doit') );
-                showHideModal( document.getElementById('doitOk'), true );
-            }
-            createCaptcha('captcha');
-        }
-    });
-}
 
 
 /*--------------------//payment-limit.html//------------------------*/
@@ -303,7 +90,9 @@ function enlargeLimit(){
         path: 'bglimit',
         post: true,
         data: data,
-        success: function(data){document.getElementById('message').innerHTML = data.message}
+        success: function(data){
+            document.getElementById('message').innerHTML = data.message
+        }
     });
 }
 
@@ -359,47 +148,3 @@ function searchPaymentTermonal(e){
     };
 }
 
-/*---------------------------------//rates.html//-----------------------------*/
-
-
-function initShapeHover() {
-    var speed = 330,
-        easing = mina.backout;
-
-    [].slice.call ( document.querySelectorAll( '.shapehover-item' ) ).forEach( function( el ) {
-        var svg = el.querySelector( 'svg' ), path = svg ? svg.querySelector('path') : null;
-        if(!path) return
-        var s = Snap( el.querySelector( 'svg' ) ), path = s.select( 'path' ),
-            pathConfig = {
-                from : path.attr( 'd' ),
-                to : el.getAttribute( 'data-path-hover' )
-            };
-        el.setAttribute('data-state', 'in')
-
-        function collapse(){
-            removeClass(el, 'shapeHover-in')
-            path.animate( { 'path' : pathConfig.from }, speed, easing );
-        }
-
-        function spread(){
-            addClass(el, 'shapeHover-in')
-            path.animate( { 'path' : pathConfig.to }, speed, easing );
-        }
-
-        el.addEventListener( 'click', function() {
-            if(hasClass(el, 'shapeHover-in')) collapse()
-            else spread()
-        } );
-
-        el.addEventListener( 'mouseenter', function() {
-            spread()
-        } );
-
-        el.addEventListener( 'mouseleave', function() {
-            collapse()
-        } );
-
-    } );
-}
-
-initShapeHover();

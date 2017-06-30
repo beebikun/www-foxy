@@ -1,0 +1,121 @@
+{% extends "client/base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}Телевокс - Подключиться{% endblock %}
+{% block title %}Televox -  Подключиться{% endblock %}
+
+
+{% block jsscript %}
+<script type="text/javascript" src="{% static "js/libs/2gis/1.0/2gis.js" %}"></script>
+<script type="text/javascript">
+
+    function preModalFn(a) {
+        var buildingId = a.getAttribute('building-id');
+        if (buildingId) {
+            var co = a.getAttribute('co');
+            $('#okModal [name="address"]').val(a.getAttribute('address'));
+            $('#okModal [name="status"]').val(a.getAttribute('status'));
+            $('#okModal [name="building-id"]').val();
+            $('#okModal #doit_contacts_area').text(co);
+
+            if (co != '') {
+                showHideElBlock(document.getElementById('doit_contacts'), true);
+            }
+        }
+    }
+
+    var created;
+    {% if created %}
+        created = true;
+    {% endif %}
+
+    templateLoadFn = function () {
+        if (created) {
+            var a = document.getElementById('doitOkBtn');
+            clickModalA(a);
+        } else {
+            var query = window.location.search.substr(1, window.location.search.length).split('&');
+            var params = {};
+            query.forEach(function (q) {
+                  var p = q.split('=');
+                  params[p[0]] = decodeURIComponent(p[1]);
+            });
+            street = params['street'];  // used in initMap
+            num = params['num']  // used in initMap
+            $('#connRequest [name="street"]').val(street);
+            $('#connRequest [name="num"]').val(num);
+            if (params.errors) {
+                var a = $('[building-id="' + params.id + '"]');
+                clickModalA(a[0]);
+            }
+        }
+
+    }
+
+</script>
+{% endblock %}
+
+
+
+{% block main-top-left %}
+{% include "client/letsfox/request-after.html" %}
+<div id="letsfoxCont" class="content">
+    <div id="LetsfoxMakeReq" > <!-- Форма запроса для мобильных -->
+        <form role="form"  action="{% url 'client-letsfox' %}" id="connRequest">
+            <div class="form-group ">
+                <div class="col-lg-4" id="address">
+                    <input type="text" class="form-control makeConReqStreetVal" name="street"  placeholder="Улица">
+                </div>
+                <div class="col-lg-4  makeConReqInput">
+                    <input type="text" class="form-control" name="num" placeholder="Дом">
+                </div>
+                <div class="col-lg-4 makeConReqBut">
+                    <button type="button" class="btn btn-default btn-sm " onclick="checkAddress()">
+                        <i class="fa fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /#LetsfoxMakeReq -->
+
+    <div id="myMapId" class="map map-full-size"><!-- Контейнер длля карты -->
+    </div> <!-- /#myMapId -->
+
+    <noscript>Для того, чтобы оставить заявку вам нужен javascript. Пожалуйста, включите его или оставьте заявку по одному из <a href="{% url 'client-about' %}">телефонов компании</a></noscript>
+</div><!-- /#letsfoxCont.content -->
+{% endblock %}
+
+
+<!-- Remove the connectButtons -->
+{% block connectBut %}
+{% endblock %}
+
+
+{% block main-bottom-left %}
+
+
+{% include "client/letsfox/request-modal.html" %}
+
+<div id="simmularItems" class="items-area">
+    {% if result %}
+    <!-- Результат с полным совпадением адреса -->
+    <div class="items-area" id="result">
+        {% include "client/letsfox/point.html" with building=result is_result="true" %}
+    </div><!-- #result.items-area -->
+    {% endif %}
+
+    {% if not created %}
+        <div id="simmularItemsLabel" style="margin:10px 0">
+        </div><!-- /#simmularItemsLabel -->
+    {% endif %}
+
+<!-- Остальные результаты -->
+    {% for building in simmular %}
+        {% include "client/letsfox/point.html" with is_result="false" %}
+    {% endfor %}
+</div><!-- /#simmularItems.items-area -->
+
+
+{% endblock %}
+

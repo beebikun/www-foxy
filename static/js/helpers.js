@@ -166,25 +166,6 @@ function request(params){
     function error(e){console.log(e)};
     if(method == 'GET') $.getJSON(path, query, _success, error)
     else $.post(path, data, _success, error)
-    /*var xhr = new XMLHttpRequest();
-    if(query) var path = path + '?' + query;
-    xhr.open(method, path, true);
-    if(data){
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        var data = serialize(data);
-    }
-    xhr.onerror = error;
-    xhr.onload = function(e){
-        console.log(xhr.responseText)
-        try{var r = eval("("+xhr.responseText+")");}
-        catch(e){var r = {'exception': e}}
-        finally{
-            if(r.exception===undefined&&(xhr.status==200||xhr.status==201)) var obj = {fn:success, r:r.data}
-            else var obj = {fn:error, r:r}
-            if(obj.fn) obj.fn(obj.r);
-        }
-    };
-    xhr.send(data);*/
 }
 
 /*----------------------------------------------------------------------------*/
@@ -192,10 +173,10 @@ var M = function(id, numInput, streetInput, prnts){
     this._init(id, numInput, streetInput, prnts)
 }
 
-M.prototype._init = function(id, numInput, streetInput, prnts) {
+M.prototype._init = function(id, num, street, prnts) {
     this.option = this._options()
-    this.numInput = numInput;
-    this.streetInput = streetInput;
+    this.numInput = num;
+    this.streetInput = street;
     this.el_parents = prnts || node2array(document.getElementById('simmularItems').getElementsByClassName('some-item'));
     this.map = new DG.Map(id);
     this.markerGroups = new Object;
@@ -204,11 +185,17 @@ M.prototype._init = function(id, numInput, streetInput, prnts) {
 };
 
 M.prototype.createMarker = function(src) {
-    function _getFloat(val){return parseFloat(val.replace(',','.')) }
+    function _getFloat(val){
+        return parseFloat(val.replace(',','.'))
+    }
+
     var point = attrs2obj( src, [['data-lat', _getFloat], ['data-lng', _getFloat], ['data-ico', null]]);
     point.id = src.getAttribute('id')
 
-    function _getChildHtml(childClass){return src.getElementsByClassName(childClass)[0].innerHTML }
+    function _getChildHtml(childClass){
+        return src.getElementsByClassName(childClass)[0].innerHTML
+    }
+
     point.header = _getChildHtml("some-item-date");
     point.cont = _getChildHtml("some-item-body-title");
     point.footer = _getChildHtml("some-item-body-text");
@@ -269,37 +256,37 @@ M.prototype.createMarker = function(src) {
 
 M.prototype._setMarkers = function() {
     var self = this;
-    request({
-        path: 'markers',
-        success: function(data){
-            if(!data || data.length == 0) return;
-            self.icons = new Object;
-            for (var i = 0; i < data.length; i++) {
-                var ico = data[i]
-                if (ico.height>42){
-                    ico.width = ico.width*42/ico.height;
-                    ico.height = 42
-                }
-                self.icons[ico.name] = new DG.Icon( ico.path, new DG.Size(ico.width, ico.height) )
-            };
-            self.icons.icoNotFound = new DG.Icon('../static/img/markers/marker-icon-gray.png', new DG.Size(25, 41))
-            self.el_parents.forEach(function(elem){ //create markers for each source elements from bottoms of site (items in #simmularItems)
-                self.createMarker(elem)
-            });
-            var alterTextLabel = document.getElementById('simmularItemsLabel');
-            if( alterTextLabel ){
-                alterTextLabel.innerHTML = (function(){
-                    if( self.numInput.value == '' || self.streetInput.value == '') return 'Пожалуйста, укажите адрес';
-                    var simular = filterVisible(self.el_parents, true).length;
-                    var result = document.getElementById('result').childElementCount;
-                    if(result && simular) return 'Возможно, вы искали:'
-                    if(result && !simular) return ''
-                    if(!result && simular) return 'Ничего не найдено. Возможно, вы искали: '
-                    if(!result && !simular) return 'Ничего не найдено <i class="fa fa-frown-o fa-lg"></i>'
-                })();
-            }
+    var data = Icons.data;
+    self.icons = new Object;
+    for (var i = 0; i < data.length; i++) {
+        var ico = data[i]
+        if (ico.height>42){
+            ico.width = ico.width*42/ico.height;
+            ico.height = 42
         }
-    })
+        self.icons[ico.name] = new DG.Icon( ico.path, new DG.Size(ico.width, ico.height) )
+    };
+    self.icons.icoNotFound = new DG.Icon(window.location.origin + '/static/img/markers/marker-icon-gray.png', new DG.Size(25, 41))
+    self.el_parents.forEach(function(elem){
+        //create markers for each source elements from bottoms of site (items in #simmularItems)
+        self.createMarker(elem)
+    });
+    var alterTextLabel = document.getElementById('simmularItemsLabel');
+    if( alterTextLabel ){
+        alterTextLabel.innerHTML = (function(){
+            if( !self.numInput || !self.streetInput) return 'Пожалуйста, укажите адрес';
+            var simular = self.el_parents.filter(function(el) {
+                return el.getAttribute('is-result') == 'false';
+            }).length;
+            var result = self.el_parents.filter(function(el) {
+                return el.getAttribute('is-result') == 'true';
+            }).length;
+            if(result && simular) return 'Возможно, вы искали:'
+            if(result && !simular) return ''
+            if(!result && simular) return 'Ничего не найдено. Возможно, вы искали: '
+            if(!result && !simular) return 'Ничего не найдено <i class="fa fa-frown-o fa-lg"></i>'
+        })();
+    }
 };
 
 M.prototype._options = function() {
@@ -311,9 +298,9 @@ M.prototype._options = function() {
 };
 
 M.prototype.getPointIco = function(val) {
-    return !this.icons ? undefined :
-            val.ico ? this.icons[val.ico] :
-            this.icons.icoDefault
+    if (!this.icons) return;
+    if (val.ico && this.icons[val.ico]) return this.icons[val.ico];
+    return this.icons.icoDefault;
 };
 
 M.prototype.createCenter = function(center) {

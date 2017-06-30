@@ -112,9 +112,9 @@ class PaymentPointAdmin(admin.ModelAdmin):
         (u'Дополнительно',
             {'fields': ['schedule', 'contacts'], 'classes': ['collapse']}),
     ]
-    list_display = ('name', 'get_address', 'payment')
+    list_display = ('name', 'payment', )
     list_filter = ['payment']
-    list_display_links = ('name', 'get_address')
+    list_display_links = ('name', )
     search_fields = ['address__street__name', 'address__num', 'name']
     list_per_page = 15
 admin.site.register(PaymentPoint, PaymentPointAdmin)
@@ -221,15 +221,15 @@ Captcha
 """
 
 
-class CaptchaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_absolute_url', 'right', 'key', 'date')
-    list_filter = ['right', 'date']
-admin.site.register(CaptchaImage, CaptchaAdmin)
+# class CaptchaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'get_absolute_url', 'right', 'key', 'date')
+#     list_filter = ['right', 'date']
+# admin.site.register(CaptchaImage, CaptchaAdmin)
 
 
-class CaptchaCloneAdmin(CaptchaAdmin):
-    pass
-admin.site.register(CaptchaImageClone, CaptchaCloneAdmin)
+# class CaptchaCloneAdmin(CaptchaAdmin):
+#     pass
+# admin.site.register(CaptchaImageClone, CaptchaCloneAdmin)
 
 """
 Заявки

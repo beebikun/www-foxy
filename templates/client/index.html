@@ -6,20 +6,25 @@
 <!-- Center carusel -->
 {% block main-top-left %}
     <div id="carussel">
-        <div id="carussel-main" class="carousel slide" data-ride="carousel" data-interval="10000">
+        <div id="carussel-main" class="carousel slide"
+             data-ride="carousel" data-interval="10000">
             <!-- Indicators -->
+            {% if banners.count > 1 %}
             <ol class="carousel-indicators">
-                {% for img in data.banner %}
-                <li data-target="#carussel-main" data-slide-to="{{img.num}}" class="{% if img.num == 0 %}active{% endif %}"></li>
+                {% for img in banners %}
+                    <li data-target="#carussel-main"
+                        data-slide-to="{{img.counter}}"
+                        class="{% if forloop.first %}active{% endif %}"></li>
                 {% endfor %}
                 <!---->
             </ol>
+            {% endif %}
             <!-- Wrapper for slides -->
             <div class="carousel-inner" data-interval="1000">
-                {% for img in data.banner %}
-                <div class="item {% if img.num == 0 %}active{% endif %}">
-                    <a href="{{img.href}}">
-                        <img src="{{img.url}}" >
+                {% for img in banners %}
+                <div class="item {% if forloop.first %}active{% endif %}">
+                    <a href="{{ img.href }}">
+                        <img src="{{ img.get_img_absolute_urls }}" >
                     </a>
                 </div>
                 {% endfor %}
@@ -39,7 +44,7 @@
 {% block main-bottom-left %}
 <!-- Last 3th news -->
     <div id="simmularItems" class="items-area no-margin-top">
-        {% for note in data.result|slice:':3' %}
+        {% for note in notes %}
             <div class="some-item">
                 <div class="some-item-date">
                     {{ note.date|date:"d E Y" }}

@@ -1,4 +1,5 @@
 {% extends "client/base.html" %}
+{% load staticfiles %}
 
 
 {% block content %}Телевокс - Контакты{% endblock %}
@@ -6,7 +7,7 @@
 
 
 {% block jsscript %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/libs/2gis/1.0/2gis.js"></script>
+<script type="text/javascript" src="{% static "js/libs/2gis/1.0/2gis.js" %}"></script>
 {% endblock %}
 
 
@@ -38,12 +39,14 @@
 <!-- Set items for map -->
 {% block main-bottom-left %}
 <div id="simmularItems" class="items-area">
-    {% for point in data.result %}
-        <div class="some-item" id="simmularItemsID_{{point.id}}" data-ico="{{point.ico}}" data-lat="{{point.lat}}" data-lng="{{point.lng}}">
-            <div class="some-item-date">{{ point.address }}</div>
+    {% for office in offices %}
+        <div class="some-item" id="simmularItemsID_{{office.id}}"
+             data-ico="{{office.marker.name}}"
+             data-lat="{{office.address.lat}}" data-lng="{{office.address.lng}}">
+            <div class="some-item-date">{{ office.address.get_address }}</div>
             <div class="some-item-body">
-                <span class="some-item-body-title">{{ point.contacts }}</span>
-                <div class="some-item-body-text"> {{ point.schedule }} </div>
+                <span class="some-item-body-title">{{ office.contacts }}</span>
+                <div class="some-item-body-text"> {{ office.schedule }} </div>
             </div><!-- /.some-item-body -->
         </div><!-- /.some-item -->
     {% endfor %}

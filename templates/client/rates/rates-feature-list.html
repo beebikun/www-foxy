@@ -14,7 +14,7 @@
             {% if tv %}
             <span><strong>5 терминалов</strong> бесплатно</span>
             {% else %}
-            <span>до <strong>{{ data.tv_count }} каналов*</strong> бесплатно</span>
+            <span><strong>{{ tv_count }}</strong> бесплатно</span>
             {% endif %}
         </span>
     </a>
@@ -67,7 +67,7 @@
 </li>
 
 <li class="list-group-item feature">
-    <a href="{% url 'client-payment' name='limit' %}">
+    <a href="{% url 'client-paymentlimit' %}">
         <i class="fa fa-2x fa-smile-o fa-fw"></i>
         <span class="feature-des">
             <span><strong> Обещанный платеж</a></strong></span>
