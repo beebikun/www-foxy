@@ -68,7 +68,7 @@ USE_TZ = True
 # ###
 
 ADMINS = (
-    ('Televox', 'info@tlvx.ru'),
+    ('Televox', 'support_fnl@tlvx.ru'),
 )
 
 MANAGERS = ADMINS
