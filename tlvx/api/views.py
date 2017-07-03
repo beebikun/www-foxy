@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-import random
-import uuid
-from django.core.files import File
-from django.utils import timezone
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from tlvx import helpers, settings
 from tlvx.api import bg
 from tlvx.api import response as project_api_response
 from tlvx.api import serializers, forms
@@ -75,5 +70,3 @@ class BGLimitRoot(ApiRoot):
             forms.BGLimitForm, request.POST)
         message = bg.take_limit(**params)
         return project_api_response.Response({'message': message})
-
-
