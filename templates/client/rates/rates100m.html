@@ -9,7 +9,7 @@
         </div>
         {% else %}
         <div class="rate-speed col-xs-6">
-            <strong>{{ rate.dayspeed|default:'100' }}</strong>
+            <strong>{{ rate.day_speed|default:'100' }}</strong>
             Мб/с
             {% if rate.summer %}
                 <div class="allday">круглосуточно</div>
