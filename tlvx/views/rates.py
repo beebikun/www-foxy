@@ -35,7 +35,7 @@ class RatesPhysicalView(RatesView):
         context['current_rates'] = [
             {'name': u'Всё включено', 'payment': '900', 'day_speed': '30',
              'tv_count': context['televoxtv_tv_count'], 'class': 'navy',
-             'href': 'http://televox.ru/page/allinclude_rate', },
+             'href': 'http://tlvx.ru/page/allinclude_rate', },
 
             {'name': u'Стандарт', 'payment': '690', 'speed': '31',
              'tv_count': context['tv_count'], 'class': 'default', },
