@@ -1,29 +1,52 @@
-<div class="item" >
-    <ul class="list-group rate-item {{class}}">
-        <li class="list-group-item rate-name" ><h3>{{name}}</h3></li>
-        <li class="list-group-item rate-main">
-            <div>
-                <div class="rate-price"><strong>{{payment}}</strong>руб/мес</div>
-                {% if not tv %}
-                <div class="rate-speed"><strong>100</strong>Мб/с</div>
-                {% else %}
-                <div class="rate-speed">{{televoxtv_tv_count | safe }}</div>
-                {% endif %}
-            </div>
-        </li>
-        <li class="list-group-item feature" {% if tv %}style="border-top-color: transparent"{% endif %}>
-            {% if not tv %}
-            <i class="fa fa-2x fa-tachometer fa-fw"></i>
-            <span class="feature-des normal-speed">
-                <span>с 19-00 до 23-00<br> <strong>{{speed}} Мб/с</strong></span>
-            </span>
-            {% else %}
-                <a class="rate-comment help-block selectedhref" href="{{href}}"
-                   style="font-weight:bold;margin-top:8px;font-size: 20px;margin-left: 5px;">
-                Подробнее..</a>
+<ul class="rates-100m-item {{ rate.class }}">
+    <li class="rates-100m-feature rate-name">
+        {{ rate.name }}
+    </li>
+    <li class="rates-100m-feature rate-main">
+        {% if rate.televoxtv %}
+        <div class="rate-speed col-xs-6">
+            {{ rate.tv_count | safe }}
+        </div>
+        {% else %}
+        <div class="rate-speed col-xs-6">
+            <strong>{{ rate.dayspeed|default:'100' }}</strong>
+            Мб/с
+            {% if rate.summer %}
+                <div class="allday">круглосуточно</div>
             {% endif %}
-        </li>
+        </div>
+        {% endif %}
+        <div class="rate-price col-xs-6">
+            <strong>{{ rate.payment }}</strong> руб/мес
+        </div>
+    </li>
 
-        {% include "client/rates/rates-feature-list.html" %}
-    </ul>
-</div>
+    {% if rate.speed and not rate.summer %}
+    <li class="rates-100m-feature">
+        <i class="fa fa-2x fa-tachometer fa-fw"></i>
+        <span>
+            с 19-00 до 23-00<br> <strong>{{ rate.speed }} Мб/с</strong>
+        </span>
+    </li>
+    {% endif %}
+
+    <li>
+        <a href="{% url 'client-simple_content' page='iptv' %}" class="rates-100m-feature">
+            <i class="fa fa-2x fa-desktop fa-fw"></i>
+            {% if rate.televoxtv %}
+                <span><strong>5 терминалов</strong> бесплатно</span>
+            {% else %}
+                <span><strong> {{ rate.tv_count|safe }} </strong> бесплатно</span>
+            {% endif %}
+        </a>
+    </li>
+
+    {% if rate.href %}
+    <li>
+        <a class="rate-comment rates-100m-feature" href="{{ rate.href }}">
+            Подробнее...
+        </a>
+    </li>
+    {% endif %}
+
+</ul>

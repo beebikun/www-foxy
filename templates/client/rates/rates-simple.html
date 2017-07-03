@@ -7,24 +7,28 @@
 
 {% block jsscript %}
 <script type="text/javascript">
+    var btn = document.querySelector('#showArchive');
+    var archive = document.querySelector('#archive');
     function showArchive(){
-        var btnText1 = "Архив тарифов";
-        var btnText2 = "Скрыть";
-        var isShow =  archive.style.display == 'block' ? true : false;
-        showHideElBlock(archive, !isShow);
-        moreItemsSpan.innerText = moreItemsSpan.innerText == btnText1 ? btnText2 : btnText1;
+        if (archive.style.display == 'none') {
+            archive.style.display = 'block';
+            btn.innerText = "Скрыть";
+        } else {
+            archive.style.display = 'none';
+            btn.innerText = "Архив тарифов";
+        }
     }
-    var archive = document.getElementsByClassName('rates-archive')[0];
-    var moreItems = document.getElementsByClassName('more-items-btn')[0]
-    var moreItemsSpan = moreItems.getElementsByTagName('span')[0]
-    moreItemsSpan.onclick = showArchive;
-    if(window.location.hash){
+    btn.onclick = showArchive;
+
+    if (window.location.hash) {
         showArchive();
         var rate = document.getElementById(window.location.hash.slice(1));
         window.scrollTo(rate.getBoundingClientRect().top, 0)
     }
 
-    if(archive.childElementCount) showHideElBlock(moreItems, true);
+    if (archive.childElementCount) {
+        btn.style.display = 'block';
+    }
 </script>
 {% endblock %}
 
@@ -37,9 +41,7 @@
 <div id="ratesCont" class="content">
     <div class="content-menu">
         <a href="{% url 'client-rates' %}">Интернет для дома</a>
-        {% comment %}
-        <a href="{% url 'client-ratessimple' name='jp' %}">Юр лица</a>
-        {% endcomment %}
+        <a href="{% url 'client-ratesaction' %}">Тарифы по акции</a>
         <a href="{% url 'client-ratessimple' name='other' %}">Дополнительные услуги</a>
     </div>
 
@@ -49,7 +51,12 @@
             <div class="table-box some-item">
                 <div class="some-item-body">
                     <div class="some-item-body-title rate-date">
-                        Тарифы, действующие с {{ rates.date_in|date:"d E Y"}}
+                        Тарифы, действующие с
+                            {% if current_rates_start %}
+                                {{ current_rates_start|date:"d E Y"}}
+                            {% else %}
+                                {{ rates.date_in|date:"d E Y"}}
+                            {% endif %}
                     </div>
                     {% block rates-active %}
                     <div class="some-item-body-text margin-top">
@@ -69,9 +76,9 @@
 
 {% block main-bottom-left %}
     {% block archive %}
-    <div id="simmularItems">
+    <div>
 <!-- Rates archive -->
-        <div class="rates-archive">
+        <div id="archive" style="display:none">
             {% for rates in result %}{% if not rates.active %}
                 <div class="table-box some-item">
                     <div class="some-item-body">
@@ -87,9 +94,9 @@
         </div><!-- /.rates-archive -->
 
 <!-- Show/hide an archive -->
-        <div class="more-items-btn" style="display:none">
-            <span>Архив тарифов</span>
-        </div>
+        <a id="showArchive" style="display:none">
+            Архив тарифов
+        </a>
     </div><!-- /#simmularItems -->
     {% endblock %}
 {% endblock %}

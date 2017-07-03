@@ -50,6 +50,7 @@ urlpatterns = [
     # Тарифы
 
     url(r'^rates/?$', rates.RatesPhysicalView.as_view(), name='client-rates'),
+    url(r'^rates/action/?$', rates.RatesActionView.as_view(), name='client-ratesaction'),
     url(r'^rates/other/$', rates.RatesView.as_view(), kwargs={'name': 'other'}, name='client-ratessimple'),
 
     ###############################

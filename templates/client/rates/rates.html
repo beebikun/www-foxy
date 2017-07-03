@@ -1,87 +1,19 @@
 {% extends "client/rates/rates-simple.html" %}
 {% block rates-active %}
-<style type="text/css">
-    .rates-100m .rate-item .rate-speed strong {
-        font-size: 35px;
-    }
-    .rates-100m .rate-item .rate-main {
-        font-size: 11px;
-    }
-    .rates-100m .rate-item .rate-speed {
-        margin-left: 1px;
-    }
-    .rates-100m .rate-item{
-        /*width: 161px;*/
-        /*height: 580px;*/
-        height: 637px;
-    }
-    .navy .rate-name{background-color: #00B4AA!important}
-    .navy .rate-comment{color: #00B4AA!important;}
-    .navy .rate-comment:hover{text-decoration: underline;}
-    .navy .rate-price{border-left-color: #00B4AA!important;}
-    .navy .rate-speed{border-right-color: #00B4AA!important;}
-    .navy a:hover{color: #00B4AA!important;}
-    @media (min-width: 711px){
-        .rates-100m .rate-item{
-            /*width: 229px!important;*/
-        }
-    }
-    @media (max-width: 720px){
-        .rates-100m .rate-item {
-          /*height: 195px;*/
-          height: 185px;
-        }
-        .feature-des-sum .rate-item{
-            height: auto;
-        }
-    }
-    @media (min-width: 550px) and (max-width: 710px){
-        .rates-100m .item{
-            width: 24%;
-        }
-        .rates-100m .rate-item .rate-speed strong {
-            font-size: 32px;
-        }
-        .rates-100m .rate-item{
-            width: 100%;
-        }
-        .rates-100m{
-            max-width: none;
-        }
-    }
-    @media (max-width: 549px){
-        .rates-100m .rate-item{
-            width: 100%;
-        }
-        .rates-100m .item{
-            float: none;
-            display: inline-block;
-        }
-        .rates-100m{
-            text-align: center;
-        }
-    }
-    @media (max-width: 500px){
-        .rates-100m .item {
-          float: none;
-        }
-    }
-</style>
 <div class="rates-100m">
-
-{% include "client/rates/rates100m.html" with name="Телевокс ТВ" payment="500" bold="bold" class="navy" tv="true" href="http://tlvx.ru/page/iptv#televoxtv" %}
-
-{% include "client/rates/rates100m.html" with name="Стандарт" speed="31" payment="690" class="rate-middle" href="http://tlvx.ru/how#change-rate" %}
-
-{% include "client/rates/rates100m.html" with  name="Комфорт" speed="41" payment="990" class="rate-middle" href="http://tlvx.ru/how#change-rate" %}
-
-{% include "client/rates/rates100m.html" with name="Престиж" speed="81" payment="1490" class="rate-middle" href="http://tlvx.ru/how#change-rate" %}
-
-    <div class="feature-des-sum">
-        <ul class="list-group rate-item">
-            {% include "client/rates/rates-feature-list.html" %}
-        </ul>
+    <div>
+        {% for rate in current_rates %}
+            {% if rate.name == 'clearfix' %}
+                <div class="clearfix"></div>
+            {% else %}
+                {% include "client/rates/rates100m.html"%}
+            {% endif %}
+        {% endfor %}
     </div>
+
+    <ul class="text-left feature-list">
+        {% include "client/rates/rates-feature-list.html" %}
+    </ul>
 
 </div>
 <div>
