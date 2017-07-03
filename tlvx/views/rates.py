@@ -71,11 +71,11 @@ class RatesActionView(RatesView):
             {'name': u'Летний', 'payment': '650',
              'tv_count': context['tv_count'], 'class': 'navy lg summer',
              'summer': True,
-             'href': 'http://tlvx.ru/page/televoxtv-plus', },
+             'href': 'http://tlvx.ru/page/rate-summer', },
 
             {'name': u'Телевокс ТВ+', 'payment': '250',
              'tv_count': context['televoxtv_tv_count'], 'class': 'navy lg',
              'televoxtv': True,
-             'href': 'http://tlvx.ru/page/rate-summer', },
+             'href': 'http://tlvx.ru/page/televoxtv-plus', },
         ]
         return context
