@@ -40,7 +40,7 @@ class PaymentCardsPageView(TemplateView):
     def get(self, *args, **kwargs):
         # @TODO add some latinic `name` to payment model
         context = {
-            'dvpay': Payment.objects.get(pk=9),
+            #'dvpay': Payment.objects.get(pk=9),
             'sberbank': Payment.objects.get(pk=8),
             'telebank': Payment.objects.get(pk=7),
         }
