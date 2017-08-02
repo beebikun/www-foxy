@@ -12,6 +12,7 @@
 
 {% block payment %}
 <div id="payment-card">
+    {% comment %}
     {% with payment=dvpay %}
         <!-- ДВ Пей-->
         <!-- Оператор-->
@@ -27,7 +28,9 @@
             </a>
         </div>
     {% endwith %}
-
+    {% endcomment %}
+    
+    {% comment %}
     {% with payment=telebank%}
         <!-- ВТБ-->
         <!-- Оператор -->
@@ -45,6 +48,7 @@
             </div>
         </div>
    {% endwith %}
+   {% endcomment %}
 
    {% with payment=sberbank %}
         <!-- Сбербанк-->
