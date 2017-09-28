@@ -43,6 +43,7 @@ class PaymentCardsPageView(TemplateView):
             #'dvpay': Payment.objects.get(pk=9),
             'sberbank': Payment.objects.get(pk=8),
             #'telebank': Payment.objects.get(pk=7),
+            'paymaster': Payment.objects.get(pk=11),
         }
         return self.render_to_response(context)
 

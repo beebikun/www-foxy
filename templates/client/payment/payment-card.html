@@ -79,6 +79,39 @@
    {% endwith %}
 
 
+   {% with payment=paymaster %}
+        <!-- Пеймастер-->
+        <!-- Оператор -->
+        <div class="some-item">
+            <div class="some-item-body">
+                <span class="some-item-body-title">{{ payment.name|safe }}</span>
+                <div class="some-item-body-text">
+                    {{ payment.hint_line|safe }}
+                    <div>
+                        <a class="how-play-btn" href="http://tlvx.ru/page/paymaster_instruction">
+                            Как оплатить
+                        </a>
+                    </div>
+                    <!-- <div>
+                        <a class="how-play-btn" href="http://tlvx.ru/page/sberbank_online">
+                        Оплата через личный кабинет для держателей карт Сбербанк
+                        </a>
+                    </div>
+                    <div>
+                        <a class="how-play-btn" href="http://tlvx.ru/page/sberbank_avtoplateg">
+                        Подключение автоплатежа в Сбербанк Онлайн (мобильная версия)
+                        </a>
+                    </div>
+                    <div>
+                        <a class="how-play-btn" href="http://tlvx.ru/page/sberbank_avtoplateg_site">
+                        Подключение автоплатежа в Сбербанк Онлайн на сайте
+                        </a>
+                    </div> -->
+                 </div>
+            </div>
+        </div>
+   {% endwith %}
+
 
 
 </div><!-- /#payment-card -->
