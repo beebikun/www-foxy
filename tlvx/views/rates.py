@@ -37,15 +37,15 @@ class RatesPhysicalView(RatesView):
              'tv_count': context['televoxtv_tv_count'], 'class': 'navy',
              'href': 'http://tlvx.ru/page/allinclude_rate', },
 
-            {'name': u'Стандарт', 'payment': '690', 'speed': '31',
+            {'name': u'Стандарт', 'payment': '690', 'speed': '40',
              'tv_count': context['tv_count'], 'class': 'default', },
 
-            {'name': u'Комфорт', 'payment': '990', 'speed': '41',
+            {'name': u'Комфорт', 'payment': '990', 'speed': '50',
              'tv_count': context['tv_count'], 'class': 'default', },
 
             {'name': 'clearfix'},
 
-            {'name': u'Престиж', 'payment': '1490', 'speed': '81',
+            {'name': u'Престиж', 'payment': '1490', 'speed': '90',
              'tv_count': context['tv_count'], 'class': 'default', },
 
             {'name': u'Телевокс ТВ', 'payment': '500',
