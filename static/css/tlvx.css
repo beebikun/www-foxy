@@ -654,8 +654,6 @@ header section:last-child{
 
 	margin: 0;
 	margin-bottom: 20px;
-	margin-right: 5px;
-	margin-left: 5px;
     padding: 0;
     list-style: none;
     display: inline-block;
@@ -663,8 +661,17 @@ header section:last-child{
 	border-radius: 20px;
 	overflow: hidden;
 	text-align: left;
-	width: 200px;
 	height: 230px;
+	/* 3 in row */
+	/*
+	width: 200px;
+	margin-right: 5px;
+	margin-left: 5px;
+	*/
+	/* 4 in row */
+	width: 171px;
+	margin-right: 2px;
+	margin-left: 2px;
 }
 .rates-100m-item.lg {
 	width: 250px;
@@ -715,6 +722,14 @@ header section:last-child{
 	padding-top: 15px!important;
 	color: #fff;
 }
+.rates-100m-feature.rate-name a {
+	color: #fff;
+	opacity: 0.95;
+	text-decoration: underline;
+}
+.rates-100m-feature.rate-name a:hover {
+	opacity: 1;
+}
 
 .rates-100m-item.default .rates-100m-feature.rate-name {
 	background-color: #ff7114;
@@ -762,12 +777,16 @@ header section:last-child{
 	color: #00b4aa;
 }
 
+a.rates-100m-feature {
+	font-weight: normal;
+}
+
 .rates-100m-feature.rate-main .rate-speed strong {
 	font-size: 35px;
 }
 
 .rates-100m-feature.rate-main .rate-price strong {
-	font-size: 20px;
+	font-size: 25px;
 }
 
 .rates-100m-feature.rate-main .rate-speed .allday {

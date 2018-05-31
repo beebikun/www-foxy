@@ -1,45 +1,75 @@
 <ul class="rates-100m-item {{ rate.class }}">
     <li class="rates-100m-feature rate-name">
-        {{ rate.name }}
+        {% if rate.header_href %}
+            <a href="{{ rate.header_href }}">{{ rate.name }}</a>
+        {% else %}
+            {{ rate.name }}
+        {% endif %}
     </li>
     <li class="rates-100m-feature rate-main">
-        {% if rate.televoxtv %}
-        <div class="rate-speed col-xs-6">
-            {{ rate.tv_count | safe }}
-        </div>
+        {% if rate.dayly %}
+            <div class="rate-speed col-xs-6">
+                <strong>{{ rate.day_speed|default:'100' }}</strong> Мб/с
+            </div>
+            <div class="rate-speed col-xs-6">
+                <strong>{{ rate.payment }}</strong> руб/день
+            </div>
         {% else %}
-        <div class="rate-speed col-xs-6">
-            <strong>{{ rate.day_speed|default:'100' }}</strong>
-            Мб/с
-            {% if rate.summer %}
-                <div class="allday">круглосуточно</div>
+            {% if rate.televoxtv %}
+            <div class="rate-speed col-xs-6">
+                {{ rate.tv_count | safe }}
+            </div>
+            {% else %}
+            <div class="rate-speed col-xs-6">
+                <strong>{{ rate.day_speed|default:'100' }}</strong>
+                Мб/с
+                {% if rate.summer %}
+                    <div class="allday">круглосуточно</div>
+                {% endif %}
+            </div>
             {% endif %}
-        </div>
+            <div class="rate-price col-xs-6">
+                <strong>{{ rate.payment }}</strong> руб/мес
+            </div>
         {% endif %}
-        <div class="rate-price col-xs-6">
-            <strong>{{ rate.payment }}</strong> руб/мес
-        </div>
     </li>
 
-    {% if rate.speed and not rate.summer %}
+    {% if rate.dayly %}
     <li class="rates-100m-feature">
-        <i class="fa fa-2x fa-tachometer fa-fw"></i>
+        <i class="fa fa-2x fa-money fa-fw"></i>
         <span>
-            с 19-00 до 23-00<br> <strong>{{ rate.speed }} Мб/с</strong>
+            Платите только <strong>когда пользуетесь</strong>
         </span>
     </li>
     {% endif %}
 
-    <li>
-        <a href="{% url 'client-simple_content' page='iptv' %}" class="rates-100m-feature">
-            <i class="fa fa-2x fa-desktop fa-fw"></i>
-            {% if rate.televoxtv %}
-                <span><strong>5 терминалов</strong> бесплатно</span>
-            {% else %}
-                <span><strong> {{ rate.tv_count|safe }} </strong> бесплатно</span>
-            {% endif %}
-        </a>
+    {% if rate.speed and not rate.summer %}
+    <li class="rates-100m-feature">
+        <i class="fa fa-2x fa-tachometer fa-fw"></i>
+        {% if rate.speed == '100' %}
+            <span>
+                100 Мб/с <strong>круглосуточно</strong>
+            </span>
+        {% else %}
+            <span>
+                с 19-00 до 23-00<br> <strong>{{ rate.speed }} Мб/с</strong>
+            </span>
+        {% endif %}
     </li>
+    {% endif %}
+
+    {% if rate.televoxtv or rate.tv_count %}
+        <li>
+            <a href="{% url 'client-simple_content' page='iptv' %}" class="rates-100m-feature">
+                <i class="fa fa-2x fa-desktop fa-fw"></i>
+                {% if rate.televoxtv %}
+                    <span><strong>5 терминалов</strong> бесплатно</span>
+                {% else %}
+                    <span><strong> {{ rate.tv_count|safe }} </strong> бесплатно</span>
+                {% endif %}
+            </a>
+        </li>
+    {% endif %}
 
     {% if rate.href %}
     <li>
