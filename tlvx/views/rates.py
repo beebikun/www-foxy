@@ -59,7 +59,7 @@ class RatesPhysicalView(RatesView):
                 'name': u'Престиж', 'payment': '1490',
                 'speed': '100',
                 'class': 'default',
-                'tv_count': context['tv_count'],
+                'tv_count': context['televoxtv_tv_count'],
             },
             {'name': 'clearfix'},
 
