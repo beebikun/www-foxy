@@ -31,7 +31,7 @@ class RatesPhysicalView(RatesView):
 
     def get_context(self, name):
         context = super(RatesPhysicalView, self).get_context(name)
-        context['current_rates_start'] = datetime.datetime(year=2017, month=12, day=1)
+        # context['current_rates_start'] = datetime.datetime(year=2017, month=12, day=1)
         context['current_rates'] = [
             {
                 'name': u'Всё включено', 'payment': '900',
@@ -87,6 +87,14 @@ class RatesPhysicalView(RatesView):
                 'class': 'navy',
                 'href': 'http://tlvx.ru/page/everyday',
                 'dayly': True,
+            },
+
+            {
+                'name': u'Квартал', 'payment': '590',
+                'day_speed': '50',
+                'class': 'navy',
+                'tv_count': context['tv_count'],
+                'href': 'http://tlvx.ru/page/kvartal',
             },
         ]
         return context
