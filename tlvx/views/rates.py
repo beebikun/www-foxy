@@ -91,10 +91,10 @@ class RatesPhysicalView(RatesView):
 
             {
                 'name': u'Квартал', 'payment': '590',
-                'day_speed': '50',
+                'speed': '50',
                 'class': 'navy',
                 'tv_count': context['tv_count'],
-                'href': 'http://tlvx.ru/page/kvartal',
+                'header_href': 'http://tlvx.ru/page/kvartal',
             },
         ]
         return context
