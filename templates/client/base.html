@@ -139,7 +139,9 @@
                                         <a href="{% url 'client-simple_content' page='internet' %}" class="btn btn-default mybtn mybtn-block {% block internet-btn-active %}{% endblock %}" id="internet">Интернет</a>
                                         <a href="{% url 'client-rates' %}" class="btn btn-default mybtn mybtn-block {% block rates-btn-active %}{% endblock %}" id="rates">Тарифы</a>
                                         <a href="{% url 'client-payment' %}" class="btn btn-default mybtn mybtn-block {% block payment-btn-active %}{% endblock %}" id="payment">Оплата услуг</a>
+                                        {% comment %}
                                         <a href="{% url 'client-about' %}" class="btn btn-default mybtn mybtn-block {% block about-btn-active %}{% endblock %}" id="about">О компании</a>
+                                        {% endcomment %}
                                         <a href="{% url 'client-faq' %}" class="btn btn-default mybtn mybtn-block {% block how-btn-active %}{% endblock %}" id="faq">Справка</a>
                                     </nav><!-- /#mainMenu -->
                                 {% endblock %}
