@@ -66,7 +66,7 @@ urlpatterns = [
     # О компании
 
     url(r'^about/?$', about.AboutPageView.as_view(), name='client-about'),
-    #url(r'^documents/?$', about.DocumentsPageView.as_view(), name='client-documents'),
+    url(r'^documents/?$', about.DocumentsPageView.as_view(), name='client-documents'),
     url(r'^vacancy/?$', about.VacancyPageView.as_view(), name='client-vacancy'),
 
     ###############################
