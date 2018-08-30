@@ -31,16 +31,30 @@ class RatesPhysicalView(RatesView):
 
     def get_context(self, name):
         context = super(RatesPhysicalView, self).get_context(name)
-        # context['current_rates_start'] = datetime.datetime(year=2017, month=12, day=1)
+        context['current_rates_start'] = datetime.datetime(year=2018, month=9, day=1)
         context['current_rates'] = [
             {
-                'name': u'Всё включено', 'payment': '900',
-                'day_speed': '40',
+                'name': u'Старт', 'payment': '349',
+                'speed': '5',
                 'class': 'navy',
-                'tv_count': context['televoxtv_tv_count'],
-                'href': 'http://tlvx.ru/page/allinclude_rate',
+                'tv_count': context['tv_count'],
+                'header_href': 'http://tlvx.ru/page/akcii',
             },
-
+            {
+                'name': u'Эталон', 'payment': '599',
+                'speed': '30',
+                'class': 'navy',
+                'tv_count': context['tv_count'],
+                'header_href': 'http://tlvx.ru/page/etalon',
+            },
+            {
+                'name': u'Квартал', 'payment': '549',
+                'speed': '50',
+                'class': 'navy',
+                'tv_count': context['tv_count'],
+                'header_href': 'http://tlvx.ru/page/kvartal',
+            },
+            {'name': 'clearfix'},
             {
                 'name': u'Стандарт', 'payment': '690',
                 'speed': '50',
@@ -62,39 +76,26 @@ class RatesPhysicalView(RatesView):
                 'tv_count': context['televoxtv_tv_count'],
             },
             {'name': 'clearfix'},
-
+            {
+                'name': u'Ежедневник', 'payment': '50',
+                'day_speed': '5',
+                'class': 'purple',
+                'href': 'http://tlvx.ru/page/everyday',
+                'dayly': True,
+            },
             {
                 'name': u'Телевокс ТВ', 'payment': '500',
                 'href': 'http://tlvx.ru/page/iptv#televoxtv',
                 'tv_count': context['televoxtv_tv_count'],
-                'class': 'navy',
+                'class': 'purple',
                 'televoxtv': True,
             },
-
-            # {'name': 'clearfix'},
-
             {
-                'name': u'Хит 349', 'payment': '349',
-                'speed': '5',
-                'class': 'navy',
-                'tv_count': context['tv_count'],
-                'header_href': 'http://tlvx.ru/page/akcii',
-            },
-
-            {
-                'name': u'Ежедневник', 'payment': '50',
-                'day_speed': '5',
-                'class': 'navy',
-                'href': 'http://tlvx.ru/page/everyday',
-                'dayly': True,
-            },
-
-            {
-                'name': u'Квартал', 'payment': '590',
-                'speed': '50',
-                'class': 'navy',
-                'tv_count': context['tv_count'],
-                'header_href': 'http://tlvx.ru/page/kvartal',
+                'name': u'Всё включено', 'payment': '900',
+                'day_speed': '40',
+                'class': 'purple',
+                'tv_count': context['televoxtv_tv_count'],
+                'href': 'http://tlvx.ru/page/allinclude_rate',
             },
         ]
         return context
