@@ -41,18 +41,18 @@ class RatesPhysicalView(RatesView):
                 'header_href': 'http://tlvx.ru/page/akcii',
             },
             {
-                'name': u'Эталон', 'payment': '599',
-                'speed': '30',
-                'class': 'navy',
-                'tv_count': context['tv_count'],
-                'header_href': 'http://tlvx.ru/page/etalon',
-            },
-            {
                 'name': u'Квартал', 'payment': '549',
                 'speed': '50',
                 'class': 'navy',
                 'tv_count': context['tv_count'],
                 'header_href': 'http://tlvx.ru/page/kvartal',
+            },
+            {
+                'name': u'Эталон', 'payment': '599',
+                'speed': '30',
+                'class': 'navy',
+                'tv_count': context['tv_count'],
+                'header_href': 'http://tlvx.ru/page/etalon',
             },
             {'name': 'clearfix'},
             {
