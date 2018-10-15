@@ -8,10 +8,63 @@ from rest_framework import serializers
 import json
 from rest_framework.reverse import reverse
 
+from operator import __or__ as OR
 
-def find__simmular_building(street, num):
-    return Building.objects.filter(Q(street__name__icontains=street, num__icontains=num) |
-                                   Q(street_alt__name__icontains=street, num_alt__icontains=num))
+
+def get_street_name_variances(street_name, fn):
+    variances = [
+        street_name.strip(),
+        street_name.strip().replace(u'е', u'ё'),
+        street_name.strip().replace(u'ё', u'е')
+    ]
+    results = []
+    for street_name in variances:
+        results.extend(fn(street_name))
+    return results
+
+
+def get_strict_street_name_variances(street_name):
+    def get(street_name):
+        def split_by(split):
+            capitalize = lambda s: s.capitalize()
+            splitted = street_name.split(split)
+            capitalized = map(capitalize, splitted)
+            return ['-'.join(capitalized), ' '.join(capitalized)]
+        return [street_name] + split_by(' ') + split_by('-')
+
+    return get_street_name_variances(street_name, get)
+
+
+def get_notstrict_street_name_variances(street_name):
+    def get(street_name):
+        # in the middle
+        return [
+            street_name.lower(),
+            street_name.lower().split('-')[0],
+            street_name.lower().split(' ')[0],
+        ]
+    return get_strict_street_name_variances(street_name) + \
+        get_street_name_variances(street_name, get)
+
+
+def find_simmular_building(street_name, num):
+    # i'm a lame - ленина and Ленина have different first symbols in unicode,
+    # idk what to do with that, but _icontains doesn't work
+    street_name_variances = get_notstrict_street_name_variances(street_name)
+    queries = []
+    for street_name in street_name_variances:
+        queries.append(Q(street__name__contains=street_name, num__icontains=num))
+        queries.append(Q(street_alt__name__contains=street_name, num_alt__icontains=num))
+
+    return Building.objects.filter(reduce(OR, queries))
+
+
+def find_street(street_name):
+    street_name_variances = get_strict_street_name_variances(street_name)
+    queries = []
+    for street_name in street_name_variances:
+        queries.append(Q(name__iexact=street_name))
+    return Street.objects.filter(reduce(OR, queries)).first()
 
 
 class ConnRequestSerializer(serializers.ModelSerializer):
@@ -62,17 +115,8 @@ class LetsFoxView(TemplateView):
         simmular = Building.objects.none()
         result = None
         if street_name and num:
-            # i'm a lame - ленина and Ленина have different first symbols in unicode,
-            # idk what to do with that, but _icontains doesn't work
-            simmular = Building.objects.filter(
-                # starts with that
-                Q(street__name__contains=street_name.capitalize(), num__icontains=num) |
-                Q(street_alt__name__contains=street_name.capitalize(), num_alt__icontains=num) |
-                # in the middle
-                Q(street__name__contains=street_name, num__icontains=num) |
-                Q(street_alt__name__contains=street_name, num_alt__icontains=num)
-            )
-            street = Street.objects.filter(name__iexact=street_name.capitalize()).first()
+            simmular = find_simmular_building(street_name, num)
+            street = find_street(street_name)
             if street is not None:
                 result = Building.objects.filter(
                     Q(street_id=street.id, num=num) |
