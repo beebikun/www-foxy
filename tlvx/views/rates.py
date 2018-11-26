@@ -31,15 +31,15 @@ class RatesPhysicalView(RatesView):
 
     def get_context(self, name):
         context = super(RatesPhysicalView, self).get_context(name)
-        context['current_rates_start'] = datetime.datetime(year=2018, month=9, day=1)
+        context['current_rates_start'] = datetime.datetime(year=2018, month=12, day=1)
         context['current_rates'] = [
-            {
-                'name': u'Старт', 'payment': '349',
-                'speed': '5',
-                'class': 'navy',
-                'tv_count': context['tv_count'],
-                'header_href': 'http://tlvx.ru/page/akcii',
-            },
+            # {
+            #     'name': u'Старт', 'payment': '349',
+            #     'speed': '5',
+            #     'class': 'navy',
+            #     'tv_count': context['tv_count'],
+            #     'header_href': 'http://tlvx.ru/page/akcii',
+            # },
             {
                 'name': u'Квартал', 'payment': '549',
                 'speed': '50',
